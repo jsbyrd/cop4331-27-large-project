@@ -7,9 +7,12 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 
+console.log("Hello");
+
 // Server static assets if in production
 if (process.env.NODE_ENV === 'production')
 {
+  console.log("Aloha");
   // Set static folder
   app.use(express.static('frontend/build'));
   app.get('*', (req, res) =>
