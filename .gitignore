@@ -1,0 +1,5 @@
+# Bad stuff
+node_modules
+.env
+production
+build
