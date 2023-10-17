@@ -34,10 +34,14 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Import api endpoints
-const usersRouter = require("./controllers/users");
+const usersRouter = require("./api/users");
+const addUserRouter = require("./api/users");
+const quizzesRouter = require("./api/quizzes");
 
 // Use routes
 app.use("/api/users", usersRouter);
+app.use("/api/addUser", addUserRouter);
+app.use("/api/quizzes", quizzesRouter);
 
 // Start server
 app.listen(PORT, () => {
