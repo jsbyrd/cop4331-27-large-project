@@ -39,7 +39,7 @@ const quizzesRouter = require("./api/quizzes");
 
 // Use routes
 app.use("/api/users", usersRouter);
-app.use("/api/quizzes", quizzesRouter);
+// app.use("/api/quizzes", quizzesRouter);
 
 // Start server
 app.listen(PORT, () => {
