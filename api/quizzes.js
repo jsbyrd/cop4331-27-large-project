@@ -6,7 +6,7 @@ const url = process.env.MONGODB_URI;
 const client = new MongoClient(url);
 client.connect();
 
-usersRouter.get("/", async (req, res) => {
+quizzesRouter.get("/", async (req, res) => {
   let error = "N/A";
   let _ret = [];
   try
