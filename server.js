@@ -2,7 +2,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const path = require('path');
+// const path = require('path');
 const PORT = process.env.PORT || 5000;
 
 const app = express();
@@ -34,10 +34,12 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Import api endpoints
-const usersRouter = require("./controllers/users");
+const usersRouter = require("./api/users");
+const quizzesRouter = require("./api/quizzes");
 
 // Use routes
 app.use("/api/users", usersRouter);
+app.use("/api/quizzes", quizzesRouter);
 
 // Start server
 app.listen(PORT, () => {
