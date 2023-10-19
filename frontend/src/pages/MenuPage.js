@@ -1,14 +1,14 @@
 import React from 'react';
-import Menu from '../components/Menu'
+import Main from '../components/Menu'
 
-const MenuPage = () =>
+const MainPage = () =>
 {
 
     return(
       <div>
-        <Menu />
+        <Main />
       </div>
     );
 };
 
-export default MenuPage;
+export default MainPage;

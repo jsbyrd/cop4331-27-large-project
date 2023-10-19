@@ -11,6 +11,7 @@ usersRouter.get("/", async (req, res) => {
   // Incoming: login, password
   // Outgoing: id, firstName, lastName
   let error = "N/A";
+
   try
   {
     console.log(url);
