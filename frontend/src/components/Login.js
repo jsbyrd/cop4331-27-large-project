@@ -29,7 +29,7 @@ function Login()
                 localStorage.setItem('user_data', JSON.stringify(user));
 
                 setMessage('');
-                window.location.href = '/menu';
+                //window.location.href = '/menu';
             }
         }
         catch(e)
@@ -51,7 +51,7 @@ function Login()
                 </form>
             </div>
             <div id="RegisterDiv">
-                <input type="button" id="goToRegisterButton" class="buttons" value="Register Account" onClick={window.location.href = '/g'}/>
+                <input type="button" id="goToRegisterButton" class="buttons" value="Register Account"/>
             </div>
         </div>
     );

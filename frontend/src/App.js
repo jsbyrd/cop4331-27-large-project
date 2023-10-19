@@ -1,5 +1,4 @@
-import React from "react";
-import logo from './logo.svg';
+import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css';
 
@@ -11,6 +10,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route path="/menu" element={<MenuPage />} />
       </Routes>
     </BrowserRouter>
