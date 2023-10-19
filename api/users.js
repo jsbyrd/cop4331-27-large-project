@@ -1,5 +1,8 @@
-const usersRouter = require("express").Router();
-require("dotenv").config();
+const Hash = require('crypto');
+const { getServers, getDefaultResultOrder } = require('dns');
+
+const usersRouter = require('express').Router();
+require('dotenv').config();
 
 const MongoClient = require('mongodb').MongoClient;
 const url = process.env.MONGODB_URI;
@@ -16,10 +19,27 @@ usersRouter.get("/", async (req, res) => {
   {
     // console.log(url);
     const {login, password} = req.body;
-    console.log(req.body);
+
+    // hello dear viewer
+    // The hash functionality currently does not work
+    // I cannot figure out how to assign variables without it hanging when
+    // it sends to the db
+    const hash = Hash.createHash('sha256');
+
+    // you also need to keep reassigning these over and over
+    // this can probably be offset by using var instead of const
+    // but I don't have time to work up the syntax of nodejs
+    const updatedHash = hash.update(password);
+
+    // the last step is to digest the hash
+    // mmm yummy
+    // I actually don't know what this does though
+    const newPassword = updatedHash.digest('hex');
+    
+    console.log({login, password});
+
     const db = client.db("LargeProject");
-    const results = await db.collection('Users').find({Login:login, Password:password}).toArray();
-    console.log(results[0]);
+    const results = await db.collection('Users').find({Login:login, Password:newPassword}).toArray();
 
     var id = -1;
 		var fn = '';
@@ -30,7 +50,9 @@ usersRouter.get("/", async (req, res) => {
 			id = results[0]._id;
 			fn = results[0].FirstName;
 			ln = results[0].LastName;
-		}
+		} 
+    
+    console.log(eat);
 
     var ret = { id:id, firstName:fn, lastName:ln, error:''};
 		res.status(200).json(ret);
