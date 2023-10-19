@@ -13,7 +13,10 @@ client.connect();
 usersRouter.get("/", async (req, res) => {
   // Incoming: login, password
   // Outgoing: id, firstName, lastName
-  let error = "N/A";
+  let error = "";
+  var id = -1;
+	var fn = '';
+	var ln = '';
 
   try
   {
@@ -41,10 +44,6 @@ usersRouter.get("/", async (req, res) => {
     const db = client.db("LargeProject");
     const results = await db.collection('Users').find({Login:login, Password:newPassword}).toArray();
 
-    var id = -1;
-		var fn = '';
-		var ln = '';
-
 		if( results.length > 0 )
 		{
 			id = results[0]._id;
@@ -53,13 +52,13 @@ usersRouter.get("/", async (req, res) => {
 		} 
     
     console.log(eat);
-
-    var ret = { id:id, firstName:fn, lastName:ln, error:''};
-		res.status(200).json(ret);
   }
   catch(e) {
     error = e.toString();
   }
+
+  var ret = { id:id, firstName:fn, lastName:ln, error:''};
+	res.status(200).json(ret);
 });
 
 // Register
@@ -77,6 +76,7 @@ usersRouter.post("/", async (req, res) => {
     const result = await db.collection("Users").insertOne(newUser);
     console.log(result);
 
+    // I'm not 100% as to why this is a for loop?
     for (let i = 0; i < result.length; i++)
     {
       _ret.push(result[i]);
@@ -87,7 +87,7 @@ usersRouter.post("/", async (req, res) => {
   }
 
   var ret = { error: error };
-		res.status(200).json(ret);
+	res.status(200).json(ret);
 });
 
 usersRouter.post("/")
