@@ -11,10 +11,9 @@ usersRouter.get("/", async (req, res) => {
   // Incoming: login, password
   // Outgoing: id, firstName, lastName
   let error = "N/A";
-
   try
   {
-    // console.log(url);
+    console.log(url);
     const {login, password} = req.body;
     console.log(req.body);
     const db = client.db("LargeProject");
