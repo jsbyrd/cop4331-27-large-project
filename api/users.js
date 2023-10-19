@@ -16,7 +16,7 @@ function getToken(json)
   try
   {
     const token = require("./createJWT.js");
-    var ret = token.createToken( json );
+    ret = token.createToken( json );
   }
   catch(e)
   {
@@ -53,7 +53,6 @@ usersRouter.get("/", async (req, res) => {
   var id = -1;
 	var fn = '';
 	var ln = '';
-  var ret;
 
   const {login, password} = req.body;
 
@@ -75,11 +74,15 @@ usersRouter.get("/", async (req, res) => {
       var ret = {id:id, firstName:fn, lastName:ln, error:error};
       // var ret = getToken({id:id, firstName:fn, lastName:ln, error:error});
 		}
+    else
+    {
+      var ret = {error:'Wrong username/password combination'};
+    }
   }
   catch(e)
   {
     error = e.toString();
-    ret = {error:e.message};
+    var ret = {error:e.message};
   }
 
   
