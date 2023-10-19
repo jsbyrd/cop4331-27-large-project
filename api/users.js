@@ -72,8 +72,8 @@ usersRouter.get("/", async (req, res) => {
 			fn = results[0].FirstName;
 			ln = results[0].LastName;
 
-      // var ret = {id:id, firstName:fn, lastName:ln, error:error};
-      var ret = getToken({id:id, firstName:fn, lastName:ln, error:error});
+      var ret = {id:id, firstName:fn, lastName:ln, error:error};
+      // var ret = getToken({id:id, firstName:fn, lastName:ln, error:error});
 		}
   }
   catch(e)
