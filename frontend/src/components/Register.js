@@ -22,7 +22,7 @@ function Register()
             const response = await fetch('https://cop4331-27-c6dfafc737d8.herokuapp.com/api/users/register', {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
             var res = JSON.parse(await response.text());
             console.log(res);
-            if( res.error != '' )
+            if( res.error !== '' )
             {
                 setMessage('Unable to Register');
             }
