@@ -16,10 +16,10 @@ function Login()
 
         try
         {    
-            const response = await fetch('https://cop4331-27-c6dfafc737d8.herokuapp.com/api/users', {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
+            const response = await fetch('https://cop4331-27-c6dfafc737d8.herokuapp.com/api/users/login', {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
             var res = JSON.parse(await response.text());
             console.log(res);
-            if( res.id <= 0 )
+            if( res.id === undefined )
             {
                 setMessage('User/Password combination incorrect');
             }
@@ -29,7 +29,7 @@ function Login()
                 localStorage.setItem('user_data', JSON.stringify(user));
 
                 setMessage('');
-                //window.location.href = '/menu';
+                window.location.href = '/menu';
             }
         }
         catch(e)
@@ -51,7 +51,7 @@ function Login()
                 </form>
             </div>
             <div id="RegisterDiv">
-                <input type="button" id="goToRegisterButton" class="buttons" value="Register Account"/>
+                <input type="button" id="goToRegisterButton" class="buttons" value="Register Account" onClick={event =>  window.location.href='/register'}/>
             </div>
         </div>
     );
