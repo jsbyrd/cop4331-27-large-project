@@ -46,7 +46,7 @@ function getHash(string)
 }
 
 // Login
-usersRouter.get("/", async (req, res) => {
+usersRouter.post("/login", async (req, res) => {
   // Incoming: login, password
   // Outgoing: id, firstName, lastName
   let error = "";
@@ -90,7 +90,7 @@ usersRouter.get("/", async (req, res) => {
 });
 
 // Register
-usersRouter.post("/", async (req, res) => {
+usersRouter.post("/register", async (req, res) => {
   // incoming: login, password, firstName, lastName, email
   // outgoing: error
   let error = "";
@@ -121,7 +121,5 @@ usersRouter.post("/", async (req, res) => {
 
 	res.status(200).json(ret);
 });
-
-usersRouter.post("/")
 
 module.exports = usersRouter;
