@@ -56,14 +56,14 @@ usersRouter.post("/login", async (req, res) => {
 
   const {login, password} = req.body;
 
-  newPassword = getHash(password);
+  hashPassword = getHash(password);
   
   console.log({login, password});
 
   try
   {
     const db = client.db("LargeProject");
-    const results = await db.collection('Users').find({Login:login, Password:newPassword}).toArray();
+    const results = await db.collection('Users').find({Login:login, Password:hashPassword}).toArray();
 
 		if( results.length > 0 )
 		{
@@ -96,9 +96,9 @@ usersRouter.post("/register", async (req, res) => {
   let error = "";
   const { login, password, firstName, lastName, email } = req.body;
 
-  const newPassword = getHash(password);
+  const hashPassword = getHash(password);
 
-  const newUser = {Login:login,Password:newPassword,FirstName:firstName,LastName:lastName,Email:email};
+  const newUser = {Login:login,Password:hashPassword,FirstName:firstName,LastName:lastName,Email:email};
   try
   {
     // console.log(url);
@@ -119,6 +119,43 @@ usersRouter.post("/register", async (req, res) => {
   var ret = { error: error };
   // var ret = getToken({ error: error });
 
+	res.status(200).json(ret);
+});
+
+// Delete
+usersRouter.delete("/delete", async (req, res) => {
+	// Incoming: login, password
+	// Outgoing: firstName, lastName
+	let error = "";
+  
+	const {login, password} = req.body;
+  
+	hashPassword = getHash(password);
+	
+	console.log({firstName, lastName});
+  
+	try
+	{
+		const db = client.db("LargeProject");
+
+		const results = await db.collection('Users').deleteOne({Login:login, Password:hashPassword}).toArray();
+	
+		if(result.deletedCount == 1)
+		{
+			console.log("Successfully deleted user " + login);
+		}
+		else
+		{
+			var ret = {error:'User not found.'};
+		}
+	}
+	catch(e)
+	{
+		error = e.toString();
+		var ret = {error:e.message};
+	}
+  
+	
 	res.status(200).json(ret);
 });
 
