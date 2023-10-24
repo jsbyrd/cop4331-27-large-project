@@ -1,0 +1,51 @@
+#menu-background
+{
+    background-color: #340e57;
+}
+
+.quizzes-button-explanation-container
+{
+    display: flex;
+    align-items: center;
+    padding: 30px 0px 0px 40px;
+}
+
+.dummy-button
+{
+    height: 30px;
+    width: 80px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+#dummy-save-button
+{
+ background-color: #E9D529;
+}
+
+#dummy-play-button
+{
+    background-color: #71E56F;
+}
+
+.dummy-button-explanation
+{
+    color: aliceblue;
+    margin: 0;
+    margin-left: 40px;
+}
+
+.quiz-catagory-container
+{
+    margin-top: 60px;
+    margin-left: 40px;
+
+    /* space for quizzes */
+    margin-bottom: 400px;
+}
+
+.quiz-catagory-title
+{
+    color: aliceblue;
+}

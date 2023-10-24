@@ -1,0 +1,94 @@
+.register-background
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: blueviolet;
+    height: 100vh;
+    width: 100%;
+}
+
+.register-foreground
+{
+    display: flex;
+    background-color: aliceblue;
+    height: calc(100% - 150px);
+    width: calc(100% - 150px);
+    box-shadow: 0px 10px 10px 10px rgba(0, 0, 0, 0.356);
+}
+
+#register-page-container
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 40%;
+}
+
+#register-title
+{
+    position: absolute;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.input-field-description
+{
+    font-size: 16px;
+}
+
+.user-input-field
+{
+    background-color: aliceblue;
+    border: solid;
+    border-color: blueviolet;
+    height: 50px;
+    width: 300px;
+    border-radius: 12px;
+    padding-left: 10px;
+    margin-bottom: 20px;
+}
+
+#registerButton
+{
+    height: 50px;
+    width: 300px;
+    background-color: blueviolet;
+    color: aliceblue;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+#LoginDiv
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+}
+
+#LoginDiv p
+{
+    margin: 0;
+}
+
+#goToLoginButton
+{
+    background-color: rgba(255, 255, 255, 0);
+    border: none;
+}
+
+.register-image
+{
+    background-color: cadetblue;
+    height: 100%;
+    width: 60%;
+
+    /* just to center the "image here" text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
