@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './Register.css';
 
 function Register()
 {
@@ -45,16 +46,25 @@ function Register()
     return(
       <div id="registerDiv">
         <form onSubmit={doRegister}>
-            <span id="registerinfo">Please fill required fields</span><br />
-                <input type="text" id="registerLogin" placeholder="Username" ref={(c) => registerLogin = c}/><br />
-                <input type="password" id="registerPassword" placeholder="Password" ref={(c) => registerPassword = c}/><br />
-                <input type="text" id="firstName" placeholder="First Name" ref={(c) => rFirstName = c}/><br />
-                <input type="text" id="lastName" placeholder="Last Name" ref={(c) => rLastName = c}/><br />
-                <input type="email" id="email" placeholder="Email" ref={(c) => rEmail = c}/><br />
-                <input type="submit" id="registerButton" class="buttons" value="Submit" onClick={doRegister}/>
+            <span class="input-field-description">Enter Username</span><br />
+            <input type="text" id="registerLogin" class="user-input-field" placeholder="Username" ref={(c) => registerLogin = c}/><br />
+            <span class="input-field-description">Enter Password</span><br />
+            <input type="password" id="registerPassword" class="user-input-field" placeholder="Password" ref={(c) => registerPassword = c}/><br />
+            <span class="input-field-description">Enter First Name</span><br />
+            <input type="text" id="firstName" class="user-input-field" placeholder="First Name" ref={(c) => rFirstName = c}/><br />
+            <span class="input-field-description">Enter Last Name</span><br />
+            <input type="text" id="lastName" class="user-input-field" placeholder="Last Name" ref={(c) => rLastName = c}/><br />
+            <span class="input-field-description">Enter Email</span><br />
+            <input type="email" id="email" class="user-input-field" placeholder="Email" ref={(c) => rEmail = c}/><br />
+            <input type="submit" id="registerButton" class="buttons" value="Submit" onClick={doRegister}/>
             <span id="registerResult">{message}</span>
         </form>
+            <div id="LoginDiv">
+                <p>Already have an account?</p>
+                <input type="button" id="goToLoginButton" class="buttons" value="Back to Login" onClick={event =>  window.location.href='/login'}/>
+            </div>
      </div>
+     
     );
 };
 

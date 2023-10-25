@@ -7,9 +7,16 @@ const LoginPage = () =>
 {
 
     return(
-      <div>
-        <LoginTitle />
-        <Login />
+      <div className="login-background">
+          <div className="login-foreground">
+            <LoginTitle />
+            <div id="login-page-container">
+              <Login />
+          </div>
+          <div className="login-image">
+            image here
+          </div>
+        </div>
       </div>
     );
 };
