@@ -114,13 +114,13 @@ usersRouter.post("/register", async (req, res) => {
 
   console.log("Begin REGISTER for User " + login);
 
-  const newUser = {Login:login,Password:hashPassword,FirstName:firstName,LastName:lastName,Email:email};
+  const newUser = {Login:login,Password:hashPassword,FirstName:firstName,LastName:lastName,Email:email,Verified:false};
   try
   {
     // console.log(url);
     const db = client.db("LargeProject");
     const result = await db.collection("Users").insertOne(newUser);
-    
+
     // I'm not 100% as to why this is a for loop?
     for (let i = 0; i < result.length; i++)
     {
