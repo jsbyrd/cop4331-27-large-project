@@ -9,7 +9,17 @@ const url = process.env.MONGODB_URI;
 const client = new MongoClient(url);
 client.connect();
 
-// functions //
+///////////////
+// Functions //
+///////////////
+
+// function used for some DB calls
+// not sure what it does yet!
+function getResult(error, result)
+{
+  cb(error, result);
+}
+
 function getToken(json)
 {
   var ret;
@@ -44,6 +54,10 @@ function getHash(string)
   // I actually don't know what this does though
   return updatedHash.digest('hex');
 }
+
+///////////////////
+// API Endpoints //
+///////////////////
 
 // Login
 usersRouter.post("/login", async (req, res) => {
@@ -98,6 +112,8 @@ usersRouter.post("/register", async (req, res) => {
 
   const hashPassword = getHash(password);
 
+  console.log("Begin REGISTER for User " + login);
+
   const newUser = {Login:login,Password:hashPassword,FirstName:firstName,LastName:lastName,Email:email};
   try
   {
@@ -132,7 +148,7 @@ usersRouter.delete("/delete", async (req, res) => {
   
 	hashPassword = getHash(password);
 	
-	console.log({firstName, lastName});
+	console.log("Begin DELETE for User " + login);
   
 	try
 	{
@@ -156,6 +172,50 @@ usersRouter.delete("/delete", async (req, res) => {
 	}
   
 	
+	res.status(200).json(ret);
+});
+
+usersRouter.post("/verify", async (req, res) => {
+  // Incoming: login, password
+  // Outgoing: id, firstName, lastName
+  let error = "";
+  var id = -1;
+	var fn = '';
+	var ln = '';
+
+  const {login, password} = req.body;
+
+  hashPassword = getHash(password);
+  
+  console.log("Begin VERIFY for User " + login);
+
+  try
+  {
+    const db = client.db("LargeProject");
+    const results = await db.collection('Users').find({Login:login, Password:hashPassword}).toArray();
+
+		if( results.length > 0 )
+		{
+			id = results[0]._id;
+
+      const edit = {$set: {Verified:true}};
+
+      await db.collection('Users').updateOne({Login:login, Password:hashPassword}, edit);
+
+      var ret = {id:id, error:error};
+		}
+    else
+    {
+      var ret = {error:'Wrong username/password combination'};
+    }
+  }
+  catch(e)
+  {
+    error = e.toString();
+    var ret = {error:e.message};
+  }
+
+  
 	res.status(200).json(ret);
 });
 
