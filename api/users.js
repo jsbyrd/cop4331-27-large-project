@@ -9,7 +9,17 @@ const url = process.env.MONGODB_URI;
 const client = new MongoClient(url);
 client.connect();
 
-// functions //
+///////////////
+// Functions //
+///////////////
+
+// function used for some DB calls
+// not sure what it does yet!
+function getResult(error, result)
+{
+  cb(error, result);
+}
+
 function getToken(json)
 {
   var ret;
@@ -45,6 +55,10 @@ function getHash(string)
   return updatedHash.digest('hex');
 }
 
+///////////////////
+// API Endpoints //
+///////////////////
+
 // Login
 usersRouter.post("/login", async (req, res) => {
   // Incoming: login, password
@@ -56,14 +70,14 @@ usersRouter.post("/login", async (req, res) => {
 
   const {login, password} = req.body;
 
-  newPassword = getHash(password);
+  hashPassword = getHash(password);
   
   console.log({login, password});
 
   try
   {
     const db = client.db("LargeProject");
-    const results = await db.collection('Users').find({Login:login, Password:newPassword}).toArray();
+    const results = await db.collection('Users').find({Login:login, Password:hashPassword}).toArray();
 
 		if( results.length > 0 )
 		{
@@ -96,15 +110,16 @@ usersRouter.post("/register", async (req, res) => {
   let error = "";
   const { login, password, firstName, lastName, email } = req.body;
 
-  const newPassword = getHash(password);
+  const hashPassword = getHash(password);
 
-  const newUser = {Login:login,Password:newPassword,FirstName:firstName,LastName:lastName,Email:email};
+  console.log("Begin REGISTER for User " + login);
+
+  const newUser = {Login:login,Password:hashPassword,FirstName:firstName,LastName:lastName,Email:email,Verified:false};
   try
   {
     // console.log(url);
     const db = client.db("LargeProject");
     const result = await db.collection("Users").insertOne(newUser);
-    console.log(result);
 
     // I'm not 100% as to why this is a for loop?
     for (let i = 0; i < result.length; i++)
@@ -119,6 +134,87 @@ usersRouter.post("/register", async (req, res) => {
   var ret = { error: error };
   // var ret = getToken({ error: error });
 
+	res.status(200).json(ret);
+});
+
+// Delete
+usersRouter.delete("/delete", async (req, res) => {
+	// Incoming: login, password
+	// Outgoing: firstName, lastName
+	let error = "";
+  
+	const {login, password} = req.body;
+  
+	hashPassword = getHash(password);
+	
+	console.log("Begin DELETE for User " + login);
+  
+	try
+	{
+		const db = client.db("LargeProject");
+
+		const results = await db.collection('Users').deleteOne({Login:login, Password:hashPassword}).toArray();
+	
+		if(result.deletedCount == 1)
+		{
+			console.log("Successfully deleted user " + login);
+		}
+		else
+		{
+			var ret = {error:'User not found.'};
+		}
+	}
+	catch(e)
+	{
+		error = e.toString();
+		var ret = {error:e.message};
+	}
+  
+	
+	res.status(200).json(ret);
+});
+
+usersRouter.post("/verify", async (req, res) => {
+  // Incoming: login, password
+  // Outgoing: id, firstName, lastName
+  let error = "";
+  var id = -1;
+	var fn = '';
+	var ln = '';
+
+  const {login, password} = req.body;
+
+  hashPassword = getHash(password);
+  
+  console.log("Begin VERIFY for User " + login);
+
+  try
+  {
+    const db = client.db("LargeProject");
+    const results = await db.collection('Users').find({Login:login, Password:hashPassword}).toArray();
+
+		if( results.length > 0 )
+		{
+			id = results[0]._id;
+
+      const edit = {$set: {Verified:true}};
+
+      await db.collection('Users').updateOne({Login:login, Password:hashPassword}, edit);
+
+      var ret = {id:id, error:error};
+		}
+    else
+    {
+      var ret = {error:'Wrong username/password combination'};
+    }
+  }
+  catch(e)
+  {
+    error = e.toString();
+    var ret = {error:e.message};
+  }
+
+  
 	res.status(200).json(ret);
 });
 
