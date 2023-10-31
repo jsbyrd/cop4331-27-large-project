@@ -48,7 +48,7 @@ quizzesRouter.post("/get", async (req, res) => {
   res.status(200).json(ret);
 });
 
-// Get
+// Search
 // Incoming: term, public (both are optional, but term must be inputted)
 // Outgoing: result, error
 quizzesRouter.post("/search", async (req, res) => {
@@ -142,7 +142,7 @@ quizzesRouter.post("/add", async (req, res) => {
 });
 
 // Edit
-// Incoming: id, name, public, UserId (optional; just input what is edited)
+// Incoming: id (not optional), name, public, UserId (optional; just input what is edited)
 // Outgoing: error
 quizzesRouter.post("/edit", async (req, res) => {
   let error = '200';
