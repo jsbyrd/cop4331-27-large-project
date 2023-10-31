@@ -52,7 +52,7 @@ quizzesRouter.post("/get", async (req, res) => {
 
 // Search
 // Incoming: term, public (both are optional, but term must be inputted)
-// Outgoing: result, error
+// Outgoing: result = {id, name, public}, error
 quizzesRouter.post("/search", async (req, res) => {
   let error = 200;
   var search;
