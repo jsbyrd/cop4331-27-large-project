@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import './Login.css';
 
-function Login()
-{
+const Login = () => {
+
     var loginName;
     var loginPassword;
 
@@ -40,17 +41,19 @@ function Login()
     };
 
     return(
-        <div>
+        <div id="loginDivContainer">
             <div id="loginDiv">
                 <form onSubmit={doLogin}>
-                    <span id="inner-title">Enter Username and Password</span><br />
-                        <input type="text" id="loginName" placeholder="Username" ref={(c) => loginName = c}/><br />
-                        <input type="password" id="loginPassword" placeholder="Password" ref={(c) => loginPassword = c}/><br />
-                        <input type="submit" id="loginButton" class="buttons" value="Login" onClick={doLogin} />
+                    <span class="input-field-description">Enter Username</span><br />
+                    <input type="text" id="loginName" class="user-input-field" placeholder="wizard@email.com" ref={(c) => loginName = c}/><br />
+                    <span class="input-field-description">Enter Password</span><br />
+                    <input type="password" id="loginPassword" class="user-input-field" placeholder="Password" ref={(c) => loginPassword = c}/><br />
+                    <input type="submit" id="loginButton" class="buttons" value="Login" onClick={doLogin} />
                     <span id="loginResult">{message}</span>
                 </form>
             </div>
             <div id="RegisterDiv">
+                <p>Don't have an account?</p>
                 <input type="button" id="goToRegisterButton" class="buttons" value="Register Account" onClick={event =>  window.location.href='/register'}/>
             </div>
         </div>

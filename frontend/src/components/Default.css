@@ -1,0 +1,57 @@
+#default-header-navbar {
+  background-color: rgba(64, 52, 116);
+}
+
+#default-header-logo {
+  font-size: 22px;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+#default-header-login-btn {
+  border: none;
+  margin-right: 10px;
+}
+
+#default-header-register-btn {
+  border: none;
+  background-color: rgba(150, 79, 196, 255);
+}
+
+#default-header-register-btn:hover {
+  background-color: rgba(150, 79, 196, 0.85);
+}
+
+#default-body-left {
+  background-color: rgba(58, 47, 171, 255);
+  padding: 0px 10px 0px 50px;
+  width: 52%;
+}
+
+#default-body-right {
+  background-color: rgba(117, 67, 149, 255);
+  width: 48%;
+}
+
+#default-body-left-logo {
+  font-size: 50px;
+  padding: 1px;
+}
+
+#default-body-left-extra-text {
+  margin-bottom: 50px;
+  margin-left: 2px;
+  font-size: 18px;
+}
+
+#default-body-left-btn {
+  background-color: rgba(150, 79, 196, 255);
+  padding: 15px 20px 15px 20px;
+  font-size: 20px;
+  border-radius: 20px;
+  border: none;
+}
+
+#default-body-left-btn:hover {
+  background-color: rgba(150, 79, 196, 0.85);
+}
