@@ -64,7 +64,7 @@ function getHash(string)
 // Outgoing: id, firstName, lastName, error
 usersRouter.post("/login", async (req, res) => {
 
-  let error = '200';
+  let error = 200;
   var id = -1;
 	var fn = '';
 	var ln = '';
@@ -80,17 +80,17 @@ usersRouter.post("/login", async (req, res) => {
     const db = client.db("LargeProject");
     const result = await db.collection('Users').find({Login:login, Password:hashPassword}).toArray();
 
-		if( results.length > 0 )
+		if( result.length > 0 )
 		{
-			id = results[0]._id;
-			fn = results[0].FirstName;
-			ln = results[0].LastName;
+			id = result[0]._id;
+			fn = result[0].FirstName;
+			ln = result[0].LastName;
 
       // var ret = getToken({id:id, firstName:fn, lastName:ln, error:error});
 		}
     else
     {
-      error = '401';
+      error = 401;
     }
 
     var ret = {id:id, firstName:fn, lastName:ln, error:error};
@@ -108,7 +108,7 @@ usersRouter.post("/login", async (req, res) => {
 // Incoming: login, password, firstName, lastName, email
 // Outgoing: id, error
 usersRouter.post("/register", async (req, res) => {
-  let error = '200';
+  let error = 200;
   const { login, password, firstName, lastName, email } = req.body;
   const hashPassword = getHash(password);
 
@@ -136,7 +136,7 @@ usersRouter.post("/register", async (req, res) => {
 // Incoming: login, password
 // Outgoing: error
 usersRouter.delete("/delete", async (req, res) => {
-	let error = '200';
+	let error = 200;
   
 	const {login, password} = req.body;
 	hashPassword = getHash(password);
@@ -147,7 +147,7 @@ usersRouter.delete("/delete", async (req, res) => {
 	{
 		const db = client.db("LargeProject");
 
-		const results = await db.collection('Users').deleteOne({Login:login, Password:hashPassword}).toArray();
+		const result = await db.collection('Users').deleteOne({Login:login, Password:hashPassword}).toArray();
 	
 		if(result.deletedCount == 1)
 		{
@@ -155,7 +155,7 @@ usersRouter.delete("/delete", async (req, res) => {
 		}
 		else
 		{
-			error = '404';
+			error = 404;
 		}
 
     var ret = {error:error};
@@ -174,7 +174,7 @@ usersRouter.delete("/delete", async (req, res) => {
 // Outgoing: id, error
 usersRouter.post("/verify", async (req, res) => {
   
-  let error = '200';
+  let error = 200;
   var id = -1;
 	var fn = '';
 	var ln = '';
@@ -187,11 +187,11 @@ usersRouter.post("/verify", async (req, res) => {
   try
   {
     const db = client.db("LargeProject");
-    const results = await db.collection('Users').find({Login:login, Password:hashPassword}).toArray();
+    const result = await db.collection('Users').find({Login:login, Password:hashPassword}).toArray();
 
-		if( results.length > 0 )
+		if( result.length > 0 )
 		{
-			id = results[0]._id;
+			id = result[0]._id;
 
       const edit = {$set: {Verified:true}};
 
@@ -201,7 +201,7 @@ usersRouter.post("/verify", async (req, res) => {
 		}
     else
     {
-      error = '404';
+      error = 404;
     }
 
     var ret = {id:id, error:error};
