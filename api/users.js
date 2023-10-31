@@ -122,10 +122,8 @@ usersRouter.post("/register", async (req, res) => {
     const result = await db.collection("Users").insertOne(newUser);
 
     // I'm not 100% as to why this is a for loop?
-    for (let i = 0; i < result.length; i++)
-    {
-      _ret.push(result[i]);
-    }
+    _ret.push(result[0]);
+  
   }
   catch(e) {
     error = e.toString();

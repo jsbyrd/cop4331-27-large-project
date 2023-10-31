@@ -39,11 +39,11 @@ app.use(bodyParser.json());
 
 // Import api endpoints
 const usersRouter = require("./api/users");
-// const quizzesRouter = require("./api/quizzes");
+const quizzesRouter = require("./api/quizzes");
 
 // Use routes
 app.use("/api/users", usersRouter);
-// app.use("/api/quizzes", quizzesRouter);
+app.use("/api/quizzes", quizzesRouter);
 
 // Start server
 app.listen(PORT, () => {

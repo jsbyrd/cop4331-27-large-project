@@ -6,27 +6,22 @@ const url = process.env.MONGODB_URI;
 const client = new MongoClient(url);
 client.connect();
 
-quizzesRouter.get("/", async (req, res) => {
-  let error = "N/A";
-  let _ret = [];
-  try
-  {
-    console.log(url);
-    const db = client.db("LargeProject");
-    const result = await db.collection("Quizzes").find().toArray();
-    console.log(result);
+quizzesRouter.post("/get", async (req, res) => {
 
-    for (let i = 0; i < result.length; i++)
-    {
-      _ret.push(result[i]);
-    }
-  }
-  catch(e) {
-    error = e.toString();
-  }
+
+
+});
+
+quizzesRouter.post("/add", async (req, res) => {
   
-  let ret = { result: _ret, error: error };
-  res.status(200).json(ret);
+
+
+});
+
+quizzesRouter.post("/edit", async (req, res) => {
+
+
+
 });
 
 module.exports = quizzesRouter;
