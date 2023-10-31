@@ -1,3 +1,154 @@
+@media (min-width: 3500px)
+{
+    #register-form
+    {
+        width: 1100px;
+        height: 1000px;
+    }
+
+    :root
+    {
+        --responsive-description-font-size: 50px;
+        --responsive-button-font-size: 46px;
+        --responsive-title-font-size: 66px;
+    }
+}
+
+@media (min-width: 3200px) and (max-width: 3499px)
+{
+    #register-form
+    {
+        width: 1000px;
+        height: 900px;
+    }
+
+    :root
+    {
+        --responsive-description-font-size: 42px;
+        --responsive-button-font-size: 38px;
+        --responsive-title-font-size: 60px;
+    }
+}
+
+@media (min-width: 2800px) and (max-width: 3199px)
+{
+    #register-form
+    {
+        width: 900px;
+        height: 800px;
+    }
+
+    :root
+    {
+        --responsive-description-font-size: 38px;
+        --responsive-button-font-size: 34px;
+        --responsive-title-font-size: 54px;
+    }
+}
+
+@media (min-width: 2500px) and (max-width: 2799px)
+{
+    #register-form
+    {
+        width: 800px;
+        height: 700px;
+    }
+
+    :root
+    {
+        --responsive-description-font-size: 34px;
+        --responsive-button-font-size: 30px;
+        --responsive-title-font-size: 50px;
+    }
+}
+
+@media (min-width: 2200px) and (max-width: 2499px)
+{
+    #register-form
+    {
+        width: 700px;
+        height: 600px;
+    }
+
+    :root
+    {
+        --responsive-description-font-size: 30px;
+        --responsive-button-font-size: 26px;
+        --responsive-title-font-size: 46px;
+    }
+}
+
+@media (min-width: 1800px) and (max-width: 2199px)
+{
+    #register-form
+    {
+        width: 500px;
+        height: 700px;
+    }
+
+    :root
+    {
+        --responsive-description-font-size: 24px;
+        --responsive-button-font-size: 20px;
+        --responsive-title-font-size: 38px;
+    }
+}
+
+@media (min-width: 1500px) and (max-width: 1799px)
+{
+    #register-form
+    {
+        width: 450px;
+        height: 600px;
+    }
+
+    :root
+    {
+        --responsive-description-font-size: 20px;
+        --responsive-button-font-size: 16px;
+        --responsive-title-font-size: 34px;
+    }
+}
+
+@media (min-width: 1250px) and (max-width: 1499px)
+{
+    #register-form
+    {
+        width: 380px;
+        height: 500px;
+    }
+
+    :root
+    {
+        --responsive-description-font-size: 16px;
+        --responsive-button-font-size: 14px;
+        --responsive-title-font-size: 28px;
+    }
+}
+
+@media (min-width: 1000px) and (max-width: 1249px)
+{
+    #register-form
+    {
+        width: 300px;
+        height: 400px;
+    }
+
+    :root
+    {
+        --responsive-description-font-size: 14px;
+        --responsive-button-font-size: 12px;
+        --responsive-title-font-size: 24px;
+    }
+}
+
+#register-form
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .register-background
 {
     display: flex;
@@ -30,36 +181,46 @@
 #register-title
 {
     position: absolute;
-    margin-top: 10px;
-    margin-left: 10px;
+    margin: 12px;
+    font-size: var(--responsive-title-font-size);
 }
 
-.input-field-description
+.register-input-field-container
 {
-    font-size: 16px;
+    height: 30%;
+    margin: 0;
 }
 
-.user-input-field
+.register-input-field-description
+{
+    font-size: var(--responsive-description-font-size);
+    margin-bottom: 0px;
+}
+
+.register-user-input-field
 {
     background-color: aliceblue;
     border: solid;
     border-color: blueviolet;
-    height: 50px;
-    width: 300px;
+    height: 53%;
+    width: 100%;
     border-radius: 12px;
     padding-left: 10px;
     margin-bottom: 20px;
+    font-size: var(--responsive-description-font-size);
 }
 
 #registerButton
 {
-    height: 50px;
-    width: 300px;
+    height: 16%;
+    width: 100%;
     background-color: blueviolet;
     color: aliceblue;
     border: none;
     border-radius: 12px;
     font-weight: 600;
+    font-size: var(--responsive-button-font-size);
+    margin-top: 12px;
 }
 
 #LoginDiv

@@ -1,3 +1,154 @@
+@media (min-width: 3500px)
+{
+    #login-form
+    {
+        width: 1100px;
+        height: 1000px;
+    }
+
+    :root
+    {
+        --responsive-description-font-size: 50px;
+        --responsive-button-font-size: 46px;
+        --responsive-title-font-size: 66px;
+    }
+}
+
+@media (min-width: 3200px) and (max-width: 3499px)
+{
+    #login-form
+    {
+        width: 1000px;
+        height: 900px;
+    }
+
+    :root
+    {
+        --responsive-description-font-size: 46px;
+        --responsive-button-font-size: 42px;
+        --responsive-title-font-size: 60px;
+    }
+}
+
+@media (min-width: 2800px) and (max-width: 3199px)
+{
+    #login-form
+    {
+        width: 900px;
+        height: 800px;
+    }
+
+    :root
+    {
+        --responsive-description-font-size: 42px;
+        --responsive-button-font-size: 38px;
+        --responsive-title-font-size: 54px;
+    }
+}
+
+@media (min-width: 2500px) and (max-width: 2799px)
+{
+    #login-form
+    {
+        width: 800px;
+        height: 700px;
+    }
+
+    :root
+    {
+        --responsive-description-font-size: 38px;
+        --responsive-button-font-size: 34px;
+        --responsive-title-font-size: 50px;
+    }
+}
+
+@media (min-width: 2200px) and (max-width: 2499px)
+{
+    #login-form
+    {
+        width: 700px;
+        height: 600px;
+    }
+
+    :root
+    {
+        --responsive-description-font-size: 34px;
+        --responsive-button-font-size: 30px;
+        --responsive-title-font-size: 46px;
+    }
+}
+
+@media (min-width: 1800px) and (max-width: 2199px)
+{
+    #login-form
+    {
+        width: 600px;
+        height: 500px;
+    }
+
+    :root
+    {
+        --responsive-description-font-size: 30px;
+        --responsive-button-font-size: 24px;
+        --responsive-title-font-size: 38px;
+    }
+}
+
+@media (min-width: 1500px) and (max-width: 1799px)
+{
+    #login-form
+    {
+        width: 500px;
+        height: 450px;
+    }
+
+    :root
+    {
+        --responsive-description-font-size: 24px;
+        --responsive-button-font-size: 20px;
+        --responsive-title-font-size: 34px;
+    }
+}
+
+@media (min-width: 1250px) and (max-width: 1499px)
+{
+    #login-form
+    {
+        width: 400px;
+        height: 350px;
+    }
+
+    :root
+    {
+        --responsive-description-font-size: 20px;
+        --responsive-button-font-size: 16px;
+        --responsive-title-font-size: 28px;
+    }
+}
+
+@media (min-width: 1000px) and (max-width: 1249px)
+{
+    #login-form
+    {
+        width: 300px;
+        height: 250px;
+    }
+
+    :root
+    {
+        --responsive-description-font-size: 18px;
+        --responsive-button-font-size: 12px;
+        --responsive-title-font-size: 24px;
+    }
+}
+
+#login-form
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .login-background
 {
     display: flex;
@@ -12,8 +163,8 @@
 {
     display: flex;
     background-color: aliceblue;
-    height: calc(100% - 150px);
-    width: calc(100% - 150px);
+    height: 80%;
+    width: 90%;
     box-shadow: 0px 10px 10px 10px rgba(0, 0, 0, 0.356);
 }
 
@@ -30,36 +181,46 @@
 #login-title
 {
     position: absolute;
-    margin-top: 10px;
-    margin-left: 10px;
+    margin: 12px;
+    font-size: var(--responsive-title-font-size);
 }
 
-.input-field-description
+.input-field-container
 {
-    font-size: 16px;
+    height: 30%;
+    margin: 0;
 }
 
-.user-input-field
+.login-input-field-description
+{
+    font-size: var(--responsive-description-font-size);
+    margin-bottom: 0px;
+}
+
+.login-user-input-field
 {
     background-color: aliceblue;
     border: solid;
     border-color: blueviolet;
-    height: 50px;
-    width: 300px;
+    height: 53%;
+    width: 100%;
     border-radius: 12px;
     padding-left: 10px;
+    margin-top: 0px;
     margin-bottom: 20px;
+    font-size: var(--responsive-description-font-size);
 }
 
 #loginButton
 {
-    height: 50px;
-    width: 300px;
+    height: 16%;
+    width: 100%;
     background-color: blueviolet;
     color: aliceblue;
     border: none;
     border-radius: 12px;
     font-weight: 600;
+    font-size: var(--responsive-button-font-size);
 }
 
 #RegisterDiv
