@@ -60,10 +60,11 @@ function getHash(string)
 ///////////////////
 
 // Login
+// Incoming: login, password
+// Outgoing: id, firstName, lastName, error
 usersRouter.post("/login", async (req, res) => {
-  // Incoming: login, password
-  // Outgoing: id, firstName, lastName
-  let error = "";
+
+  let error = 200;
   var id = -1;
 	var fn = '';
 	var ln = '';
@@ -72,44 +73,43 @@ usersRouter.post("/login", async (req, res) => {
 
   hashPassword = getHash(password);
   
-  console.log({login, password});
+  console.log("Begin LOGIN for User " + login);
 
   try
   {
     const db = client.db("LargeProject");
-    const results = await db.collection('Users').find({Login:login, Password:hashPassword}).toArray();
+    const result = await db.collection('Users').find({Login:login, Password:hashPassword}).toArray();
 
-		if( results.length > 0 )
+		if( result.length > 0 )
 		{
-			id = results[0]._id;
-			fn = results[0].FirstName;
-			ln = results[0].LastName;
+			id = result[0]._id;
+			fn = result[0].FirstName;
+			ln = result[0].LastName;
 
-      var ret = {id:id, firstName:fn, lastName:ln, error:error};
       // var ret = getToken({id:id, firstName:fn, lastName:ln, error:error});
 		}
     else
     {
-      var ret = {error:'Wrong username/password combination'};
+      error = 401;
     }
+
+    var ret = {id:id, firstName:fn, lastName:ln, error:error};
   }
   catch(e)
   {
     error = e.toString();
     var ret = {error:e.message};
   }
-
   
 	res.status(200).json(ret);
 });
 
 // Register
+// Incoming: login, password, firstName, lastName, email
+// Outgoing: id, error
 usersRouter.post("/register", async (req, res) => {
-  // incoming: login, password, firstName, lastName, email
-  // outgoing: error
-  let error = "";
+  let error = 200;
   const { login, password, firstName, lastName, email } = req.body;
-
   const hashPassword = getHash(password);
 
   console.log("Begin REGISTER for User " + login);
@@ -121,30 +121,24 @@ usersRouter.post("/register", async (req, res) => {
     const db = client.db("LargeProject");
     const result = await db.collection("Users").insertOne(newUser);
 
-    // I'm not 100% as to why this is a for loop?
-    for (let i = 0; i < result.length; i++)
-    {
-      _ret.push(result[i]);
-    }
+    var ret = {id:result.insertedId, error: error };
   }
   catch(e) {
     error = e.toString();
   }
-
-  var ret = { error: error };
+  
   // var ret = getToken({ error: error });
 
 	res.status(200).json(ret);
 });
 
 // Delete
+// Incoming: login, password
+// Outgoing: error
 usersRouter.delete("/delete", async (req, res) => {
-	// Incoming: login, password
-	// Outgoing: firstName, lastName
-	let error = "";
+	let error = 200;
   
 	const {login, password} = req.body;
-  
 	hashPassword = getHash(password);
 	
 	console.log("Begin DELETE for User " + login);
@@ -153,7 +147,7 @@ usersRouter.delete("/delete", async (req, res) => {
 	{
 		const db = client.db("LargeProject");
 
-		const results = await db.collection('Users').deleteOne({Login:login, Password:hashPassword}).toArray();
+		const result = await db.collection('Users').deleteOne({Login:login, Password:hashPassword}).toArray();
 	
 		if(result.deletedCount == 1)
 		{
@@ -161,8 +155,10 @@ usersRouter.delete("/delete", async (req, res) => {
 		}
 		else
 		{
-			var ret = {error:'User not found.'};
+			error = 404;
 		}
+
+    var ret = {error:error};
 	}
 	catch(e)
 	{
@@ -174,16 +170,16 @@ usersRouter.delete("/delete", async (req, res) => {
 	res.status(200).json(ret);
 });
 
+// Incoming: login, password
+// Outgoing: id, error
 usersRouter.post("/verify", async (req, res) => {
-  // Incoming: login, password
-  // Outgoing: id, firstName, lastName
-  let error = "";
+  
+  let error = 200;
   var id = -1;
 	var fn = '';
 	var ln = '';
 
   const {login, password} = req.body;
-
   hashPassword = getHash(password);
   
   console.log("Begin VERIFY for User " + login);
@@ -191,11 +187,11 @@ usersRouter.post("/verify", async (req, res) => {
   try
   {
     const db = client.db("LargeProject");
-    const results = await db.collection('Users').find({Login:login, Password:hashPassword}).toArray();
+    const result = await db.collection('Users').find({Login:login, Password:hashPassword}).toArray();
 
-		if( results.length > 0 )
+		if( result.length > 0 )
 		{
-			id = results[0]._id;
+			id = result[0]._id;
 
       const edit = {$set: {Verified:true}};
 
@@ -205,8 +201,10 @@ usersRouter.post("/verify", async (req, res) => {
 		}
     else
     {
-      var ret = {error:'Wrong username/password combination'};
+      error = 404;
     }
+
+    var ret = {id:id, error:error};
   }
   catch(e)
   {
