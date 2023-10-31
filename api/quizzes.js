@@ -91,7 +91,7 @@ quizzesRouter.post("/search", async (req, res) => {
   try
   {
     const db = client.db("LargeProject");
-    const result = await db.collection('Quizzes').find().toArray();
+    const result = await db.collection('Quizzes').find(search, projection).toArray();
 
     if (result.length > 0)
     {
