@@ -146,7 +146,7 @@ quizzesRouter.post("/add", async (req, res) => {
 });
 
 // Edit
-// Incoming: id (not optional), name, public, UserId (optional; just input what is edited)
+// Incoming: id (required), name, public, UserId (optional; just input what is edited)
 // Outgoing: error
 quizzesRouter.post("/edit", async (req, res) => {
   let error = 200;

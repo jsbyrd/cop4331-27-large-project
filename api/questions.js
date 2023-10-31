@@ -12,21 +12,21 @@ client.connect();
 ///////////////////
 
 // Search
-// Incoming: term, id (both are optional, but term must be inputted)
+// Incoming: term (optional but needs to be inputted), quizId (required or it will return empty)
 // Outgoing: result, error
 questionsRouter.post("/search", async (req, res) => {
   let error = 200;
   
-  const {term, id} = req.body;
+  const {term, quizId} = req.body;
   
-  console.log("Begin Search for Question with ID " + id);
+  console.log("Begin Search for Question with Quiz ID " + quizId);
   
   // more silly nodejs jargain
   var search = {
-  $and: [{QuizId:id}],
-  $or: [{
-    Question: { $regex: term, $options: "i"},
-    Answer: { $regex: term, $options: "i"}
+    $and: [{QuizId:quizId}],
+    $or: [{
+      Question: { $regex: term, $options: "i"},
+      Answer: { $regex: term, $options: "i"}
     }]
   };
 
@@ -40,14 +40,8 @@ questionsRouter.post("/search", async (req, res) => {
     const db = client.db("LargeProject");
     const result = await db.collection('Questions').find(search, projection).toArray();
     
-    if (result.length > 0)
-    {
-    var ret = {result:result, error:error};
-    }
-    else
-    {
-    error = 204;
-    }
+    if (result.length == 0)
+      error = 204;
     
     var ret = {result:result, error:error};
   }
@@ -61,7 +55,7 @@ questionsRouter.post("/search", async (req, res) => {
 });
 
 // Add
-// Incoming: question, answer, wrongAnswers (default: 0), quizId
+// Incoming: question, answer, wrongAnswers, quizId
 // Outgoing: id, error
 questionsRouter.post("/add", async (req, res) => {
   let error = 200;
@@ -88,8 +82,48 @@ questionsRouter.post("/add", async (req, res) => {
   res.status(200).json(ret);
 });
 
+// Edit
+// Incoming: id (required), question, answer, wrongAnswers, quizId (optional; only input what's edited)
+// Outgoing: error
 questionsRouter.post("/edit", async (req, res) => {
-  
+  let error = 200;
+
+  const {id, question, answer, wrongAnswers, quizId} = req.body;
+
+  // some annoying variable jargain part 2
+  var _id = new ObjectId(id);
+
+  console.log("Begin EDIT for Quiz with ID " + id);
+
+  try
+  {
+    // it gets worse every time I type it
+    let update = {
+      ...question != null ? {Question:question} : null,
+      ...answer != null ? {Answer:answer} : null,
+      ...wrongAnswers != null ? {WrongAnswers:wrongAnswers} : null,
+      ...quizId != null ? {QuizId:quizId} : null,
+    };
+
+    const edit = {$set: update};
+
+    const db = client.db("LargeProject");
+    const result = await db.collection('Questions').updateOne({_id}, edit);
+
+    if (result.matchedCount == 0)
+    {
+      error = 404;
+    }
+
+    var ret = {error:error};
+  }
+  catch(e)
+  {
+    error = e.toString();
+    var ret = {error:e.message};
+  }
+
+  res.status(200).json(ret);
 });
 
 module.exports = questionsRouter;
