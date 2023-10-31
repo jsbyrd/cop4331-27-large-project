@@ -1,4 +1,5 @@
 import React from 'react';
+import logo from './images/logo.png'
 
 const DefaultHeader = () => {
 
@@ -12,8 +13,8 @@ const DefaultHeader = () => {
 
   return (
     <header className='position-sticky top-0'>
-      <nav className="navbar navbar-expand-lg d-flex flex-nowrap justify-content-between w-100" id='default-header-navbar'>
-        <a className="nav-link text-light" id='default-header-logo' href="/" style={{marginLeft: "20px"}}>Logo</a>
+      <nav className="navbar navbar-expand-lg d-flex flex-nowrap justify-content-between w-100 navbar-custom" id='default-header-navbar'>
+        <img id='default-header-logo' src={logo}/>
         <div className="d-flex align-items-center" style={{marginRight: "20px"}}>
           <button type="button" className="btn px-3 text-light" id='default-header-login-btn' onClick={goToLogin}>
             Login

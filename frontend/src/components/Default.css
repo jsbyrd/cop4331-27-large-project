@@ -1,11 +1,16 @@
+.navbar-custom
+{
+  height:100px;
+}
+
 #default-header-navbar {
   background-color: rgba(64, 52, 116);
 }
 
 #default-header-logo {
-  font-size: 22px;
-  font-weight: bold;
   margin-left: 10px;
+  width:200px;
+  height:200px;
 }
 
 #default-header-login-btn {
