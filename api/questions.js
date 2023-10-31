@@ -93,7 +93,7 @@ questionsRouter.post("/edit", async (req, res) => {
   // some annoying variable jargain part 2
   var _id = new ObjectId(id);
 
-  console.log("Begin EDIT for Quiz with ID " + id);
+  console.log("Begin EDIT for Question with ID " + id);
 
   try
   {
