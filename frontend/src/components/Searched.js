@@ -2,8 +2,11 @@ import React from 'react';
 
 function Searched()
 {
-    <div id='searched-background'>
-    </div>
+    return(
+        <div id='searched-background'>
+            <p>Search Results :D</p>
+        </div>
+    );
 }
 
 export default Searched;

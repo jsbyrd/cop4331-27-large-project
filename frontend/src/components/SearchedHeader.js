@@ -6,7 +6,7 @@ import logo from './images/logo.png'
 const SearchHeader = () => {
     return (
         <header className='position-sticky top-0'>
-            <nav className="navbar navbar-expand-lg d-flex flex-nowrap justify-content-between w-100" id='default-header-navbar'>
+            <nav className="navbar navbar-expand-lg d-flex flex-nowrap justify-content-between w-100 searched-navbar-custom" id='default-header-navbar'>
                 <a className="nav-link text-light" id='searched-header-logo' href="/" style={{ marginLeft: "20px" }}>
                     <img src={logo} id='searched-header-logo'/>
                 </a>

@@ -13,7 +13,7 @@ const DefaultHeader = () => {
 
   return (
     <header className='position-sticky top-0'>
-      <nav className="navbar navbar-expand-lg d-flex flex-nowrap justify-content-between w-100 navbar-custom" id='default-header-navbar'>
+      <nav className="navbar navbar-expand-lg d-flex flex-nowrap justify-content-between w-100 default-navbar-custom" id='default-header-navbar'>
         <img id='default-header-logo' src={logo}/>
         <div className="d-flex align-items-center" style={{marginRight: "20px"}}>
           <button type="button" className="btn px-3 text-light" id='default-header-login-btn' onClick={goToLogin}>
