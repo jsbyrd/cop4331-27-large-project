@@ -1,3 +1,19 @@
+.menu-navbar-custom
+{
+    height:100px;
+}
+
+#menu-searchbar
+{
+    width: 350px;
+}
+
+#menu-header-logo {
+    margin-left: 10px;
+    width:200px;
+    height:200px;
+}
+
 #menu-background
 {
     background-color: #340e57;

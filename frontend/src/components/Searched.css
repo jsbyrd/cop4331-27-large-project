@@ -1,0 +1,15 @@
+#searched-searchbar
+{
+    width: 350px;
+}
+
+#searched-header-logo {
+    margin-left: 10px;
+    width:200px;
+    height:200px;
+  }
+
+.searched-navbar-custom
+{
+  height:100px;
+}
