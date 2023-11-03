@@ -41,12 +41,13 @@ app.use(bodyParser.json());
 const usersRouter = require("./api/users");
 const quizzesRouter = require("./api/quizzes");
 const questionsRouter = require("./api/questions");
-
+const savedRouter = require("./api/saved");
 
 // Use routes
 app.use("/api/users", usersRouter);
 app.use("/api/quizzes", quizzesRouter);
 app.use("/api/questions", questionsRouter);
+app.use("/api/saved", savedRouter);
 
 // Start server
 app.listen(PORT, () => {
