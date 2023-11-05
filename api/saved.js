@@ -85,3 +85,5 @@ savedRouter.post("/add", async (req, res) => {
 
 	res.status(200).json(ret);
 });
+
+module.exports = savedRouter;
