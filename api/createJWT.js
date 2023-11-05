@@ -1,64 +1,64 @@
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
+	const jwt = require("jsonwebtoken");
+	require("dotenv").config();
 
-exports.createToken = function ( fn, ln, id )
-{
-    return _createToken( fn, ln, id );
-}
+	exports.createToken = function ( fn, ln, id )
+	{
+		return _createToken( fn, ln, id );
+	}
 
-_createToken = function ( fn, ln, id )
-{
-    try
-    {
-      const expiration = new Date();
-      const user = {userId:id,firstName:fn,lastName:ln};
+	_createToken = function ( fn, ln, id )
+	{
+		try
+		{
+		const expiration = new Date();
+		const user = {userId:id,firstName:fn,lastName:ln};
 
-      const accessToken =  jwt.sign( user, process.env.ACCESS_TOKEN_SECRET);
+		const accessToken =  jwt.sign( user, process.env.ACCESS_TOKEN_SECRET);
 
-      // In order to exoire with a value other than the default, use the 
-       // following
-      /*
-      const accessToken= jwt.sign(user,process.env.ACCESS_TOKEN_SECRET, 
-         { expiresIn: '30m'} );
-                       '24h'
-                      '365d'
-      */
+		// In order to exoire with a value other than the default, use the 
+		// following
+		/*
+		const accessToken= jwt.sign(user,process.env.ACCESS_TOKEN_SECRET, 
+			{ expiresIn: '30m'} );
+						'24h'
+						'365d'
+		*/
 
-      var ret = {accessToken:accessToken};
-    }
-    catch(e)
-    {
-      var ret = {error:e.message};
-    }
-    return ret;
-}
+		var ret = {accessToken:accessToken};
+		}
+		catch(e)
+		{
+		var ret = {error:e.message};
+		}
+		return ret;
+	}
 
-exports.isExpired = function( token )
-{
-   var isError = jwt.verify( token, process.env.ACCESS_TOKEN_SECRET, 
-     (err, verifiedJwt) =>
-   {
-     if( err )
-     {
-       return true;
-     }
-     else
-     {
-       return false;
-     }
-   });
+	exports.isExpired = function( token )
+	{
+	var isError = jwt.verify( token, process.env.ACCESS_TOKEN_SECRET, 
+		(err, verifiedJwt) =>
+	{
+		if( err )
+		{
+		return true;
+		}
+		else
+		{
+		return false;
+		}
+	});
 
-   return isError;
+	return isError;
 
-}
+	}
 
-exports.refresh = function( token )
-{
-  var ud = jwt.decode(token,{complete:true});
+	exports.refresh = function( token )
+	{
+	var ud = jwt.decode(token,{complete:true});
 
-  var id = ud.payload._id;
-  var firstName = ud.payload.firstName;
-  var lastName = ud.payload.lastName;
+	var id = ud.payload._id;
+	var firstName = ud.payload.firstName;
+	var lastName = ud.payload.lastName;
 
-  return _createToken( firstName, lastName, id );
-}
+	return _createToken( firstName, lastName, id );
+	}
