@@ -1,4 +1,4 @@
-const { resourceLimits } = require("worker_threads");
+// const { resourceLimits } = require("worker_threads");
 
 const quizzesRouter = require("express").Router();
 require("dotenv").config();
