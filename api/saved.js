@@ -29,17 +29,10 @@ savedRouter.post("/get", async (req, res) => {
 		const db = client.db("LargeProject");
 		const result = await db.collection('Saved').find({_id}).toArray();
 
-		if (result.length > 0)
-		{
-			quizId = result[0].QuizId;
-			userId = result[0].UserId;
+		if (result.length == 0)
+			error = 204;
 
-			var ret = {QuizId:quizId, UserId:userId, error:error};
-		}
-		else
-		{
-			var ret = {error:404};
-		}
+		var ret = {result:result, error:error};
 	}
 	catch(e)
 	{
@@ -64,18 +57,13 @@ savedRouter.post("/add", async (req, res) => {
 
 	try
 	{
+		const db = client.db("LargeProject");
+		const result = await db.collection('Saved').insertOne(newQuiz);
+
 		if(userId == "" || quizId == "")
-		{
 			error = "You have a blank field somewhere. No saved quiz for you!";
-			var ret = {error: error};
-		}
-		else
-		{
-			const db = client.db("LargeProject");
-			const result = await db.collection('Saved').insertOne(newQuiz);
-		
-			var ret = {id:result.insertedId, userId:userId, quizId:quizId, error: error};
-		}
+
+		var ret = {result:result, error:error};
 	}
 	catch(e)
 	{
@@ -85,3 +73,5 @@ savedRouter.post("/add", async (req, res) => {
 
 	res.status(200).json(ret);
 });
+
+module.exports = savedRouter;
