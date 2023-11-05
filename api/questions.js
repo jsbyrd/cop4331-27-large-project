@@ -55,14 +55,14 @@ questionsRouter.post("/search", async (req, res) => {
 });
 
 // Add
-// Incoming: question, answer, wrongAnswers, quizId
+// Incoming: question, quizId
 // Outgoing: id, error
 questionsRouter.post("/add", async (req, res) => {
 	let error = 200;
 	
-	const {question, answer, wrongAnswers, quizId} = req.body;
+	const {question, quizId} = req.body;
 	
-	const newQuestion = {Question:question, Answer:answer, WrongAnswers:wrongAnswers, QuizId:quizId};
+	const newQuestion = {Question:question, QuizId:quizId};
 	
 	console.log("Begin ADD for Question with quizId " + quizId);
 	
@@ -80,15 +80,15 @@ questionsRouter.post("/add", async (req, res) => {
 	}
 	
 	res.status(200).json(ret);
-	});
+});
 
 // Edit
-// Incoming: id (required), question, answer, wrongAnswers, quizId (optional; only input what's edited)
+// Incoming: id (required), question, quizId (optional; only input what's edited)
 // Outgoing: error
 questionsRouter.post("/edit", async (req, res) => {
 	let error = 200;
 
-	const {id, question, answer, wrongAnswers, quizId} = req.body;
+	const {id, question, quizId} = req.body;
 
 	// some annoying variable jargain part 2
 	var _id = new ObjectId(id);
@@ -100,8 +100,6 @@ questionsRouter.post("/edit", async (req, res) => {
 		// it gets worse every time I type it
 		let update = {
 		...question != null ? {Question:question} : null,
-		...answer != null ? {Answer:answer} : null,
-		...wrongAnswers != null ? {WrongAnswers:wrongAnswers} : null,
 		...quizId != null ? {QuizId:quizId} : null,
 		};
 
@@ -112,7 +110,7 @@ questionsRouter.post("/edit", async (req, res) => {
 
 		if (result.matchedCount == 0)
 		{
-		error = 404;
+		error = 204;
 		}
 
 		var ret = {error:error};
@@ -124,6 +122,6 @@ questionsRouter.post("/edit", async (req, res) => {
 	}
 
 	res.status(200).json(ret);
-	});
+});
 
-	module.exports = questionsRouter;
+module.exports = questionsRouter;
