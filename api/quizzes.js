@@ -24,24 +24,22 @@ quizzesRouter.post("/get", async (req, res) => {
 	// some annoying variable jargon
 	var _id = new ObjectId(id);
 
+  var projection = {
+    projection: {_id: 0}
+  }
+
 	console.log("Begin GET for Quiz with ID" + id);
 
 	try
 	{
 		const db = client.db("LargeProject");
-		const result = await db.collection('Quizzes').find({_id}).toArray();
+		const result = await db.collection('Quizzes').find({_id}, projection).toArray();
 
-		if (result.length > 0)
-		{
-			quizName = result[0].Name;
-				userId = result[0].UserId;
+		if (result.length == 0)
+			error = 204;
 
-			var ret = {Name:quizName, UserId:userId, error:error};
-		}
-		else
-		{
-			var ret = {error:404};
-		}
+    var ret = {result:result, error:error};
+
 	}
 	catch(e)
 	{
@@ -171,7 +169,7 @@ quizzesRouter.post("/edit", async (req, res) => {
 
 		if (result.matchedCount == 0)
 		{
-		error = 404;
+		error = 204;
 		}
 
 		var ret = {error:error};

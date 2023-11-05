@@ -163,7 +163,7 @@ usersRouter.delete("/delete", async (req, res) => {
 	{
 		const db = client.db("LargeProject");
 
-		const result = await db.collection('Users').deleteOne({Login:login, Password:hashPassword}).toArray();
+		const result = await db.collection('Users').deleteOne({Login:login, Password:hashPassword});
 	
 		if(result.deletedCount == 1)
 		{
