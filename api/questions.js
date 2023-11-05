@@ -20,13 +20,13 @@ questionsRouter.post("/search", async (req, res) => {
   const {term, quizId} = req.body;
   
   console.log("Begin Search for Question with Quiz ID " + quizId);
+  var _id = new ObjectId(quizId);
   
   // more silly nodejs jargain
   var search = {
-    $and: [{QuizId:quizId}],
+    $and: [{QuizId:_id}],
     $or: [{
-      Question: { $regex: term, $options: "i"},
-      Answer: { $regex: term, $options: "i"}
+      Question: { $regex: term, $options: "i"}
     }]
   };
 

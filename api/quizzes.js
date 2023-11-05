@@ -1,3 +1,5 @@
+const { resourceLimits } = require("worker_threads");
+
 const quizzesRouter = require("express").Router();
 require("dotenv").config();
 
@@ -93,14 +95,8 @@ quizzesRouter.post("/search", async (req, res) => {
     const db = client.db("LargeProject");
     const result = await db.collection('Quizzes').find(search, projection).toArray();
 
-    if (result.length > 0)
-    {
-      var ret = {result:result, error:error};
-    }
-    else
-    {
+    if (result.length == 0)
       error = 204;
-    }
 
     var ret = {result:result, error:error};
   }
