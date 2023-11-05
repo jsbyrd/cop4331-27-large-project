@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage';
 import MenuPage from './pages/MenuPage';
 import RegisterPage from './pages/RegisterPage';
 import SearchedPage from './pages/SearchedPage';
+import ViewQuizPage from './pages/ViewQuizPage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/menu" element={<MenuPage />} />
+        <Route path="/viewquiz/:quizID" element={<ViewQuizPage />} />
       </Routes>
     </BrowserRouter>
       );

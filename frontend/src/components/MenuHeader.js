@@ -19,8 +19,8 @@ const MenuHeader = () => {
           <img src={logo} id='menu-header-logo'/>
         </a>
         <div className='d-flex align-items-center'>
-          <form class="form-inline">
-            <input class="form-control mr-sm-2" id='menu-searchbar' type="search" placeholder="Search" aria-label="Search" />
+          <form className="form-inline">
+            <input className="form-control mr-sm-2" id='menu-searchbar' type="search" placeholder="Search" aria-label="Search" />
           </form>
         </div>
         <div className="d-flex align-items-center" style={{marginRight: "20px"}}>
