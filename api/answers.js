@@ -125,11 +125,11 @@ answersRouter.delete("/delete", async (req, res) => {
 	{
 		const db = client.db("LargeProject");
 
-		const result = await db.collection('Answers').deleteOne({_id}).toArray();
+		const result = await db.collection('Answers').deleteOne({_id});
 	
 		if(result.deletedCount == 1)
 		{
-			console.log("Successfully deleted answer " + answer);
+			console.log("Successfully deleted answer " + id);
 		}
 		else
 		{

@@ -74,4 +74,42 @@ savedRouter.post("/add", async (req, res) => {
 	res.status(200).json(ret);
 });
 
+// Get
+// Incoming: id
+// Outgoing: name, userId, error
+savedRouter.delete("/delete", async (req, res) => {
+	let error = 200;
+  
+	const {id} = req.body;
+  var _id = new ObjectId(id);
+	
+	console.log("Begin DELETE for Saved Quiz " + id);
+	
+	try
+	{
+		const db = client.db("LargeProject");
+
+		const result = await db.collection('Saved').deleteOne({_id});
+	
+		if(result.deletedCount == 1)
+		{
+			console.log("Successfully deleted Saved Quiz " + id);
+		}
+		else
+		{
+			error = 204;
+		}
+
+	var ret = {error:error};
+	}
+	catch(e)
+	{
+		error = e.toString();
+		var ret = {error:e.message};
+	}
+	
+	
+	res.status(200).json(ret);
+});
+
 module.exports = savedRouter;
