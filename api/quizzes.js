@@ -1,3 +1,5 @@
+const { resourceLimits } = require("worker_threads");
+
 const quizzesRouter = require("express").Router();
 require("dotenv").config();
 
@@ -83,34 +85,28 @@ quizzesRouter.post("/search", async (req, res) => {
 		};
 	}
   
-	// projections can be used to specify what to return
-	var projection = {
-	projection: {_id: 1, Name: 1, Public: 1}
-	}
+  // projections can be used to specify what to return
+  var projection = {
+    projection: {_id: 1, Name: 1, Public: 1}
+  }
 
-	try
-	{
-		const db = client.db("LargeProject");
-		const result = await db.collection('Quizzes').find(search, projection).toArray();
+  try
+  {
+    const db = client.db("LargeProject");
+    const result = await db.collection('Quizzes').find(search, projection).toArray();
 
-		if (result.length > 0)
-		{
-			var ret = {result:result, error:error};
-		}
-		else
-		{
-			error = 204;
-		}
+    if (result.length == 0)
+      error = 204;
 
-		var ret = {result:result, error:error};
-	}
-	catch(e)
-	{
-		error = e.toString();
-		var ret = {error:e.message};
-	}
+    var ret = {result:result, error:error};
+  }
+  catch(e)
+  {
+    error = e.toString();
+    var ret = {error:e.message};
+  }
 
-	res.status(200).json(ret);
+  res.status(200).json(ret);
 });
 
 // Add
