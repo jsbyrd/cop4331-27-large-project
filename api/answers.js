@@ -15,10 +15,15 @@ client.connect();
 answersRouter.post("/get", async (req, res) => {
 	let error = 200;
 
-	const {questionId} = req.body;
+	const {questionId, quizId} = req.body;
+
+	let getter = {
+		...questionId != null ? {QuestionId:questionId} : null,
+		...quizId != null ? {QuizId:quizId} : null
+		};
 
   var projection = {
-    projection: {questionId: 0}
+    projection: {QuestionId: 0, QuizId: 0}
   }
 
 	console.log("Begin GET for Answer with Question ID " + questionId);
