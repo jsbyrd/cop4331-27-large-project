@@ -20,13 +20,13 @@ questionsRouter.post("/search", async (req, res) => {
   const {term, quizId} = req.body;
   
   console.log("Begin Search for Question with Quiz ID " + quizId);
+  var _id = new ObjectId(quizId);
   
   // more silly nodejs jargain
   var search = {
-    $and: [{QuizId:quizId}],
+    $and: [{QuizId:_id}],
     $or: [{
-      Question: { $regex: term, $options: "i"},
-      Answer: { $regex: term, $options: "i"}
+      Question: { $regex: term, $options: "i"}
     }]
   };
 
@@ -55,75 +55,73 @@ questionsRouter.post("/search", async (req, res) => {
 });
 
 // Add
-// Incoming: question, answer, wrongAnswers, quizId
+// Incoming: question, quizId
 // Outgoing: id, error
 questionsRouter.post("/add", async (req, res) => {
-  let error = 200;
-  
-  const {question, answer, wrongAnswers, quizId} = req.body;
-  
-  const newQuestion = {Question:question, Answer:answer, WrongAnswers:wrongAnswers, QuizId:quizId};
-  
-  console.log("Begin ADD for Question with quizId " + quizId);
-  
-  try
-  {
-    const db = client.db("LargeProject");
-    const result = await db.collection('Questions').insertOne(newQuestion);
-    
-    var ret = {id:result.insertedId, error: error};
-  }
-  catch(e)
-  {
-    error = e.toString();
-    var ret = {error:e.message};
-  }
-  
-  res.status(200).json(ret);
+	let error = 200;
+	
+	const {question, quizId} = req.body;
+	
+	const newQuestion = {Question:question, QuizId:quizId};
+	
+	console.log("Begin ADD for Question with quizId " + quizId);
+	
+	try
+	{
+		const db = client.db("LargeProject");
+		const result = await db.collection('Questions').insertOne(newQuestion);
+		
+		var ret = {id:result.insertedId, error: error};
+	}
+	catch(e)
+	{
+		error = e.toString();
+		var ret = {error:e.message};
+	}
+	
+	res.status(200).json(ret);
 });
 
 // Edit
-// Incoming: id (required), question, answer, wrongAnswers, quizId (optional; only input what's edited)
+// Incoming: id (required), question, quizId (optional; only input what's edited)
 // Outgoing: error
 questionsRouter.post("/edit", async (req, res) => {
-  let error = 200;
+	let error = 200;
 
-  const {id, question, answer, wrongAnswers, quizId} = req.body;
+	const {id, question, quizId} = req.body;
 
-  // some annoying variable jargain part 2
-  var _id = new ObjectId(id);
+	// some annoying variable jargain part 2
+	var _id = new ObjectId(id);
 
-  console.log("Begin EDIT for Question with ID " + id);
+	console.log("Begin EDIT for Question with ID " + id);
 
-  try
-  {
-    // it gets worse every time I type it
-    let update = {
-      ...question != null ? {Question:question} : null,
-      ...answer != null ? {Answer:answer} : null,
-      ...wrongAnswers != null ? {WrongAnswers:wrongAnswers} : null,
-      ...quizId != null ? {QuizId:quizId} : null,
-    };
+	try
+	{
+		// it gets worse every time I type it
+		let update = {
+		...question != null ? {Question:question} : null,
+		...quizId != null ? {QuizId:quizId} : null,
+		};
 
-    const edit = {$set: update};
+		const edit = {$set: update};
 
-    const db = client.db("LargeProject");
-    const result = await db.collection('Questions').updateOne({_id}, edit);
+		const db = client.db("LargeProject");
+		const result = await db.collection('Questions').updateOne({_id}, edit);
 
-    if (result.matchedCount == 0)
-    {
-      error = 404;
-    }
+		if (result.matchedCount == 0)
+		{
+		error = 204;
+		}
 
-    var ret = {error:error};
-  }
-  catch(e)
-  {
-    error = e.toString();
-    var ret = {error:e.message};
-  }
+		var ret = {error:error};
+	}
+	catch(e)
+	{
+		error = e.toString();
+		var ret = {error:e.message};
+	}
 
-  res.status(200).json(ret);
+	res.status(200).json(ret);
 });
 
 module.exports = questionsRouter;
