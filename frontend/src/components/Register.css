@@ -3,7 +3,7 @@
     #register-form
     {
         width: 1100px;
-        height: 1000px;
+        height: 1200px;
     }
 
     :root
@@ -11,6 +11,8 @@
         --responsive-description-font-size: 50px;
         --responsive-button-font-size: 46px;
         --responsive-title-font-size: 66px;
+        --display-image-type: flex;
+        --register-section-width: 40%;
     }
 }
 
@@ -19,7 +21,7 @@
     #register-form
     {
         width: 1000px;
-        height: 900px;
+        height: 1100px;
     }
 
     :root
@@ -27,6 +29,8 @@
         --responsive-description-font-size: 42px;
         --responsive-button-font-size: 38px;
         --responsive-title-font-size: 60px;
+        --display-image-type: flex;
+        --register-section-width: 40%;
     }
 }
 
@@ -35,7 +39,7 @@
     #register-form
     {
         width: 900px;
-        height: 800px;
+        height: 1000px;
     }
 
     :root
@@ -43,6 +47,8 @@
         --responsive-description-font-size: 38px;
         --responsive-button-font-size: 34px;
         --responsive-title-font-size: 54px;
+        --display-image-type: flex;
+        --register-section-width: 40%;
     }
 }
 
@@ -51,7 +57,7 @@
     #register-form
     {
         width: 800px;
-        height: 700px;
+        height: 900px;
     }
 
     :root
@@ -59,6 +65,8 @@
         --responsive-description-font-size: 34px;
         --responsive-button-font-size: 30px;
         --responsive-title-font-size: 50px;
+        --display-image-type: flex;
+        --register-section-width: 40%;
     }
 }
 
@@ -67,7 +75,7 @@
     #register-form
     {
         width: 700px;
-        height: 600px;
+        height: 800px;
     }
 
     :root
@@ -75,6 +83,8 @@
         --responsive-description-font-size: 30px;
         --responsive-button-font-size: 26px;
         --responsive-title-font-size: 46px;
+        --display-image-type: flex;
+        --register-section-width: 40%;
     }
 }
 
@@ -91,6 +101,8 @@
         --responsive-description-font-size: 24px;
         --responsive-button-font-size: 20px;
         --responsive-title-font-size: 38px;
+        --display-image-type: flex;
+        --register-section-width: 40%;
     }
 }
 
@@ -107,6 +119,8 @@
         --responsive-description-font-size: 20px;
         --responsive-button-font-size: 16px;
         --responsive-title-font-size: 34px;
+        --display-image-type: flex;
+        --register-section-width: 40%;
     }
 }
 
@@ -123,10 +137,12 @@
         --responsive-description-font-size: 16px;
         --responsive-button-font-size: 14px;
         --responsive-title-font-size: 28px;
+        --display-image-type: flex;
+        --register-section-width: 40%;
     }
 }
 
-@media (min-width: 1000px) and (max-width: 1249px)
+@media (min-width: 900px) and (max-width: 1249px)
 {
     #register-form
     {
@@ -139,6 +155,27 @@
         --responsive-description-font-size: 14px;
         --responsive-button-font-size: 12px;
         --responsive-title-font-size: 24px;
+        --display-image-type: flex;
+        --register-section-width: 40%;
+    }
+}
+
+/* for mobile */
+@media (max-width: 899px)
+{
+    #register-form
+    {
+        width: 400px;
+        height: 700px;
+    }
+
+    :root
+    {
+        --responsive-description-font-size: 24px;
+        --responsive-button-font-size: 20px;
+        --responsive-title-font-size: 38px;
+        --display-image-type: none;
+        --register-section-width: 100%;
     }
 }
 
@@ -175,7 +212,7 @@
     align-items: center;
     justify-content: center;
     height: 100%;
-    width: 40%;
+    width: var(--register-section-width);
 }
 
 #register-title
@@ -249,7 +286,7 @@
     width: 60%;
 
     /* just to center the "image here" text */
-    display: flex;
+    display: var(--display-image-type);
     justify-content: center;
     align-items: center;
 }
