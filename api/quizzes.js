@@ -58,7 +58,7 @@ quizzesRouter.post("/search", async (req, res) => {
 	var search;
 
 	// public here needs to be true/false
-	const {term, public} = req.body;
+	const {term, userId, public} = req.body;
 
 	console.log("Begin Search for Quiz with term" + term + (public ? ("with Public Tag " + public) : ""));
 
@@ -70,7 +70,8 @@ quizzesRouter.post("/search", async (req, res) => {
 		search = {
 			$and: [{Public: 0}],
 			$or: [{
-			Name: { $regex: term, $options: "i"}
+			Name: { $regex: term, $options: "i"},
+			...userId != null ? {UserId:userId} : null
 			}]
 		};
 	}
@@ -78,14 +79,15 @@ quizzesRouter.post("/search", async (req, res) => {
 	{
 		search = {
 		$or: [{
-			Name: { $regex: term, $options: "i"}
+			Name: { $regex: term, $options: "i"},
+			...userId != null ? {UserId:userId} : null
 			}]
 		};
 	}
   
   // projections can be used to specify what to return
   var projection = {
-    projection: {_id: 1, Name: 1, Public: 1}
+    projection: {_id: 1, Name: 1, Public: 1, UserId: 1}
   }
 
   try

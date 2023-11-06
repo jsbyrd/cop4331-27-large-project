@@ -25,13 +25,13 @@ function getToken(json)
   var ret;
   try
   {
-	const token = require("./createJWT.js");
-	ret = token.createToken( json );
+    const token = require("./createJWT.js");
+    ret = token.createToken( json );
   }
   catch(e)
   {
-	error = e.toString();
-	ret = {error:e.message};
+    error = e.toString();
+    ret = {error:e.message};
   }
 
   return ret;
@@ -60,110 +60,100 @@ function getHash(string)
 ///////////////////
 
 // Login
-// Incoming: login, password
-// Outgoing: id, firstName, lastName, error
 usersRouter.post("/login", async (req, res) => {
-
-	let error = 200;
-	var id = -1;
+  // Incoming: login, password
+  // Outgoing: id, firstName, lastName
+  let error = "";
+  var id = -1;
 	var fn = '';
 	var ln = '';
 
-	const {login, password} = req.body;
+  const {login, password} = req.body;
 
-	hashPassword = getHash(password);
+  hashPassword = getHash(password);
   
-	console.log("Begin LOGIN for User " + login);
+  console.log({login, password});
 
-	try
-	{
-		const db = client.db("LargeProject");
-		const result = await db.collection('Users').find({Login:login, Password:hashPassword}).toArray();
+  try
+  {
+    const db = client.db("LargeProject");
+    const results = await db.collection('Users').find({Login:login, Password:hashPassword}).toArray();
 
-		if(login == "" || password == "")
+		if( results.length > 0 )
 		{
-			error = "You have a blank Login or Password parameter. NO LOGGING IN FOR YOU!!!"
-			var ret = {error:error};
-		}
-		else
-		{
-			if( result.length > 0)
-			{
-			id = result[0]._id;
-			fn = result[0].FirstName;
-			ln = result[0].LastName;
+			id = results[0]._id;
+			fn = results[0].FirstName;
+			ln = results[0].LastName;
 
-			// var ret = getToken({id:id, firstName:fn, lastName:ln, error:error});
-			}
-			else
-			{
-				error = 401;
-			}
-
-			var ret = {id:id, firstName:fn, lastName:ln, error:error};
+      var ret = {id:id, firstName:fn, lastName:ln, error:error};
+      // var ret = getToken({id:id, firstName:fn, lastName:ln, error:error});
 		}
-	}
-	catch(e)
-	{
-		error = e.toString();
-		var ret = {error:e.message};
-	}
+    else
+    {
+      var ret = {error:'Wrong username/password combination'};
+    }
+  }
+  catch(e)
+  {
+    error = e.toString();
+    var ret = {error:e.message};
+  }
+
   
 	res.status(200).json(ret);
 });
 
 // Register
-// Incoming: login, password, firstName, lastName, email
-// Outgoing: id, error
 usersRouter.post("/register", async (req, res) => {
-	let error = 200;
-	const { login, password, firstName, lastName, email } = req.body;
-	const hashPassword = getHash(password);
+  // incoming: login, password, firstName, lastName, email
+  // outgoing: error
+  let error = "";
+  const { login, password, firstName, lastName, email } = req.body;
 
-	console.log("Begin REGISTER for User " + login);
+  const hashPassword = getHash(password);
 
-	const newUser = {Login:login,Password:hashPassword,FirstName:firstName,LastName:lastName,Email:email,Verified:false};
-	try
-	{
-		if(login == "" || password == "" || firstName == "" || lastName == "" || email == "")
-		{
-			error = "You have a blank parameter somewhere. NO REGISTERING FOR YOU!!!"
-			var ret = {error:error};
-		}
-		else
-		{
-			// console.log(url);
-			const db = client.db("LargeProject");
-			const result = await db.collection("Users").insertOne(newUser);
+  console.log("Begin REGISTER for User " + login);
 
-			var ret = {id:result.insertedId, error: error };
-		}
-	}
-	catch(e) {
-		error = e.toString();
-	}
+  const newUser = {Login:login,Password:hashPassword,FirstName:firstName,LastName:lastName,Email:email,Verified:false};
+  try
+  {
+    // console.log(url);
+    const db = client.db("LargeProject");
+    const result = await db.collection("Users").insertOne(newUser);
 
-	// var ret = getToken({ error: error });
+    // I'm not 100% as to why this is a for loop?
+    for (let i = 0; i < result.length; i++)
+    {
+      _ret.push(result[i]);
+    }
+  }
+  catch(e) {
+    error = e.toString();
+  }
+
+  var ret = { error: error };
+  // var ret = getToken({ error: error });
 
 	res.status(200).json(ret);
 });
 
 // Delete
-// Incoming: login, password
-// Outgoing: error
 usersRouter.delete("/delete", async (req, res) => {
-	let error = 200;
+	// Incoming: login, password
+	// Outgoing: firstName, lastName
+	let error = "";
   
 	const {login, password} = req.body;
+  
 	hashPassword = getHash(password);
 	
 	console.log("Begin DELETE for User " + login);
-	
+  
 	try
 	{
 		const db = client.db("LargeProject");
 
-		const result = await db.collection('Users').deleteOne({Login:login, Password:hashPassword});
+		const results = await db.collection('Users').deleteOne({Login:login, Password:hashPassword}).toArray();
 	
 		if(result.deletedCount == 1)
 		{
@@ -171,64 +161,60 @@ usersRouter.delete("/delete", async (req, res) => {
 		}
 		else
 		{
-			error = 404;
+			var ret = {error:'User not found.'};
 		}
-
-	var ret = {error:error};
 	}
 	catch(e)
 	{
 		error = e.toString();
 		var ret = {error:e.message};
 	}
-	
+  
 	
 	res.status(200).json(ret);
 });
 
-// Incoming: login, password
-// Outgoing: id, error
 usersRouter.post("/verify", async (req, res) => {
-  
-	let error = 200;
-	var id = -1;
+  // Incoming: login, password
+  // Outgoing: id, firstName, lastName
+  let error = "";
+  var id = -1;
 	var fn = '';
 	var ln = '';
 
-	const {login, password} = req.body;
-	hashPassword = getHash(password);
+  const {login, password} = req.body;
+
+  hashPassword = getHash(password);
   
-	console.log("Begin VERIFY for User " + login);
+  console.log("Begin VERIFY for User " + login);
 
-	try
-	{
-		const db = client.db("LargeProject");
-		const result = await db.collection('Users').find({Login:login, Password:hashPassword}).toArray();
+  try
+  {
+    const db = client.db("LargeProject");
+    const results = await db.collection('Users').find({Login:login, Password:hashPassword}).toArray();
 
-		if( result.length > 0 )
+		if( results.length > 0 )
 		{
-			id = result[0]._id;
+			id = results[0]._id;
 
-			const edit = {$set: {Verified:true}};
+      const edit = {$set: {Verified:true}};
 
-			await db.collection('Users').updateOne({Login:login, Password:hashPassword}, edit);
+      await db.collection('Users').updateOne({Login:login, Password:hashPassword}, edit);
 
-			var ret = {id:id, error:error};
+      var ret = {id:id, error:error};
 		}
-		else
-		{
-			error = 404;
-		}
+    else
+    {
+      var ret = {error:'Wrong username/password combination'};
+    }
+  }
+  catch(e)
+  {
+    error = e.toString();
+    var ret = {error:e.message};
+  }
 
-		var ret = {id:id, error:error};
-	}
-	catch(e)
-	{
-		error = e.toString();
-		var ret = {error:e.message};
-	}
-
-	
+  
 	res.status(200).json(ret);
 });
 
