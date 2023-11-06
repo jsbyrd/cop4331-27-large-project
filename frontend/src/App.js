@@ -14,11 +14,11 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/search" element={<SearchedPage />} />
         <Route path="/" element={<DefaultPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/menu" element={<MenuPage />} />
+        <Route path="/search/:query" element={<SearchedPage />} />
         <Route path="/viewquiz/:quizID" element={<ViewQuizPage />} />
       </Routes>
     </BrowserRouter>
