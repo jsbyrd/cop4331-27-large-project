@@ -31,7 +31,7 @@ answersRouter.post("/get", async (req, res) => {
 	try
 	{
 		const db = client.db("LargeProject");
-		const result = await db.collection('Answers').find({QuestionId:questionId}, projection).toArray();
+		const result = await db.collection('Answers').find(getter, projection).toArray();
 
 		if (result.length == 0)
 			error = 204;
