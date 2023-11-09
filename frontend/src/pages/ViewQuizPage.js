@@ -12,7 +12,7 @@ const ViewQuizPage = () => {
   //                         {Question: "This is question two", _id: "2"}, 
   //                         {Question: "Are you stupid?", _id: "3"},
   //                         {Question: "This is very very dumb", _id: "4"}];
-  const [quizInfo, setQuizInfo] = useState({});
+  const [quizInfo, setQuizInfo] = useState({Name: "Failed to load quiz..."});
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(-1);
   const [isLoading, setIsLoading] = useState(true);
@@ -37,9 +37,14 @@ const ViewQuizPage = () => {
     const fetchParams = {
       id: quizID
     }
-    const res = await axios.post(`https://cop4331-27-c6dfafc737d8.herokuapp.com/api/quizzes/get/`, fetchParams);
-    if (res !== undefined && res.data.result.length !== 0) {
-      setQuizInfo(res.data.result[0]);
+    try {
+      const res = await axios.post(`https://cop4331-27-c6dfafc737d8.herokuapp.com/api/quizzes/get/`, fetchParams);
+      if (res !== undefined && res.data.result.length !== 0) {
+        setQuizInfo(res.data.result[0]);
+      }
+    }
+    catch {
+      return;
     }
   }
 
@@ -48,10 +53,14 @@ const ViewQuizPage = () => {
       term: "",
       quizId: quizID
     }
-    const res = await axios.post(`https://cop4331-27-c6dfafc737d8.herokuapp.com/api/questions/search/`, fetchParams);
-    if (res !== undefined && res.data.result.length !== 0) {
-      setQuestions(res.data.result);
-      setCurrentQuestion(0);
+    try {
+      const res = await axios.post(`https://cop4331-27-c6dfafc737d8.herokuapp.com/api/questions/search/`, fetchParams);
+      if (res !== undefined && res.data.result.length !== 0) {
+        setQuestions(res.data.result);
+        setCurrentQuestion(0);
+      }
+    } catch {
+      return;
     }
   }
 
@@ -82,10 +91,10 @@ const ViewQuizPage = () => {
                   {(questions.length === 0) ? "No Questions :(" : `${questions[currentQuestion].Question}`}
                 </p>
               </div>
-              <div className='flip-card-side' id='flip-card-back'>
-              <p id='vqp-flashcard-q'>
-              {(questions.length === 0) ? "No Answers :(" : "No Answers :("}
-                </p>
+                <div className='flip-card-side' id='flip-card-back'>
+                <p id='vqp-flashcard-q'>
+                {(questions.length === 0) ? "No Answers :(" : "No Answers :("}
+                  </p>
               </div>
             </div>
           </div>
@@ -94,11 +103,18 @@ const ViewQuizPage = () => {
             <p id='flashcard-nav-count'>{`${currentQuestion + 1} / ${isLoading ? 0 : questions.length}`}</p>
             <button className='nav-btn' id='nav-btn-forward' onClick={moveFlashCardForward}>{"→"}</button>
           </div>
-          <ul>
+          <ul id='vqp-questions-ul'>
             {questions.map((q) => {
               return (
                 <li key={q._id}>
-                  {`${q.Question}`}
+                  <div className='vqp-questions-li'>
+                    <div className='vqp-questions-li-q'>{`${q.Question}`}</div>
+                    <div className='vqp-questions-li-a'>{"No Answer Yet :( but this is what a really long answer would look"}</div>
+                    <div className='vqp-questions-li-o'>
+                      <button>Edit</button>
+                      <button>Delete</button>
+                    </div>
+                  </div>
                 </li>
               )
             })}

@@ -33,7 +33,7 @@ const MenuHeader = () => {
   // ============================
 
   return (
-    <header className='position-sticky top-0'>
+    <header>
       <nav className="navbar navbar-expand-lg d-flex flex-nowrap justify-content-between w-100 menu-navbar-custom" id='default-header-navbar'>
         <a className="nav-link text-light" id='default-header-logo' href="/" style={{ marginLeft: "20px" }}>
           <img src={logo} id='menu-header-logo' />
