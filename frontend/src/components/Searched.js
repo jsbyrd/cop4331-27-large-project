@@ -1,5 +1,6 @@
 import React, 
-        { useState } from 'react';
+        { useState, 
+        useEffect } from 'react';
 import { useNavigate,
         useLocation,
         useParams } from 'react-router-dom';
@@ -11,18 +12,57 @@ const Search = () => {
 
     const { query } = useParams();
     const [searchQuery, setSearchQuery] = useState('');
+    const [results, setResults] = useState([]);
+    const [message, setMessage] = useState('');
     const navigate = useNavigate();
     const location = useLocation();
     const type = location.state;
 
+    var count = 0;
+
+    // Utilize Search API
+    const doSearch = async (term) =>
+    {
+        var obj = {term:term};
+        var js = JSON.stringify(obj);
+        try
+        {    
+            const response = await fetch('https://cop4331-27-c6dfafc737d8.herokuapp.com/api/quizzes/search', {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
+            var res = JSON.parse(await response.text());
+            console.log(res);
+            if(res.error == 204)
+            {
+                setMessage("No results");
+                setResults([]);
+            }
+            else
+            {
+                setMessage("");
+                setResults(res.result);
+            }
+        }
+        catch(e)
+        {
+            alert(e.toString());
+            return;
+        }
+    };
+
     // Complete the search
     const goToSearch = async (type) => {
         if (type == 2)
+        {
+            setSearchQuery('');
             navigate('/search/savedQuizzes', { state: 2 });
+        }
         else if (type == 3)
+        {
+            setSearchQuery('');
             navigate('/search/myQuizzes', { state: 3 })
+        }
         else if (searchQuery.trim() !== '') {
             navigate(`/search/${searchQuery}`, { state: 1 });
+            doSearch(searchQuery);
         }
         else {
             alert('Please enter a search query.');
@@ -37,6 +77,12 @@ const Search = () => {
         }
     }
 
+    // Send API call upon loading of page
+    useEffect(() => {
+        if (type == 1)
+            setSearchQuery(query);
+        doSearch(query);
+    },[]);
 
     return (
         <div>
@@ -49,7 +95,8 @@ const Search = () => {
                         <form class="form-inline">
                             <input onKeyDown={keyDownHandler}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            class="form-control mr-sm-2" id='searched-searchbar' type="text" value={searchQuery} placeholder={query} aria-label="Search" 
+                            class="form-control mr-sm-2" id='searched-searchbar' type="text" aria-label="Search" value={searchQuery} 
+                            placeholder={type != 1 ? 'Search' : query} 
                             />
                         </form>
                     </div>
@@ -64,7 +111,16 @@ const Search = () => {
                 </nav>
             </header>
             <div>
-
+                {message && <p>{message}</p>}
+                <ul className="search-result">
+                    {results.map((result) => (
+                        <li key={result.id}>
+                            <a href={`/viewquiz/${result.id}`}>
+                                {result.Name}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
             </div>
         </div>
     );
