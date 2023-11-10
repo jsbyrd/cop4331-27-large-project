@@ -80,7 +80,7 @@ const ViewQuizPage = () => {
         <div id='vqp-body'>
           <p id='vqp-quiz-title'>{quizInfo.Name}</p>
           <div id='vqp-quiz-options'>
-            <button className='vqp-qo'>Take Test</button>
+            <button className='vqp-qo' onClick={event =>  window.location.href=`/taketest/${quizID}`}>Take Test</button>
             <button className='vqp-qo'>Save Quiz</button>
             <button className='vqp-qo'>Add Question</button>
           </div>

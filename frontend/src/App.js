@@ -9,6 +9,7 @@ import MenuPage from './pages/MenuPage';
 import RegisterPage from './pages/RegisterPage';
 import SearchedPage from './pages/SearchedPage';
 import ViewQuizPage from './pages/ViewQuizPage';
+import TestPage from './pages/TestPage';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/search/:query" element={<SearchedPage />} />
         <Route path="/viewquiz/:quizID" element={<ViewQuizPage />} />
+        <Route path="/taketest/:quizID" element={<TestPage />} />
       </Routes>
     </BrowserRouter>
       );
