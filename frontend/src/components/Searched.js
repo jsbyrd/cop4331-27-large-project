@@ -29,7 +29,6 @@ const Search = () => {
         {    
             const response = await fetch('https://cop4331-27-c6dfafc737d8.herokuapp.com/api/quizzes/search', {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
             var res = JSON.parse(await response.text());
-            console.log(res);
             if(res.error == 204)
             {
                 setMessage("No results");
@@ -115,7 +114,7 @@ const Search = () => {
                 <ul className="search-result">
                     {results.map((result) => (
                         <li key={result.id}>
-                            <a href={`/viewquiz/${result.id}`}>
+                            <a href={`/menu`}>
                                 {result.Name}
                             </a>
                         </li>
