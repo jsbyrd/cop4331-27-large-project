@@ -3,13 +3,32 @@
     width: 350px;
 }
 
-#searched-header-logo {
-    margin-left: 10px;
-    width:200px;
-    height:200px;
-  }
+#searched-header-logo 
+{
+  margin-left: 10px;
+  width:200px;
+  height:200px;
+}
 
 .searched-navbar-custom
 {
   height:100px;
+}
+
+.search-result {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.search-result li {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin: 5px;
+  padding: 10px;
+  width: 200px;
+  text-align: center;
 }

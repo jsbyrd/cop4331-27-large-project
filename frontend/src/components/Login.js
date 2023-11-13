@@ -43,11 +43,16 @@ const Login = () => {
     return(
         <div id="loginDivContainer">
             <div id="loginDiv">
-                <form onSubmit={doLogin}>
-                    <span class="input-field-description">Enter Username</span><br />
-                    <input type="text" id="loginName" class="user-input-field" placeholder="wizard@email.com" ref={(c) => loginName = c}/><br />
-                    <span class="input-field-description">Enter Password</span><br />
-                    <input type="password" id="loginPassword" class="user-input-field" placeholder="Password" ref={(c) => loginPassword = c}/><br />
+                <form id="login-form" onSubmit={doLogin}>
+                    <div className="input-field-container">
+                        <span class="login-input-field-description">Enter Username</span><br />
+                        <input type="text" id="loginName" class="login-user-input-field" placeholder="wizard@email.com" ref={(c) => loginName = c}/><br />
+                    </div>
+
+                    <div className="input-field-container">
+                        <span class="login-input-field-description">Enter Password</span><br />
+                        <input type="password" id="loginPassword" class="login-user-input-field" placeholder="Password" ref={(c) => loginPassword = c}/><br />
+                    </div>
                     <input type="submit" id="loginButton" class="buttons" value="Login" onClick={doLogin} />
                     <span id="loginResult">{message}</span>
                 </form>
