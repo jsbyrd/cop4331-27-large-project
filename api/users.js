@@ -1,4 +1,5 @@
 const Hash = require('crypto');
+// let cookieParser = require("cookie-parser");
 const { getServers, getDefaultResultOrder } = require('dns');
 
 const usersRouter = require('express').Router();
@@ -84,6 +85,8 @@ usersRouter.post("/login", async (req, res) => {
 			id = results[0]._id;
 			fn = results[0].FirstName;
 			ln = results[0].LastName;
+
+      res.cookie("loginId", id);
 
       var ret = {id:id, firstName:fn, lastName:ln, error:error};
       // var ret = getToken({id:id, firstName:fn, lastName:ln, error:error});

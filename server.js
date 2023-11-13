@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
+var cookieParser = require('cookie-parser');
 const PORT = process.env.PORT || 5000;
 
 const app = express();
@@ -36,6 +37,7 @@ app.use((req, res, next) =>
 // Use middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 // Import api endpoints
 const usersRouter = require("./api/users");
