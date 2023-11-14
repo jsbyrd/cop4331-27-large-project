@@ -12,13 +12,20 @@ client.connect();
 ///////////////////
 
 // TODO: Get
+// it's certainly being done
 answersRouter.post("/get", async (req, res) => {
-	let error = 200;
+	let retCode = 200;
+  let message = "";
 
-	const {questionId} = req.body;
+	const {questionId, quizId} = req.body;
+
+	let getter = {
+		...questionId != null ? {QuestionId: questionId} : null,
+		...quizId != null ? {QuizId: quizId} : null
+		};
 
   var projection = {
-    projection: {questionId: 0}
+    projection: {QuestionId: 0, QuizId: 0}
   }
 
 	console.log("Begin GET for Answer with Question ID " + questionId);
@@ -26,31 +33,69 @@ answersRouter.post("/get", async (req, res) => {
 	try
 	{
 		const db = client.db("LargeProject");
-		const result = await db.collection('Answers').find({QuestionId:questionId}, projection).toArray();
+		const result = await db.collection('Answers').find(getter, projection).toArray();
 
 		if (result.length == 0)
-			error = 204;
+			retCode = 204;
 
-    var ret = {result:result, error:error};
+    var ret = {result: result, error: message};
 	}
 	catch(e)
 	{
-		error = e.toString();
-		var ret = {error:e.message};
+		retCode = 404;
+		var ret = {error: e.message};
 	}
 
-	res.status(200).json(ret);
+	res.status(retCode).json(ret);
+});
+
+answersRouter.post("/getcorrect", async (req, res) => {
+	let retCode = 200;
+  let message = "";
+
+	const {questionId, quizId} = req.body;
+
+	let getter = {
+		WrongAnswer: false,
+		...questionId != null ? {QuestionId: questionId} : null,
+		...quizId != null ? {QuizId: quizId} : null
+		};
+
+  var projection = {
+    projection: {QuestionId: 0, QuizId: 0, WrongAnswer: 0}
+  }
+
+	console.log("Begin GET CORRECT for Answer with Question ID " + questionId);
+
+	try
+	{
+		const db = client.db("LargeProject");
+		const result = await db.collection('Answers').findOne(getter, projection);
+
+		if (result == null)
+			retCode = 204;
+
+    var ret = {result: result, error: message};
+	}
+	catch(e)
+	{
+		retCode = 404;
+		var ret = {error: e.message};
+	}
+
+	res.status(retCode).json(ret);
 });
 
 // TODO: Add
 // Add with a string
 // Throw the question id in
 answersRouter.post("/add", async (req, res) => {
-	let error = 200;
+	let retCode = 200;
+  let message = "";
 	
 	const {answer, questionId, wrong} = req.body;
 	
-	const newAnswer = {Answer:answer, QuestionId:questionId, WrongAnswer:wrong};
+	const newAnswer = {Answer: answer, QuestionId: questionId, WrongAnswer: wrong};
 	
 	console.log("Begin ADD for Answer with questionId " + questionId);
 	
@@ -59,21 +104,22 @@ answersRouter.post("/add", async (req, res) => {
 		const db = client.db("LargeProject");
 		const result = await db.collection('Answers').insertOne(newAnswer);
 		
-		var ret = {id:result.insertedId, error: error};
+		var ret = {id: result.insertedId, error: error};
 	}
 	catch(e)
 	{
-		error = e.toString();
-		var ret = {error:e.message};
+		retCode = 200;
+		var ret = {error: e.message};
 	}
 	
-	res.status(200).json(ret);
+	res.status(retCode).json(ret);
 });
 
 // TODO: Edit
 // Reference the quiz stuff with the ...
 answersRouter.post("/edit", async (req, res) => {
-	let error = 200;
+	let retCode = 200;
+  let message = "";
 
 	const {id, answer, wrong, questionId} = req.body;
 
@@ -85,9 +131,9 @@ answersRouter.post("/edit", async (req, res) => {
 	try
 	{
 		let update = {
-		...questionId != null ? {QuestionId:questionId} : null,
-		...answer != null ? {Answer:answer} : null,
-		...wrong != null ? {WrongAnswer:wrong} : null
+		...questionId != null ? {QuestionId: questionId} : null,
+		...answer != null ? {Answer: answer} : null,
+		...wrong != null ? {WrongAnswer: wrong} : null
 		};
 
 
@@ -97,24 +143,23 @@ answersRouter.post("/edit", async (req, res) => {
 		const result = await db.collection('Answers').updateOne({_id}, edit);
 
 		if (result.matchedCount == 0)
-		{
-		error = 204;
-		}
+      retCode = 204;
 
-		var ret = {error:error};
+		var ret = {error: message};
 	}
 	catch(e)
 	{
-		error = e.toString();
-		var ret = {error:e.message};
+		retCode = 404;
+		var ret = {error: e.message};
 	}
 
-	res.status(200).json(ret);
+	res.status(retCode).json(ret);
 });
 
 // TODO: Delete
 answersRouter.delete("/delete", async (req, res) => {
-	let error = 200;
+	let retCode = 200;
+  let message = "";
   
 	const {id} = req.body;
   var _id = new ObjectId(id);
@@ -128,24 +173,20 @@ answersRouter.delete("/delete", async (req, res) => {
 		const result = await db.collection('Answers').deleteOne({_id});
 	
 		if(result.deletedCount == 1)
-		{
-			console.log("Successfully deleted answer " + id);
-		}
+			message = "Successfully deleted answer " + id;
 		else
-		{
-			error = 204;
-		}
+			retCode = 204;
 
-	var ret = {error:error};
+	var ret = {error: message};
 	}
 	catch(e)
 	{
-		error = e.toString();
-		var ret = {error:e.message};
+		retCode = 404;
+		var ret = {error: e.message};
 	}
 	
 	
-	res.status(200).json(ret);
+	res.status(retCode).json(ret);
 });
 
 module.exports = answersRouter;

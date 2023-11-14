@@ -1,4 +1,5 @@
 const Hash = require('crypto');
+// let cookieParser = require("cookie-parser");
 const { getServers, getDefaultResultOrder } = require('dns');
 
 const usersRouter = require('express').Router();
@@ -9,9 +10,9 @@ const url = process.env.MONGODB_URI;
 const client = new MongoClient(url);
 client.connect();
 
-///////////////
-// Functions //
-///////////////
+///////////////////
+// API Endpoints //
+///////////////////
 
 // function used for some DB calls
 // not sure what it does yet!
@@ -25,13 +26,13 @@ function getToken(json)
   var ret;
   try
   {
-	const token = require("./createJWT.js");
-	ret = token.createToken( json );
+    const token = require("./createJWT.js");
+    ret = token.createToken( json );
   }
   catch(e)
   {
-	error = e.toString();
-	ret = {error:e.message};
+    error = e.toString();
+    ret = {error:e.message};
   }
 
   return ret;
@@ -61,175 +62,163 @@ function getHash(string)
 
 // Login
 // Incoming: login, password
-// Outgoing: id, firstName, lastName, error
+// Outgoing: id, firstName, lastName
 usersRouter.post("/login", async (req, res) => {
+  let retCode = 200;
+  let message = "";
 
-	let error = 200;
-	var id = -1;
-	var fn = '';
-	var ln = '';
+  const {login, password} = req.body;
 
-	const {login, password} = req.body;
-
-	hashPassword = getHash(password);
+  hashPassword = getHash(password);
   
-	console.log("Begin LOGIN for User " + login);
+  console.log({login, password});
 
-	try
-	{
-		const db = client.db("LargeProject");
-		const result = await db.collection('Users').find({Login:login, Password:hashPassword}).toArray();
+  var projection = {
+    projection: {_id: 1, FirstName: 1, LastName: 1}
+  }
 
-		if(login == "" || password == "")
+  try
+  {
+    const db = client.db("LargeProject");
+    const result = await db.collection('Users').findOne({Login:login, Password:hashPassword}, projection);
+
+		if (result == null)
 		{
-			error = "You have a blank Login or Password parameter. NO LOGGING IN FOR YOU!!!"
-			var ret = {error:error};
+      retCode = 403;
+      message = "Username/password combination incorrect";
 		}
-		else
-		{
-			if( result.length > 0)
-			{
-			id = result[0]._id;
-			fn = result[0].FirstName;
-			ln = result[0].LastName;
+    else
+    {
+      var expireTime = new Date();
+      expireTime.setHours(expireTime.getHours() + 24);
 
-			// var ret = getToken({id:id, firstName:fn, lastName:ln, error:error});
-			}
-			else
-			{
-				error = 401;
-			}
+      res.cookie("loginId", result._id, {
+        expires: expireTime,
+        secure: true,
+        httpOnly: true,
+        sameSite: 'lax'
+      });
+    }
 
-			var ret = {id:id, firstName:fn, lastName:ln, error:error};
-		}
-	}
-	catch(e)
-	{
-		error = e.toString();
-		var ret = {error:e.message};
-	}
-  
-	res.status(200).json(ret);
+    var ret = {result: result, error: message};
+  }
+  catch(e)
+  {
+    retCode = 404;
+    var ret = {error:e.message};
+  }
+
+	res.status(retCode).json(ret);
 });
 
 // Register
-// Incoming: login, password, firstName, lastName, email
-// Outgoing: id, error
+// incoming: login, password, firstName, lastName, email
+// outgoing: error
 usersRouter.post("/register", async (req, res) => {
-	let error = 200;
-	const { login, password, firstName, lastName, email } = req.body;
-	const hashPassword = getHash(password);
+  let retCode = 200;
+  let message = "";
 
-	console.log("Begin REGISTER for User " + login);
+  const { login, password, firstName, lastName, email } = req.body;
 
-	const newUser = {Login:login,Password:hashPassword,FirstName:firstName,LastName:lastName,Email:email,Verified:false};
-	try
-	{
-		if(login == "" || password == "" || firstName == "" || lastName == "" || email == "")
-		{
-			error = "You have a blank parameter somewhere. NO REGISTERING FOR YOU!!!"
-			var ret = {error:error};
-		}
-		else
-		{
-			// console.log(url);
-			const db = client.db("LargeProject");
-			const result = await db.collection("Users").insertOne(newUser);
+  const hashPassword = getHash(password);
 
-			var ret = {id:result.insertedId, error: error };
-		}
-	}
-	catch(e) {
-		error = e.toString();
-	}
+  console.log("Begin REGISTER for User " + login);
 
-	// var ret = getToken({ error: error });
+  const newUser = {Login: login, Password: hashPassword, FirstName: firstName, LastName: lastName, Email: email, Verified: false};
+  try
+  {
+    const db = client.db("LargeProject");
+    const result = await db.collection("Users").insertOne(newUser);
 
-	res.status(200).json(ret);
+    // I'm not 100% as to why this is here?
+    ret.push(result);
+  }
+  catch(e) {
+    retCode = 404;
+    message = e.toString();
+  }
+
+  var ret = {error: message};
+  // var ret = getToken({ error: error });
+
+	res.status(retCode).json(ret);
 });
 
 // Delete
 // Incoming: login, password
-// Outgoing: error
+// Outgoing: firstName, lastName
 usersRouter.delete("/delete", async (req, res) => {
-	let error = 200;
+	let retCode = 200;
+  let message = "";
   
 	const {login, password} = req.body;
+  
 	hashPassword = getHash(password);
 	
 	console.log("Begin DELETE for User " + login);
-	
+  
 	try
 	{
 		const db = client.db("LargeProject");
 
 		const result = await db.collection('Users').deleteOne({Login:login, Password:hashPassword});
 	
-		if(result.deletedCount == 1)
+		if (result.deletedCount == 1)
 		{
-			console.log("Successfully deleted user " + login);
+			message = "Successfully deleted user " + login;
 		}
 		else
 		{
-			error = 404;
+			retCode = 403;
+      message = "User does not exist.";
 		}
 
-	var ret = {error:error};
+    var ret = {error: message};
 	}
 	catch(e)
 	{
-		error = e.toString();
-		var ret = {error:e.message};
+		retCode = 404;
+		var ret = {error: e.message};
 	}
+  
 	
-	
-	res.status(200).json(ret);
+	res.status(retCode).json(ret);
 });
 
+// Verify
 // Incoming: login, password
-// Outgoing: id, error
+// Outgoing: error
 usersRouter.post("/verify", async (req, res) => {
+  let retCode = 200;
+  let message = "";
+
+  const {login, password} = req.body;
+  hashPassword = getHash(password);
   
-	let error = 200;
-	var id = -1;
-	var fn = '';
-	var ln = '';
+  console.log("Begin VERIFY for User " + login);
 
-	const {login, password} = req.body;
-	hashPassword = getHash(password);
+  try
+  {
+    const edit = {$set: {Verify: true}};
+
+    const db = client.db("LargeProject");
+    const result = await db.collection('Users').updateOne({Login:login, Password:hashPassword}, edit);
+
+		if (result.modifiedCount == 0)
+    {
+      retCode = 403;
+      message = "User not found";
+    }
+
+    var ret = {error: message};
+  }
+  catch(e)
+  {
+    retCode = 404;
+    var ret = {error: e.message};
+  }
   
-	console.log("Begin VERIFY for User " + login);
-
-	try
-	{
-		const db = client.db("LargeProject");
-		const result = await db.collection('Users').find({Login:login, Password:hashPassword}).toArray();
-
-		if( result.length > 0 )
-		{
-			id = result[0]._id;
-
-			const edit = {$set: {Verified:true}};
-
-			await db.collection('Users').updateOne({Login:login, Password:hashPassword}, edit);
-
-			var ret = {id:id, error:error};
-		}
-		else
-		{
-			error = 404;
-		}
-
-		var ret = {id:id, error:error};
-	}
-	catch(e)
-	{
-		error = e.toString();
-		var ret = {error:e.message};
-	}
-
-	
-	res.status(200).json(ret);
+	res.status(retCode).json(ret);
 });
 
 module.exports = usersRouter;
