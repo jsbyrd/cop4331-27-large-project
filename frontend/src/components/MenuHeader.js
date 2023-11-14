@@ -5,6 +5,7 @@ import React,
 import { useNavigate } from 'react-router-dom';
 import './Menu.css';
 import logo from './images/logo.png'
+import Search from './Searched';
 
 const MenuHeader = () => {
 
@@ -41,6 +42,7 @@ const MenuHeader = () => {
   // Search bar utilization =====
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
+  const [placeholder, setPlaceHolder] = useState('Search');
 
   // Complete the search
   const goToSearch = async (type) => {
@@ -49,10 +51,12 @@ const MenuHeader = () => {
     else if (type == 3)
       navigate('/search/myQuizzes', { state:3 })
     else if (searchQuery.trim() !== '') {
-        navigate(`/search/${searchQuery}`, { state:1 });
-    }
-    else {
-        alert('Please enter a search query.');
+      var i = 0;
+      while (searchQuery[i] == ' ') {
+        i++;
+      }
+      var temp = searchQuery.substring(i);
+      navigate(`/search/${temp}`, { state:1 });
     }
   }
   // Detect enter
@@ -81,7 +85,8 @@ const MenuHeader = () => {
           <form class="form-inline">
             <input onKeyDown={keyDownHandler}
               onChange={(e) => setSearchQuery(e.target.value)}
-              class="form-control mr-sm-2" id='searched-searchbar' type="text" value={searchQuery} placeholder="Search" aria-label="Search"
+              class="form-control mr-sm-2" id='searched-searchbar' type="text" value={searchQuery} 
+              placeholder={placeholder} onFocus={() => setPlaceHolder('')} onBlur={() => setPlaceHolder('Search')} aria-label="Search"
             />
           </form>
         </div>
