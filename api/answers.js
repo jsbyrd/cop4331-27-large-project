@@ -47,6 +47,42 @@ answersRouter.post("/get", async (req, res) => {
 	res.status(200).json(ret);
 });
 
+answersRouter.post("/getcorrect", async (req, res) => {
+	let error = 200;
+
+	const {questionId, quizId} = req.body;
+
+	let getter = {
+		WrongAnswer: false,
+		...questionId != null ? {QuestionId: questionId} : null,
+		...quizId != null ? {QuizId: quizId} : null
+		};
+
+  var projection = {
+    projection: {QuestionId: 0, QuizId: 0, WrongAnswer: 0}
+  }
+
+	console.log("Begin GET CORRECT for Answer with Question ID " + questionId);
+
+	try
+	{
+		const db = client.db("LargeProject");
+		const result = await db.collection('Answers').findOne(getter, projection);
+
+		if (result.length == 0)
+			error = 204;
+
+    var ret = {result:result, error:error};
+	}
+	catch(e)
+	{
+		error = e.toString();
+		var ret = {error:e.message};
+	}
+
+	res.status(200).json(ret);
+});
+
 // TODO: Add
 // Add with a string
 // Throw the question id in

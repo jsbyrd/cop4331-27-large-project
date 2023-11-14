@@ -45,7 +45,7 @@ const quizzesRouter = require("./api/quizzes");
 const questionsRouter = require("./api/questions");
 const answersRouter = require("./api/answers");
 const savedRouter = require("./api/saved");
-const cookieRouter = require("./api/cookie");
+const cookiesRouter = require("./api/cookies");
 
 // Use routes
 app.use("/api/users", usersRouter);
@@ -53,7 +53,7 @@ app.use("/api/quizzes", quizzesRouter);
 app.use("/api/questions", questionsRouter);
 app.use("/api/answers", answersRouter);
 app.use("/api/saved", savedRouter);
-app.use("/api/cookie", cookieRouter);
+app.use("/api/cookie", cookiesRouter);
 
 // Start server
 app.listen(PORT, () => {
