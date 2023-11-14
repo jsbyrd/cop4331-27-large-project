@@ -40,7 +40,7 @@ savedRouter.post("/get", async (req, res) => {
 		var ret = {error: e.message};
 	}
 
-	res.status(retcode).json(ret);
+	res.status(retCode).json(ret);
 });
 
 // Add
@@ -105,7 +105,7 @@ savedRouter.delete("/delete", async (req, res) => {
 	catch(e)
 	{
 		retCode = 404;
-		var ret = {error:e.message};
+		var ret = {error: e.message};
 	}
 	
 	

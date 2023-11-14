@@ -176,12 +176,12 @@ quizzesRouter.post("/edit", async (req, res) => {
 		if (result.matchedCount == 0)
       retCode = 204;
 
-		var ret = {error:message};
+		var ret = {error: message};
 	}
 	catch(e)
 	{
 		retCode = 404;
-		var ret = {error:e.message};
+		var ret = {error: e.message};
 	}
 
 	res.status(retCode).json(ret);

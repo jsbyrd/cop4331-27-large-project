@@ -75,7 +75,7 @@ answersRouter.post("/getcorrect", async (req, res) => {
 		if (result == null)
 			retCode = 204;
 
-    var ret = {result:result, error: message};
+    var ret = {result: result, error: message};
 	}
 	catch(e)
 	{
