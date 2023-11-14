@@ -86,7 +86,15 @@ usersRouter.post("/login", async (req, res) => {
 			fn = results[0].FirstName;
 			ln = results[0].LastName;
 
-      res.cookie("loginId", id);
+      var expireTime = new Date();
+      expireTime.setHours(expireTime.getHours() + 24);
+
+      res.cookie("loginId", id, {
+        expires: expireTime,
+        secure: true,
+        httpOnly: true,
+        sameSite: 'lax'
+      });
 
       var ret = {id:id, firstName:fn, lastName:ln, error:error};
       // var ret = getToken({id:id, firstName:fn, lastName:ln, error:error});
