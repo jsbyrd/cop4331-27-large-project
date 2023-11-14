@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import AddQuestionModal from '../components/AddQuestionModal';
 import MenuHeader from '../components/MenuHeader';
 import DefaultFooter from '../components/DefaultFooter';
 import './ViewQuizPage.css';
@@ -16,6 +17,15 @@ const ViewQuizPage = () => {
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(-1);
   const [isLoading, setIsLoading] = useState(true);
+
+  // States for modals
+  const [isAddQuestionOpen, setIsAddQuestionOpen] = useState(false);
+
+  // Functions for opening modals
+  function openAddQuestion(e) {
+    e.preventDefault();
+    setIsAddQuestionOpen(true);
+  }
 
   const moveFlashCardForward = (e) => {
     e.preventDefault();
@@ -75,14 +85,19 @@ const ViewQuizPage = () => {
 
   return (
     <div id='vqp-container'>
+      <AddQuestionModal 
+        isAddQuestionOpen={isAddQuestionOpen}
+        setIsAddQuestionOpen={setIsAddQuestionOpen}
+      />
       <MenuHeader />
+      
       <div id='vqp-body-container'>
         <div id='vqp-body'>
           <p id='vqp-quiz-title'>{quizInfo.Name}</p>
           <div id='vqp-quiz-options'>
             <button className='vqp-qo' onClick={event =>  window.location.href=`/taketest/${quizID}`}>Take Test</button>
             <button className='vqp-qo'>Save Quiz</button>
-            <button className='vqp-qo'>Add Question</button>
+            <button className='vqp-qo' onClick={openAddQuestion}>Add Question</button>
           </div>
           <div id='vqp-flashcard'>
             <div id='flip-card-inner'>
@@ -120,7 +135,6 @@ const ViewQuizPage = () => {
             })}
           </ul>
         </div>
-
       </div>
       <DefaultFooter />
     </div>
