@@ -10,9 +10,9 @@ const url = process.env.MONGODB_URI;
 const client = new MongoClient(url);
 client.connect();
 
-///////////////
-// Functions //
-///////////////
+///////////////////
+// API Endpoints //
+///////////////////
 
 // function used for some DB calls
 // not sure what it does yet!

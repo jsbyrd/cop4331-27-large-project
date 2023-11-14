@@ -6,8 +6,14 @@ const url = process.env.MONGODB_URI;
 const client = new MongoClient(url);
 client.connect();
 
+///////////////////
+// API Endpoints //
+///////////////////
+
 cookiesRouter.post("/clear", async (req, res) => {
   res.clearCookie();
+
+  res.status(200);
 });
 
 module.exports = cookiesRouter;

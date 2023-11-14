@@ -17,7 +17,8 @@ client.connect();
 // Incoming: id
 // Outgoing: name, userId, error
 quizzesRouter.post("/get", async (req, res) => {
-	let error = 200;
+	let retCode = 200;
+	let message = "";
 
 	const {id} = req.body;
 
@@ -36,25 +37,26 @@ quizzesRouter.post("/get", async (req, res) => {
 		const result = await db.collection('Quizzes').find({_id}, projection).toArray();
 
 		if (result.length == 0)
-			error = 204;
+			retCode = 204;
 
-    var ret = {result:result, error:error};
+    var ret = {result:result, error: message};
 
 	}
 	catch(e)
 	{
-		error = e.toString();
-		var ret = {error:e.message};
+		retCode = 404;
+		var ret = {error: e.message};
 	}
 
-	res.status(200).json(ret);
+	res.status(retCode).json(ret);
 });
 
 // Search
 // Incoming: term, public (both are optional, but term must be inputted)
 // Outgoing: result = {id, name, public}, error
 quizzesRouter.post("/search", async (req, res) => {
-	let error = 200;
+	let retCode = 200;
+	let message = "";
 	var search;
 
 	// public here needs to be true/false
@@ -71,7 +73,7 @@ quizzesRouter.post("/search", async (req, res) => {
 			$and: [{Public: 0}],
 			$or: [{
 			Name: { $regex: term, $options: "i"},
-			...userId != null ? {UserId:userId} : null
+			...userId != null ? {UserId: userId} : null
 			}]
 		};
 	}
@@ -80,7 +82,7 @@ quizzesRouter.post("/search", async (req, res) => {
 		search = {
 		$or: [{
 			Name: { $regex: term, $options: "i"},
-			...userId != null ? {UserId:userId} : null
+			...userId != null ? {UserId: userId} : null
 			}]
 		};
 	}
@@ -96,30 +98,31 @@ quizzesRouter.post("/search", async (req, res) => {
     const result = await db.collection('Quizzes').find(search, projection).toArray();
 
     if (result.length == 0)
-      error = 204;
+      retCode = 204;
 
-    var ret = {result:result, error:error};
+    var ret = {result:result, error: message};
   }
   catch(e)
   {
-    error = e.toString();
-    var ret = {error:e.message};
+    retCode = 404;
+    var ret = {error: e.message};
   }
 
-  res.status(200).json(ret);
+  res.status(retCode).json(ret);
 });
 
 // Add
 // Incoming: name, public (default: 0), userId
 // Outgoing: id, error
 quizzesRouter.post("/add", async (req, res) => {
-	let error = 200;
+	let retCode = 200;
+  let message = "";
 
 	const {name, public, userId} = req.body;
 
-	const newQuiz = {Name:name, Public:public, UserId:userId};
+	const newQuiz = {Name: name, Public: public, UserId: userId};
 
-	// idk what 0 is tbh
+	// default it to public
 	if (!newQuiz.Public)
 		newQuiz.Public = 0;
 
@@ -130,22 +133,23 @@ quizzesRouter.post("/add", async (req, res) => {
 		const db = client.db("LargeProject");
 		const result = await db.collection('Quizzes').insertOne(newQuiz);
 		
-		var ret = {id:result.insertedId, error: error};
+		var ret = {id: result.insertedId, error: message};
 	}
 	catch(e)
 	{
-		error = e.toString();
+		retCode = 404;
 		var ret = {error:e.message};
 	}
 
-	res.status(200).json(ret);
+	res.status(retCode).json(ret);
 });
 
 // Edit
 // Incoming: id (required), name, public, UserId (optional; just input what is edited)
 // Outgoing: error
 quizzesRouter.post("/edit", async (req, res) => {
-	let error = 200;
+	let retCode = 200;
+  let message = "";
 
 	const {id, name, public, userId} = req.body;
 
@@ -170,19 +174,17 @@ quizzesRouter.post("/edit", async (req, res) => {
 		const result = await db.collection('Quizzes').updateOne({_id}, edit);
 
 		if (result.matchedCount == 0)
-		{
-		error = 204;
-		}
+      retCode = 204;
 
-		var ret = {error:error};
+		var ret = {error:message};
 	}
 	catch(e)
 	{
-		error = e.toString();
+		retCode = 404;
 		var ret = {error:e.message};
 	}
 
-	res.status(200).json(ret);
+	res.status(retCode).json(ret);
 });
 
 module.exports = quizzesRouter;

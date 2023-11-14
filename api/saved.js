@@ -15,7 +15,7 @@ client.connect();
 // Incoming: id
 // Outgoing: name, userId, error
 savedRouter.post("/get", async (req, res) => {
-	let error = 200;
+	let retCode = 200;
 
 	const {id} = req.body;
 
@@ -30,58 +30,62 @@ savedRouter.post("/get", async (req, res) => {
 		const result = await db.collection('Saved').find({_id}).toArray();
 
 		if (result.length == 0)
-			error = 204;
+			retCode = 204;
 
-		var ret = {result:result, error:error};
+		var ret = {result: result, error: message};
 	}
 	catch(e)
 	{
-		error = e.toString();
-		var ret = {error:e.message};
+		retCode = 404;
+		var ret = {error: e.message};
 	}
 
-	res.status(200).json(ret);
+	res.status(retcode).json(ret);
 });
 
 // Add
 // Incoming: userId, quizId
 // Outgoing: id, error
 savedRouter.post("/add", async (req, res) => {
-	let error = 200;
+	let retCode = 200;
+  let message = "";
 
 	const {userId, quizId} = req.body;
 
-	const newQuiz = {UserId:userId, QuizId:quizId};
+	const newQuiz = {UserId: userId, QuizId: quizId};
 
 	console.log("Saving Quiz with userId " + userId + " and quizId " + quizId);
 
 	try
 	{
+		var result;
 		const db = client.db("LargeProject");
-		const result = await db.collection('Saved').insertOne(newQuiz);
 
 		if(userId == "" || quizId == "")
-			error = "You have a blank field somewhere. No saved quiz for you!";
+			message = "You have a blank field somewhere. No saved quiz for you!";
+		else
+			result = await db.collection('Saved').insertOne(newQuiz);
 
-		var ret = {result:result, error:error};
+		var ret = {result: result, error: message};
 	}
 	catch(e)
 	{
-		error = e.toString();
-		var ret = {error:e.message};
+		retCode = 404;
+		var ret = {error: e.message};
 	}
 
-	res.status(200).json(ret);
+	res.status(retCode).json(ret);
 });
 
 // Get
 // Incoming: id
 // Outgoing: name, userId, error
 savedRouter.delete("/delete", async (req, res) => {
-	let error = 200;
+	let retCode = 200;
+  let message = "";
   
 	const {id} = req.body;
-  var _id = new ObjectId(id);
+	var _id = new ObjectId(id);
 	
 	console.log("Begin DELETE for Saved Quiz " + id);
 	
@@ -92,24 +96,20 @@ savedRouter.delete("/delete", async (req, res) => {
 		const result = await db.collection('Saved').deleteOne({_id});
 	
 		if(result.deletedCount == 1)
-		{
-			console.log("Successfully deleted Saved Quiz " + id);
-		}
+			message = "Successfully deleted Saved Quiz " + id;
 		else
-		{
-			error = 204;
-		}
+			retCode = 204;
 
-	var ret = {error:error};
+	var ret = {error: message};
 	}
 	catch(e)
 	{
-		error = e.toString();
+		retCode = 404;
 		var ret = {error:e.message};
 	}
 	
 	
-	res.status(200).json(ret);
+	res.status(retCode).json(ret);
 });
 
 module.exports = savedRouter;

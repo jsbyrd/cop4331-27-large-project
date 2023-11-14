@@ -15,7 +15,8 @@ client.connect();
 // Incoming: term (optional but needs to be inputted), quizId (required or it will return empty)
 // Outgoing: result, error
 questionsRouter.post("/search", async (req, res) => {
-  let error = 200;
+  let retCode = 200;
+  let message = "";
   
   const {term, quizId} = req.body;
   
@@ -24,7 +25,7 @@ questionsRouter.post("/search", async (req, res) => {
   
   // more silly nodejs jargain
   var search = {
-    $and: [{QuizId:_id}],
+    $and: [{QuizId: _id}],
     $or: [{
       Question: { $regex: term, $options: "i"}
     }]
@@ -41,28 +42,29 @@ questionsRouter.post("/search", async (req, res) => {
     const result = await db.collection('Questions').find(search, projection).toArray();
     
     if (result.length == 0)
-      error = 204;
+      retCode = 204;
     
-    var ret = {result:result, error:error};
+    var ret = {result: result, error: message};
   }
   catch(e)
   {
-    error = e.toString();
-    var ret = {error:e.message};
+    retCode = 404;
+    var ret = {error: e.message};
   }
   
-  res.status(200).json(ret);
+  res.status(retCode).json(ret);
 });
 
 // Add
 // Incoming: question, quizId
 // Outgoing: id, error
 questionsRouter.post("/add", async (req, res) => {
-	let error = 200;
+	let retCode = 200;
+	let message = "";
 	
 	const {question, quizId} = req.body;
 	
-	const newQuestion = {Question:question, QuizId:quizId};
+	const newQuestion = {Question: question, QuizId :quizId};
 	
 	console.log("Begin ADD for Question with quizId " + quizId);
 	
@@ -71,22 +73,23 @@ questionsRouter.post("/add", async (req, res) => {
 		const db = client.db("LargeProject");
 		const result = await db.collection('Questions').insertOne(newQuestion);
 		
-		var ret = {id:result.insertedId, error: error};
+		var ret = {id: result.insertedId, error: message};
 	}
 	catch(e)
 	{
-		error = e.toString();
-		var ret = {error:e.message};
+		retCode = 404;
+		var ret = {error: e.message};
 	}
 	
-	res.status(200).json(ret);
+	res.status(404).json(ret);
 });
 
 // Edit
 // Incoming: id (required), question, quizId (optional; only input what's edited)
 // Outgoing: error
 questionsRouter.post("/edit", async (req, res) => {
-	let error = 200;
+	let retCode = 200;
+	let message = "";
 
 	const {id, question, quizId} = req.body;
 
@@ -99,8 +102,8 @@ questionsRouter.post("/edit", async (req, res) => {
 	{
 		// it gets worse every time I type it
 		let update = {
-		...question != null ? {Question:question} : null,
-		...quizId != null ? {QuizId:quizId} : null,
+		...question != null ? {Question: question} : null,
+		...quizId != null ? {QuizId: quizId} : null,
 		};
 
 		const edit = {$set: update};
@@ -109,19 +112,17 @@ questionsRouter.post("/edit", async (req, res) => {
 		const result = await db.collection('Questions').updateOne({_id}, edit);
 
 		if (result.matchedCount == 0)
-		{
-		error = 204;
-		}
+			retCode = 204;
 
-		var ret = {error:error};
+		var ret = {error: message};
 	}
 	catch(e)
 	{
-		error = e.toString();
-		var ret = {error:e.message};
+		retCode = 404;
+		var ret = {error: e.message};
 	}
 
-	res.status(200).json(ret);
+	res.status(retCode).json(ret);
 });
 
 module.exports = questionsRouter;
