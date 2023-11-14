@@ -72,7 +72,7 @@ answersRouter.post("/getcorrect", async (req, res) => {
 		const db = client.db("LargeProject");
 		const result = await db.collection('Answers').findOne(getter, projection);
 
-		if (result.length == 0)
+		if (result == null)
 			retCode = 204;
 
     var ret = {result:result, error: message};
