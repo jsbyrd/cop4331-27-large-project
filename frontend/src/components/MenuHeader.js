@@ -1,10 +1,42 @@
 import React,
-        { useState } from 'react';
+        { useState, 
+          useRef,
+          useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Menu.css';
 import logo from './images/logo.png'
 
 const MenuHeader = () => {
+
+  // Sidebar utilization ========
+  const [isSideBar, setIsSideBar] = useState(false);
+  const sideBarRef = useRef(null);
+
+  const toggleSideBar = () =>
+  {
+    console.log("PRE | Side bar out: ", isSideBar);
+    setIsSideBar(!isSideBar);
+    console.log("POST | Side bar out: ", isSideBar);
+
+    if (isSideBar) {
+      // Attach the event listener when opening the sidebar
+      document.addEventListener('click', closeSideBar);
+    } else {
+      // Remove the event listener when closing the sidebar
+      document.removeEventListener('click', closeSideBar);
+    }
+  };
+
+  const closeSideBar = (event) => {
+    console.log(event.target);
+    console.log(sideBarRef.current);
+    console.log(!sideBarRef.current.contains(event.target));
+    console.log(isSideBar);
+    if (isSideBar && !sideBarRef.current.contains(event.target)) {
+      console.log("Closing side bar");
+      setIsSideBar(!isSideBar);
+    }
+  };
 
   // Search bar utilization =====
   const navigate = useNavigate();
@@ -35,6 +67,13 @@ const MenuHeader = () => {
   return (
     <header>
       <nav className="navbar navbar-expand-lg d-flex flex-nowrap justify-content-between w-100 menu-navbar-custom" id='default-header-navbar'>
+        <button className="btn px-3 text-light" id="hamburger" onClick={toggleSideBar}>
+          ☰
+        </button>
+        {isSideBar && (
+          <div className="side-bar" ref={sideBarRef}>
+          </div>
+        )}
         <a className="nav-link text-light" id='default-header-logo' href="/" style={{ marginLeft: "20px" }}>
           <img src={logo} id='menu-header-logo' />
         </a>

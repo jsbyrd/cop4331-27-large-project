@@ -113,8 +113,8 @@ const Search = () => {
                 {message && <p>{message}</p>}
                 <ul className="search-result">
                     {results.map((result) => (
-                        <li key={result.id}>
-                            <a href={`/menu`}>
+                        <li key={result._id}>
+                            <a href={`/viewquiz/${result._id}`}>
                                 {result.Name}
                             </a>
                         </li>
