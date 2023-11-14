@@ -7,7 +7,7 @@ const client = new MongoClient(url);
 client.connect();
 
 cookiesRouter.post("/clear", async (req, res) => {
-    res.clearCookie();
+  res.clearCookie();
 });
 
 module.exports = cookiesRouter;
