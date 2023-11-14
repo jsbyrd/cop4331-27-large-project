@@ -1,0 +1,9 @@
+.modal-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#add-question-form {
+  padding: 0px 10px 0px 10px;
+}
