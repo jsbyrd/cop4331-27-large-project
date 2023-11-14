@@ -14,6 +14,7 @@ const Search = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [results, setResults] = useState([]);
     const [message, setMessage] = useState('');
+    const [placeholder, setPlaceHolder] = useState('Search');
     const navigate = useNavigate();
     const location = useLocation();
     const type = location.state;
@@ -60,11 +61,14 @@ const Search = () => {
             navigate('/search/myQuizzes', { state: 3 })
         }
         else if (searchQuery.trim() !== '') {
-            navigate(`/search/${searchQuery}`, { state: 1 });
-            doSearch(searchQuery);
-        }
-        else {
-            alert('Please enter a search query.');
+            var i = 0;
+            while (searchQuery[i] == ' ') {
+                i++;
+            }
+            var temp = searchQuery.substring(i);
+            setSearchQuery(searchQuery.substring(i));
+            navigate(`/search/${temp}`, { state: 1 });
+            doSearch(temp);
         }
     }
     // Detect enter
@@ -95,7 +99,7 @@ const Search = () => {
                             <input onKeyDown={keyDownHandler}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             class="form-control mr-sm-2" id='searched-searchbar' type="text" aria-label="Search" value={searchQuery} 
-                            placeholder={type != 1 ? 'Search' : query} 
+                            placeholder={placeholder} onFocus={() => setPlaceHolder('')} onBlur={() => setPlaceHolder('Search')} 
                             />
                         </form>
                     </div>
