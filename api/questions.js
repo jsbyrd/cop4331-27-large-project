@@ -64,7 +64,7 @@ questionsRouter.post("/add", async (req, res) => {
 	
 	const {question, quizId} = req.body;
 	
-	const newQuestion = {Question: question, QuizId :quizId};
+	const newQuestion = {Question: question, QuizId: quizId};
 	
 	console.log("Begin ADD for Question with quizId " + quizId);
 	

@@ -104,7 +104,7 @@ answersRouter.post("/add", async (req, res) => {
 		const db = client.db("LargeProject");
 		const result = await db.collection('Answers').insertOne(newAnswer);
 		
-		var ret = {id: result.insertedId, error: error};
+		var ret = {id: result.insertedId, error: retCode};
 	}
 	catch(e)
 	{

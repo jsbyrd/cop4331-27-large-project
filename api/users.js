@@ -131,15 +131,12 @@ usersRouter.post("/register", async (req, res) => {
     const result = await db.collection("Users").insertOne(newUser);
 
     // I'm not 100% as to why this is here?
-    ret.push(result);
+    var ret = {result:result.insertedId, error: message};
   }
   catch(e) {
     retCode = 404;
-    message = e.toString();
+    var ret = {result:result.insertedId, error: e.message};
   }
-
-  var ret = {error: message};
-  // var ret = getToken({ error: error });
 
 	res.status(retCode).json(ret);
 });
