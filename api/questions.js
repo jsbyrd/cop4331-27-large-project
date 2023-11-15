@@ -81,7 +81,7 @@ questionsRouter.post("/add", async (req, res) => {
 		var ret = {error: e.message};
 	}
 	
-	res.status(404).json(ret);
+	res.status(retcode).json(ret);
 });
 
 // Edit
