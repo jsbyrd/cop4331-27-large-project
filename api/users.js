@@ -131,7 +131,7 @@ usersRouter.post("/register", async (req, res) => {
     const result = await db.collection("Users").insertOne(newUser);
 
     // I'm not 100% as to why this is here?
-    ret.push(result);
+    // ret.push(result);
   }
   catch(e) {
     retCode = 404;

@@ -17,28 +17,21 @@ answersRouter.post("/get", async (req, res) => {
 	let retCode = 200;
   let message = "";
 
-	const {questionId, quizId} = req.body;
+	const {questionId} = req.body;
 
-	let getter = {
-		...questionId != null ? {QuestionId: questionId} : null,
-		...quizId != null ? {QuizId: quizId} : null
-		};
-
-  var projection = {
-    projection: {QuestionId: 0, QuizId: 0}
-  }
+  	var projection = {projection: {QuestionId: 0}};
 
 	console.log("Begin GET for Answer with Question ID " + questionId);
 
 	try
 	{
 		const db = client.db("LargeProject");
-		const result = await db.collection('Answers').find(getter, projection).toArray();
+		const result = await db.collection('Answers').find({QuestionId: questionId}, projection).toArray();
 
 		if (result.length == 0)
 			retCode = 204;
 
-    var ret = {result: result, error: message};
+    	var ret = {result: result, error: message};
 	}
 	catch(e)
 	{
@@ -51,31 +44,23 @@ answersRouter.post("/get", async (req, res) => {
 
 answersRouter.post("/getcorrect", async (req, res) => {
 	let retCode = 200;
-  let message = "";
+  	let message = "";
 
 	const {questionId, quizId} = req.body;
 
-	let getter = {
-		WrongAnswer: false,
-		...questionId != null ? {QuestionId: questionId} : null,
-		...quizId != null ? {QuizId: quizId} : null
-		};
-
-  var projection = {
-    projection: {QuestionId: 0, QuizId: 0, WrongAnswer: 0}
-  }
+  var projection = {projection: {QuestionId: 0, WrongAnswer: 0}}
 
 	console.log("Begin GET CORRECT for Answer with Question ID " + questionId);
 
 	try
 	{
 		const db = client.db("LargeProject");
-		const result = await db.collection('Answers').findOne(getter, projection);
+		const result = await db.collection('Answers').findOne({QuestionId: questionId}, projection);
 
 		if (result == null)
 			retCode = 204;
 
-    var ret = {result: result, error: message};
+    	var ret = {result: result, error: message};
 	}
 	catch(e)
 	{
@@ -104,12 +89,12 @@ answersRouter.post("/add", async (req, res) => {
 		const db = client.db("LargeProject");
 		const result = await db.collection('Answers').insertOne(newAnswer);
 		
-		var ret = {id: result.insertedId, error: error};
+		var ret = {id: result.insertedId, retCode: retCode};
 	}
 	catch(e)
 	{
 		retCode = 200;
-		var ret = {error: e.message};
+		var ret = {retCode: e.message};
 	}
 	
 	res.status(retCode).json(ret);
