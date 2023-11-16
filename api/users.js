@@ -94,8 +94,6 @@ usersRouter.post("/login", async (req, res) => {
 
       res.cookie("loginId", result._id, {
         expires: expireTime,
-        secure: true,
-        httpOnly: true,
         sameSite: 'lax'
       });
     }
