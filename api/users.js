@@ -89,6 +89,12 @@ usersRouter.post("/login", async (req, res) => {
 		}
     else
     {
+      var retJSON = {
+        id: result._id,
+        firstName: result.FirstName,
+        lastName: result.LastName
+      }
+
       var expireTime = new Date();
       expireTime.setHours(expireTime.getHours() + 24);
 
@@ -98,7 +104,7 @@ usersRouter.post("/login", async (req, res) => {
       });
     }
 
-    var ret = {result: result, error: message};
+    var ret = {result: retJSON, error: message};
   }
   catch(e)
   {
