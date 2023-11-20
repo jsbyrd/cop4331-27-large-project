@@ -89,11 +89,20 @@ usersRouter.post("/login", async (req, res) => {
 		}
     else
     {
-      var retJSON = {
+      var userJSON = {
         id: result._id,
         firstName: result.FirstName,
         lastName: result.LastName
       }
+      const token = getToken(userJSON);
+      var retJSON = {
+        id: result._id,
+        firstName: result.FirstName,
+        lastName: result.LastName,
+        token: token.accessToken
+      }
+
+      console.log(token);
 
       var expireTime = new Date();
       expireTime.setHours(expireTime.getHours() + 24);
