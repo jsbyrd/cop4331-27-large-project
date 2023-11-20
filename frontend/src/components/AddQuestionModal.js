@@ -32,24 +32,20 @@ const AddQuestionModal = (props) => {
         contentLabel="Example Modal"
       >
         <div id='add-question-form-container'>
-          <div className='modal-header'>
-            <h2>Add Question</h2>
-            <button onClick={closeAddQuestion}>X</button>
-          </div>
+          <h2>Add your questions</h2>
+          <button id='close-add-btn' onClick={closeAddQuestion}>X</button>
           <form id='add-question-form'>
             <label for="question">Question:</label><br/>
-            <input type="text" id="question-add" name="question" size={50} /><br/>
+            <input type="text" id="question-add" name="question" placeholder='Who was the first president of the United States?' size={50} required /><br/>
             <label for="answer">Correct Answer:</label><br/>
-            <input type="text" id="answer-add" name="answer" size={50} /><br />
+            <input type="text" id="answer-add-c" name="answer" placeholder='George Washington' size={50} required /><br />
             <label for="answer">Incorrect Answer 1:</label><br/>
-            <input type="text" id="answer-add" name="answer" size={50} /><br />
+            <input type="text" id="answer-add-w1" name="answer" placeholder='Abraham Lincoln' size={50} required /><br />
             <label for="answer">Incorrect Answer 2:</label><br/>
-            <input type="text" id="answer-add" name="answer" size={50} /><br />
+            <input type="text" id="answer-add-w2" name="answer" placeholder='King George III' size={50} required /><br />
             <label for="answer">Incorrect Answer 3:</label><br/>
-            <input type="text" id="answer-add" name="answer" size={50} /><br />
-            <label for="answer">Incorrect Answer 4:</label><br/>
-            <input type="text" id="answer-add" name="answer" size={50} /><br />
-            <button>Add</button>
+            <input type="text" id="answer-add-w3" name="answer" placeholder='Winston Churchill' size={50} required /><br />
+            <button id='answer-submit'>Add Question</button>
           </ form>
         </div>
       </Modal>
