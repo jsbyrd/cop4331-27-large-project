@@ -12,6 +12,9 @@ const TestPage = () => {
 
     const [quizInfo, setQuizInfo] = useState({Name: "Failed to load quiz..."});
     const [questions, setQuestions] = useState([]);
+    // const [answers, setAnswers] = useState([]);
+    let answers = new Array();
+
     const [currentQuestion, setCurrentQuestion] = useState(-1);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -46,14 +49,58 @@ const TestPage = () => {
         }
     }
 
+    const fetchAnswers = async () => {
+        let numQuestions = questions.length;
 
-    // Fetch Quiz info and all Questions related to that quiz
+        for (let i = 0; i < numQuestions; i++)
+        {
+            // console.log(i); // debug
+            // console.log(questions[i]._id); // debug
+            // console.log(quizID); // debug
+
+            const fetchParams = {
+                QuestionId: questions[i]._id
+                }
+                try {
+                const res = await axios.post(`https://cop4331-27-c6dfafc737d8.herokuapp.com/api/answers/get/`, fetchParams);
+                if (res !== undefined && res.data.result.length !== 0) {
+                    // console.log(res.data.result);
+                    // setAnswers(res.data.result);      
+                    
+                    // very uneffiecent
+                    for (let j = 0; j < res.data.result.length; j++)
+                    {
+                        if (!res.data.result[j].WrongAnswer)
+                        {
+                            answers[i] = res.data.result[j];
+                            console.log(answers[i]);
+                        }
+                    }
+                }
+                } catch {
+                    console.log("ERROR :(");
+                return;
+                }
+        }
+    }
+
     useEffect(() => {
-        fetchQuizInfo();
-        fetchQuestions();
-        setIsLoading(false);
-        
+        const fetchData = async () => {
+            await fetchQuizInfo();
+            await fetchQuestions();
+            setIsLoading(false);
+        };
+    
+        fetchData();
     }, []);
+    
+
+    useEffect(() => {
+        if (questions.length > 0) {
+            fetchAnswers();
+        }
+        
+    }, [questions]);
 
     return ( 
         <div>
@@ -65,10 +112,11 @@ const TestPage = () => {
                     <div key={index} className="question-container">
                         <p className='question-number'>Question {index + 1}</p>
                         <p className='question-text'>{questionItem.Question}</p>
+                        <p className='question-text'>(temporary) question Id: {questionItem._id}</p> 
                         <div className='answer-choices'>
                             <button className='answer-choice'>
                                 <p>
-                                    Answer placeholder :D
+                                    
                                 </p>
                             </button>
 
