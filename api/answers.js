@@ -25,8 +25,8 @@ answersRouter.post("/get", async (req, res) => {
 		};
 
   var projection = {
-    projection: {QuestionId: 1, QuizId: 0}
-  }
+    projection: {QuestionId: 1}
+  };
 
 	console.log("Begin GET for Answer with Question ID " + questionId);
 
