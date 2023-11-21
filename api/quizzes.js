@@ -14,7 +14,7 @@ client.connect();
 ///////////////////
 
 // Get
-// Incoming: id
+// Incoming: quiz id (id)
 // Outgoing: name, userId, error
 quizzesRouter.post("/get", async (req, res) => {
 	let retCode = 200;
@@ -62,7 +62,7 @@ quizzesRouter.post("/search", async (req, res) => {
 	// public here needs to be true/false
 	const {term, userId, public} = req.body;
 
-	console.log("Begin Search for Quiz with term" + term + (public ? ("with Public Tag " + public) : ""));
+	console.log("Begin Search for Quiz with term " + term + (public ? (" with Public Tag " + public) : ""));
 
 	// note that for "contains" queries, we need to manipulate the search
 	// using some annoying advanced queries

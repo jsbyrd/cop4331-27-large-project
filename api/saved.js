@@ -16,23 +16,33 @@ client.connect();
 // Outgoing: name, userId, error
 savedRouter.post("/get", async (req, res) => {
 	let retCode = 200;
+	let message = "";
 
 	const {id} = req.body;
-
-	// some annoying variable jargon
-	var _id = new ObjectId(id);
-
-	console.log("Begin GET for Saved Quiz with ID" + id);
+	console.log("Begin GET for Saved Quiz with ID " + id);
 
 	try
 	{
 		const db = client.db("LargeProject");
-		const result = await db.collection('Saved').find({_id}).toArray();
+		const result = await db.collection('Saved').find({UserId: id}).toArray();
 
 		if (result.length == 0)
+		{
 			retCode = 204;
 
-		var ret = {result: result, error: message};
+			var ret = {result: result, error: message};
+		}
+		else
+		{
+			var quizList = result.map((item) => {
+				return {
+					QuizId: item.QuizId,
+					QuizName: item.QuizName,
+				};
+			});
+
+			var ret = {result: quizList, error: message};
+		}
 	}
 	catch(e)
 	{
@@ -62,7 +72,7 @@ savedRouter.post("/add", async (req, res) => {
 		const db = client.db("LargeProject");
 
 		if(userId == "" || quizId == "")
-			message = "You have a blank field somewhere. No saved quiz for you!";
+			retCode = 204;
 		else
 			result = await db.collection('Saved').insertOne(newQuiz);
 
@@ -77,7 +87,7 @@ savedRouter.post("/add", async (req, res) => {
 	res.status(retCode).json(ret);
 });
 
-// Get
+// Delete
 // Incoming: id
 // Outgoing: name, userId, error
 savedRouter.delete("/delete", async (req, res) => {
@@ -85,7 +95,6 @@ savedRouter.delete("/delete", async (req, res) => {
   let message = "";
   
 	const {id} = req.body;
-	var _id = new ObjectId(id);
 	
 	console.log("Begin DELETE for Saved Quiz " + id);
 	
@@ -93,9 +102,9 @@ savedRouter.delete("/delete", async (req, res) => {
 	{
 		const db = client.db("LargeProject");
 
-		const result = await db.collection('Saved').deleteOne({_id});
+		const result = await db.collection('Saved').deleteOne({_id: id});
 	
-		if(result.deletedCount == 1)
+		if (result.deletedCount == 1)
 			message = "Successfully deleted Saved Quiz " + id;
 		else
 			retCode = 204;

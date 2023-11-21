@@ -143,12 +143,11 @@ usersRouter.post("/register", async (req, res) => {
     const db = client.db("LargeProject");
     const result = await db.collection("Users").insertOne(newUser);
 
-    // I'm not 100% as to why this is here?
-    var ret = {result:result.insertedId, error: message};
+    var ret = {result: result.insertedId, error: message};
   }
   catch(e) {
     retCode = 404;
-    var ret = {result:result.insertedId, error: e.message};
+    var ret = {error: e.message};
   }
 
 	res.status(retCode).json(ret);

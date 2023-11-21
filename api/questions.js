@@ -1,3 +1,5 @@
+const { Console } = require("console");
+
 const questionsRouter = require("express").Router();
 require("dotenv").config();
 
@@ -21,11 +23,10 @@ questionsRouter.post("/search", async (req, res) => {
   const {term, quizId} = req.body;
   
   console.log("Begin Search for Question with Quiz ID " + quizId);
-  var _id = new ObjectId(quizId);
   
   // more silly nodejs jargain
   var search = {
-    $and: [{QuizId: _id}],
+    $and: [{QuizId: quizId}],
     $or: [{
       Question: { $regex: term, $options: "i"}
     }]
@@ -44,6 +45,7 @@ questionsRouter.post("/search", async (req, res) => {
     if (result.length == 0)
       retCode = 204;
     
+	  console.log(result);
     var ret = {result: result, error: message};
   }
   catch(e)
@@ -52,6 +54,7 @@ questionsRouter.post("/search", async (req, res) => {
     var ret = {error: e.message};
   }
   
+  console.log(ret);
   res.status(retCode).json(ret);
 });
 
@@ -81,7 +84,7 @@ questionsRouter.post("/add", async (req, res) => {
 		var ret = {error: e.message};
 	}
 	
-	res.status(retcode).json(ret);
+	res.status(retCode).json(ret);
 });
 
 // Edit
