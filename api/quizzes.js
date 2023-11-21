@@ -51,6 +51,54 @@ quizzesRouter.post("/get", async (req, res) => {
 	res.status(retCode).json(ret);
 });
 
+quizzesRouter.post("/getfromid", async (req, res) => {
+	let retCode = 200;
+	let message = "";
+	var search;
+
+	// public here needs to be true/false
+	const {userId, public} = req.body;
+
+	console.log("Begin GET FROM ID for ID" + userId);
+
+	if (public)
+	{
+		search = {
+			Public: 0,
+			UserId: userId
+		};
+	}
+	else
+	{
+		search = {
+			UserId: userId
+		};
+	}
+  
+  // projections can be used to specify what to return
+  var projection = {
+    projection: {_id: 1, Name: 1, Public: 1}
+  }
+
+  try
+  {
+    const db = client.db("LargeProject");
+    const result = await db.collection('Quizzes').find(search, projection).toArray();
+
+    if (result.length == 0)
+      retCode = 204;
+
+    var ret = {result: result, error: message};
+  }
+  catch(e)
+  {
+    retCode = 404;
+    var ret = {error: e.message};
+  }
+
+  res.status(retCode).json(ret);
+});
+
 // Search
 // Incoming: term, public (both are optional, but term must be inputted)
 // Outgoing: result = {id, name, public}, error

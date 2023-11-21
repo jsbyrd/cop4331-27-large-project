@@ -19,7 +19,7 @@ answersRouter.post("/get", async (req, res) => {
 
 	const {questionId} = req.body;
 
-	var newId = new ObjectId("65249c13a5a3366c6ede8724");
+	var newId = new ObjectId(questionId);
 
 	var projection = {projection: {QuestionId: 0}};
 
@@ -48,16 +48,18 @@ answersRouter.post("/getcorrect", async (req, res) => {
 	let retCode = 200;
   	let message = "";
 
-	const {questionId, quizId} = req.body;
+	const {questionId} = req.body;
 
-  var projection = {projection: {QuestionId: 0, WrongAnswer: 0}}
+	var newId = new ObjectId(questionId);
+
+  	var projection = {projection: {QuestionId: 0, WrongAnswer: 0}}
 
 	console.log("Begin GET CORRECT for Answer with Question ID " + questionId);
 
 	try
 	{
 		const db = client.db("LargeProject");
-		const result = await db.collection('Answers').findOne({QuestionId: questionId}, projection);
+		const result = await db.collection('Answers').findOne({QuestionId: newId, WrongAnswer: false}, projection);
 
 		if (result == null)
 			retCode = 204;
