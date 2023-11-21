@@ -21,6 +21,8 @@ questionsRouter.post("/search", async (req, res) => {
   let message = "";
   
   const {term, quizId} = req.body;
+
+  var newId = new ObjectId(quizId);
   
   console.log("Begin Search for Question with Quiz ID " + quizId);
   
