@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -12,6 +12,19 @@ import ViewQuizPage from './pages/ViewQuizPage';
 import TestPage from './pages/TestPage';
 
 function App() {
+  const [userID, setUserID] = useState(null);
+
+  // Fetch user info from local storage
+  useEffect(() => {
+    if (userID === null) {
+      const userInfo = localStorage.getItem('userInfo');
+      console.log(userInfo);
+      if (userInfo) {
+        setUserID(userInfo.userID);
+      }
+    }
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>

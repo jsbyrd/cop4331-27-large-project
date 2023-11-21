@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import AddQuestionModal from '../components/AddQuestionModal';
 import MenuHeader from '../components/MenuHeader';
 import DefaultFooter from '../components/DefaultFooter';
 import './ViewQuizPage.css';
+import EditQuestionModal from '../components/EditQuestionModal.js';
+const path = require('../components/Path.js');
 
 const ViewQuizPage = () => {
 
@@ -17,6 +20,21 @@ const ViewQuizPage = () => {
   const [currentQuestion, setCurrentQuestion] = useState(-1);
   const [isLoading, setIsLoading] = useState(true);
 
+  // States for modals
+  const [isAddQuestionOpen, setIsAddQuestionOpen] = useState(false);
+  const [isEditQuestionOpen, setIsEditQuestionOpen] = useState(false);
+
+  // Functions for opening modals
+  function openAddQuestion(e) {
+    e.preventDefault();
+    setIsAddQuestionOpen(true);
+  }
+  function openEditQuestion(e) {
+    e.preventDefault();
+    setIsEditQuestionOpen(true);
+  }
+
+  // Navigate through flashcards
   const moveFlashCardForward = (e) => {
     e.preventDefault();
     if (currentQuestion >= questions.length - 1) {
@@ -24,7 +42,6 @@ const ViewQuizPage = () => {
     }
     setCurrentQuestion(currentQuestion + 1);
   }
-
   const moveFlashCardBackward = (e) => {
     e.preventDefault();
     if (currentQuestion <= 0) {
@@ -38,7 +55,7 @@ const ViewQuizPage = () => {
       id: quizID
     }
     try {
-      const res = await axios.post(`https://cop4331-27-c6dfafc737d8.herokuapp.com/api/quizzes/get/`, fetchParams);
+      const res = await axios.post(path.buildPath('/api/quizzes/get/'), fetchParams);
       if (res !== undefined && res.data.result.length !== 0) {
         setQuizInfo(res.data.result[0]);
       }
@@ -54,7 +71,7 @@ const ViewQuizPage = () => {
       quizId: quizID
     }
     try {
-      const res = await axios.post(`https://cop4331-27-c6dfafc737d8.herokuapp.com/api/questions/search/`, fetchParams);
+      const res = await axios.post(path.buildPath('/api/questions/search/'), fetchParams);
       if (res !== undefined && res.data.result.length !== 0) {
         setQuestions(res.data.result);
         setCurrentQuestion(0);
@@ -64,7 +81,6 @@ const ViewQuizPage = () => {
     }
   }
 
-
   // Fetch Quiz info and all Questions related to that quiz
   useEffect(() => {
     fetchQuizInfo();
@@ -73,16 +89,34 @@ const ViewQuizPage = () => {
     
   }, []);
 
+  const deleteQuestion = () => {
+    const answer = window.confirm("Are you sure you want to delete this question?");
+    if (answer) {
+      console.log('Question has been deleted!');
+      // TODO: Delete incorrect answers
+      // TODO: Delete question
+    }
+  }
+
   return (
     <div id='vqp-container'>
+      <AddQuestionModal 
+        isAddQuestionOpen={isAddQuestionOpen}
+        setIsAddQuestionOpen={setIsAddQuestionOpen}
+      />
+      <EditQuestionModal
+        isEditQuestionOpen={isEditQuestionOpen}
+        setIsEditQuestionOpen={setIsEditQuestionOpen}
+      />
       <MenuHeader />
+      
       <div id='vqp-body-container'>
         <div id='vqp-body'>
           <p id='vqp-quiz-title'>{quizInfo.Name}</p>
           <div id='vqp-quiz-options'>
             <button className='vqp-qo' onClick={event =>  window.location.href=`/taketest/${quizID}`}>Take Test</button>
             <button className='vqp-qo'>Save Quiz</button>
-            <button className='vqp-qo'>Add Question</button>
+            <button className='vqp-qo' onClick={openAddQuestion}>Add Question</button>
           </div>
           <div id='vqp-flashcard'>
             <div id='flip-card-inner'>
@@ -111,8 +145,8 @@ const ViewQuizPage = () => {
                     <div className='vqp-questions-li-q'>{`${q.Question}`}</div>
                     <div className='vqp-questions-li-a'>{"No Answer Yet :( but this is what a really long answer would look"}</div>
                     <div className='vqp-questions-li-o'>
-                      <button>Edit</button>
-                      <button>Delete</button>
+                      <button onClick={openEditQuestion}>Edit</button>
+                      <button onClick={deleteQuestion}>Delete</button>
                     </div>
                   </div>
                 </li>
@@ -120,7 +154,6 @@ const ViewQuizPage = () => {
             })}
           </ul>
         </div>
-
       </div>
       <DefaultFooter />
     </div>

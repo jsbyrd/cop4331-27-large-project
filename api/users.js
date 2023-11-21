@@ -89,18 +89,31 @@ usersRouter.post("/login", async (req, res) => {
 		}
     else
     {
+      var userJSON = {
+        id: result._id,
+        firstName: result.FirstName,
+        lastName: result.LastName
+      }
+      const token = getToken(userJSON);
+      var retJSON = {
+        id: result._id,
+        firstName: result.FirstName,
+        lastName: result.LastName,
+        token: token.accessToken
+      }
+
+      console.log(token);
+
       var expireTime = new Date();
       expireTime.setHours(expireTime.getHours() + 24);
 
       res.cookie("loginId", result._id, {
         expires: expireTime,
-        secure: true,
-        httpOnly: true,
         sameSite: 'lax'
       });
     }
 
-    var ret = {result: result, error: message};
+    var ret = {result: retJSON, error: message};
   }
   catch(e)
   {
@@ -130,16 +143,12 @@ usersRouter.post("/register", async (req, res) => {
     const db = client.db("LargeProject");
     const result = await db.collection("Users").insertOne(newUser);
 
-    // I'm not 100% as to why this is here?
-    // ret.push(result);
+    var ret = {result: result.insertedId, error: message};
   }
   catch(e) {
     retCode = 404;
-    message = e.toString();
+    var ret = {error: e.message};
   }
-
-  var ret = {error: message};
-  // var ret = getToken({ error: error });
 
 	res.status(retCode).json(ret);
 });

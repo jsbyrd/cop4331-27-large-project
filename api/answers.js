@@ -19,8 +19,6 @@ answersRouter.post("/get", async (req, res) => {
 
 	const {questionId} = req.body;
 
-  	var projection = {projection: {QuestionId: 0}};
-
 	console.log("Begin GET for Answer with Question ID " + questionId);
 
 	try

@@ -6,6 +6,7 @@ import { useNavigate,
         useParams } from 'react-router-dom';
 import './Searched.css';
 import logo from './images/logo.png'
+const path = require('./Path.js');
 
 
 const Search = () => {
@@ -14,6 +15,7 @@ const Search = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [results, setResults] = useState([]);
     const [message, setMessage] = useState('');
+    const [placeholder, setPlaceHolder] = useState('Search');
     const navigate = useNavigate();
     const location = useLocation();
     const type = location.state;
@@ -27,9 +29,9 @@ const Search = () => {
         var js = JSON.stringify(obj);
         try
         {    
-            const response = await fetch('https://cop4331-27-c6dfafc737d8.herokuapp.com/api/quizzes/search', {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
+            const response = await fetch(path.buildPath('/api/quizzes/search'), {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
             var res = JSON.parse(await response.text());
-            if(res.error == 204)
+            if(res.error === 204)
             {
                 setMessage("No results");
                 setResults([]);
@@ -60,11 +62,14 @@ const Search = () => {
             navigate('/search/myQuizzes', { state: 3 })
         }
         else if (searchQuery.trim() !== '') {
-            navigate(`/search/${searchQuery}`, { state: 1 });
-            doSearch(searchQuery);
-        }
-        else {
-            alert('Please enter a search query.');
+            var i = 0;
+            while (searchQuery[i] == ' ') {
+                i++;
+            }
+            var temp = searchQuery.substring(i);
+            setSearchQuery(searchQuery.substring(i));
+            navigate(`/search/${temp}`, { state: 1 });
+            doSearch(temp);
         }
     }
     // Detect enter
@@ -95,7 +100,7 @@ const Search = () => {
                             <input onKeyDown={keyDownHandler}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             class="form-control mr-sm-2" id='searched-searchbar' type="text" aria-label="Search" value={searchQuery} 
-                            placeholder={type != 1 ? 'Search' : query} 
+                            placeholder={placeholder} onFocus={() => setPlaceHolder('')} onBlur={() => setPlaceHolder('Search')} 
                             />
                         </form>
                     </div>
@@ -113,8 +118,8 @@ const Search = () => {
                 {message && <p>{message}</p>}
                 <ul className="search-result">
                     {results.map((result) => (
-                        <li key={result.id}>
-                            <a href={`/menu`}>
+                        <li key={result._id}>
+                            <a href={`/viewquiz/${result._id}`}>
                                 {result.Name}
                             </a>
                         </li>
