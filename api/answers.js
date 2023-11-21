@@ -19,6 +19,8 @@ answersRouter.post("/get", async (req, res) => {
 
 	const {questionId} = req.body;
 
+	var newId = new ObjectId("65249c13a5a3366c6ede8724");
+
 	var projection = {projection: {QuestionId: 0}};
 
 	console.log("Begin GET for Answer with Question ID " + questionId);
@@ -26,7 +28,7 @@ answersRouter.post("/get", async (req, res) => {
 	try
 	{
 		const db = client.db("LargeProject");
-		const result = await db.collection('Answers').find({QuestionId: questionId}, projection).toArray();
+		const result = await db.collection('Answers').find({QuestionId: newId}, projection).toArray();
 
 		if (result.length == 0)
 			retCode = 204;
