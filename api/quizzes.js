@@ -51,7 +51,7 @@ quizzesRouter.post("/get", async (req, res) => {
 	res.status(retCode).json(ret);
 });
 
-quizzesRouter.post("/getfromid", async (req, res) => {
+quizzesRouter.post("/getfromuser", async (req, res) => {
 	let retCode = 200;
 	let message = "";
 	var search;
