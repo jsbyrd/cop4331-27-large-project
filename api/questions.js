@@ -28,7 +28,7 @@ questionsRouter.post("/search", async (req, res) => {
   
   // more silly nodejs jargain
   var search = {
-    $and: [{QuizId: quizId}],
+    $and: [{QuizId: newId}],
     $or: [{
       Question: { $regex: term, $options: "i"}
     }]
