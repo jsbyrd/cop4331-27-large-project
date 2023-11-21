@@ -4,9 +4,9 @@ import React,
 import { useNavigate,
         useLocation,
         useParams } from 'react-router-dom';
-import './Searched.css';
+import './Menu.css';
 import logo from './images/logo.png'
-
+import SideBarModal from './SideBarModal';
 
 const Search = () => {
 
@@ -20,6 +20,15 @@ const Search = () => {
     const type = location.state;
 
     var count = 0;
+
+    // SideBar Modal
+    const [isSideBarOpen, setIsSideBarOpen] = useState(false);
+
+  // Functions for opening modals
+    function openSideBar(e) {
+        e.preventDefault();
+        setIsSideBarOpen(true);
+    }
 
     // Utilize Search API
     const doSearch = async (term) =>
@@ -89,30 +98,29 @@ const Search = () => {
 
     return (
         <div>
-            <header className='position-sticky top-0'>
-                <nav className="navbar navbar-expand-lg d-flex flex-nowrap justify-content-between w-100 searched-navbar-custom" id='default-header-navbar'>
-                    <a className="nav-link text-light" id='searched-header-logo' href="/menu" style={{ marginLeft: "20px" }}>
-                        <img src={logo} id='searched-header-logo'/>
-                    </a>
-                    <div className='d-flex align-items-center'>
-                        <form class="form-inline">
-                            <input onKeyDown={keyDownHandler}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            class="form-control mr-sm-2" id='searched-searchbar' type="text" aria-label="Search" value={searchQuery} 
-                            placeholder={placeholder} onFocus={() => setPlaceHolder('')} onBlur={() => setPlaceHolder('Search')} 
-                            />
-                        </form>
-                    </div>
-                    <div className="d-flex align-items-center" style={{ marginRight: "20px" }}>
-                        <button type="button" className="btn px-3 text-light" id='default-header-login-btn' onClick={event => goToSearch(2)}>
-                            Saved Quizzes
-                        </button>
-                        <button type="button" className="btn btn-primary me-3" id='default-header-register-btn' onClick={event => goToSearch(3)}>
-                            My Quizzes
-                        </button>
-                    </div>
-                </nav>
-            </header>
+            <header>
+      <SideBarModal
+        isSideBarOpen={isSideBarOpen}
+        setIsSideBarOpen={setIsSideBarOpen}
+      />
+      <nav className="navbar navbar-expand-lg d-flex flex-nowrap justify-content-between w-100 menu-navbar-custom" id='default-header-navbar'>
+        <button className="btn px-3 text-light" id="hamburger" onClick={openSideBar}>
+          ☰
+        </button>
+        <a className="nav-link text-light" id='default-header-logo' href="/menu" style={{ marginLeft: "20px" }}>
+          <img src={logo} id='menu-header-logo' />
+        </a>
+        <div className='d-flex align-items-center'>
+          <form class="form-inline">
+            <input onKeyDown={keyDownHandler}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              class="form-control mr-sm-2" id='menu-searchbar' type="text" value={searchQuery} 
+              placeholder={placeholder} onFocus={() => setPlaceHolder('')} onBlur={() => setPlaceHolder('Search')} aria-label="Search"
+            />
+          </form>
+        </div>
+      </nav>
+    </header>
             <div>
                 {message && <p>{message}</p>}
                 <ul className="search-result">

@@ -5,11 +5,13 @@
 
 #menu-searchbar
 {
-    width: 350px;
+    margin-right: 130px;
+    width: 420px;
 }
 
 #menu-header-logo {
-    margin-left: 10px;
+    margin-left: -50px;
+    position: absolute;
     width:200px;
     height:200px;
 }
@@ -42,7 +44,7 @@
 
 #dummy-play-button
 {
-    background-color: #71E56F;
+    background-color: #307c2f;
 }
 
 .dummy-button-explanation
@@ -71,17 +73,25 @@
     background: none;
     color: white;
     position: relative;
-    left:30px;
+    left: 20px;
+    width: 60px;
     font-size: 25px;
 }
 
-.side-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh; 
-    width: 200px; 
-    background-color: white;
-    z-index: 1; 
-    padding: 20px; 
-}
+.search-result {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .search-result li {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin: 5px;
+    padding: 10px;
+    width: 200px;
+    text-align: center;
+  }

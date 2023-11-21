@@ -66,18 +66,10 @@ const MenuHeader = () => {
           <form class="form-inline">
             <input onKeyDown={keyDownHandler}
               onChange={(e) => setSearchQuery(e.target.value)}
-              class="form-control mr-sm-2" id='searched-searchbar' type="text" value={searchQuery} 
+              class="form-control mr-sm-2" id='menu-searchbar' type="text" value={searchQuery} 
               placeholder={placeholder} onFocus={() => setPlaceHolder('')} onBlur={() => setPlaceHolder('Search')} aria-label="Search"
             />
           </form>
-        </div>
-        <div className="d-flex align-items-center" style={{ marginRight: "20px" }}>
-          <button type="button" className="btn px-3 text-light" id='default-header-login-btn' onClick={event => goToSearch(2)}>
-            Saved Quizzes
-          </button>
-          <button type="button" className="btn btn-primary me-3" id='default-header-register-btn' onClick={event => goToSearch(3)}>
-            My Quizzes
-          </button>
         </div>
       </nav>
     </header>
