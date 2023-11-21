@@ -1,7 +1,7 @@
 #vqp-body-container {
   display: flex;
   justify-content: center;
-  background-color: rgb(67, 39, 161);
+  background-color: rgba(67, 39, 161, 1);
   color: white;
 }
 

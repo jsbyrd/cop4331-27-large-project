@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import MenuHeader from '../components/MenuHeader';
 import DefaultFooter from '../components/DefaultFooter';
 import './TestPage.css';
+const path = require('../components/Path.js');
 
 
 const TestPage = () => {
@@ -23,7 +24,7 @@ const TestPage = () => {
         id: quizID
         }
         try {
-        const res = await axios.post(`https://cop4331-27-c6dfafc737d8.herokuapp.com/api/quizzes/get/`, fetchParams);
+        const res = await axios.post(path.buildPath('/api/quizzes/get'), fetchParams);
         if (res !== undefined && res.data.result.length !== 0) {
             setQuizInfo(res.data.result[0]);
         }
@@ -39,7 +40,7 @@ const TestPage = () => {
         quizId: quizID
         }
         try {
-        const res = await axios.post(`https://cop4331-27-c6dfafc737d8.herokuapp.com/api/questions/search/`, fetchParams);
+        const res = await axios.post(path.buildPath('/api/questions/search'), fetchParams);
         if (res !== undefined && res.data.result.length !== 0) {
             setQuestions(res.data.result);
             setCurrentQuestion(0);

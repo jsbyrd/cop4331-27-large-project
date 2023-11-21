@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './Login.css';
 
+const path = require('./Path.js');
+
 const Login = () => {
 
     var loginName;
@@ -17,7 +19,7 @@ const Login = () => {
 
         try
         {    
-            const response = await fetch('https://cop4331-27-c6dfafc737d8.herokuapp.com/api/users/login', {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
+            const response = await fetch(path.buildPath('/api/users/login'), {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
             var res = JSON.parse(await response.text());
             console.log(res);
             if( res.id === undefined )

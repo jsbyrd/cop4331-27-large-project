@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Register.css';
+const path = require('./Path.js');
 
 function Register()
 {
@@ -20,7 +21,7 @@ function Register()
 
         try
         {    
-            const response = await fetch('https://cop4331-27-c6dfafc737d8.herokuapp.com/api/users/register', {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
+            const response = await fetch(path.buildPath('/api/users/register'), {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
             var res = JSON.parse(await response.text());
             console.log(res);
             if( res.error !== '' )
