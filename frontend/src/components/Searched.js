@@ -7,6 +7,7 @@ import { useNavigate,
 import './Menu.css';
 import logo from './images/logo.png'
 import SideBarModal from './SideBarModal';
+const path = require('./Path.js');
 
 const Search = () => {
 
@@ -37,9 +38,9 @@ const Search = () => {
         var js = JSON.stringify(obj);
         try
         {    
-            const response = await fetch('https://cop4331-27-c6dfafc737d8.herokuapp.com/api/quizzes/search', {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
+            const response = await fetch(path.buildPath('/api/quizzes/search'), {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
             var res = JSON.parse(await response.text());
-            if(res.error == 204)
+            if(res.error === 204)
             {
                 setMessage("No results");
                 setResults([]);

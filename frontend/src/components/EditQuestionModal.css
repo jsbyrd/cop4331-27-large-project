@@ -1,25 +1,25 @@
-#add-question-form-container {
+#edit-question-form-container {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-#close-add-btn {
+#close-edit-btn {
   position: absolute;
   top: 20px;
   right: 20px;
 }
 
-#add-question-form {
+#edit-question-form {
   padding: 0px 10px 0px 10px;
 }
 
-#add-question-form input {
+#edit-question-form input {
   padding: 0px 5px 0px 5px;
   border: 1px solid black;
 }
 
-#answer-submit {
+#edit-submit {
   margin: 20px 0px 0px 0px;
   border-radius: 5px;
 }
