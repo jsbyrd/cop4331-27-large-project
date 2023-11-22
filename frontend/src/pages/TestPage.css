@@ -51,10 +51,51 @@
     color: white;
     border: none;
     border-radius: 12px;
-
     margin: 10px;
+    box-shadow: 1px 4px 20px 1px rgba(8, 2, 27, 0.103);
 
     /* hardcoding sizes */
     height: 80px;
     width: 400px;
+}
+
+.answer-choice:hover
+{
+    background-color: rgb(106, 78, 197);
+}
+
+.test-result
+{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(50, 48, 84);
+    border-radius: 20px;
+    margin: 40px;
+    box-shadow: 1px 4px 20px 1px rgba(8, 2, 27, 0.534);
+
+    /* hardcoding sizes */
+    height: 200px;
+    width: 900px;
+}
+
+.submit-button
+{
+    background-color: rgb(143, 66, 179);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    margin: 10px;
+    font-size: 24px;
+
+    /* hardcoding sizes */
+    height: 80px;
+    width: 180px;
+}
+
+.submit-button:hover
+{
+    background-color: rgb(173, 95, 209);
 }
