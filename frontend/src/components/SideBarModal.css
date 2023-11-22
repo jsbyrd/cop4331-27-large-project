@@ -1,0 +1,37 @@
+.sidebar-buttons {
+    padding: 10px;
+    height: auto;
+    justify-content: center;
+}
+
+.btn:hover {
+    border-bottom-color: rgba(168,177,255,255);
+}
+
+.btn {
+    margin: 10px;
+    width: 150px;
+    justify-content: center;
+}
+
+.other-btn {
+    order: 1;
+}
+
+#x-btn
+{
+    border-color: transparent;
+    background: none;
+    color: black;
+    position: relative;
+    left:130px;
+    top: -20px;
+    font-size: 25px;
+}
+
+#logout-btn {
+    position: absolute;
+    bottom: 0;
+    order: 2;
+}
+
