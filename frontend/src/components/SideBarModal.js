@@ -63,6 +63,7 @@ const SideBarModal = (props) => {
 
     // Complete the search
     const goToSearch = async (type) => {
+        //setIsSideBarOpen(false);
         if (type == 2)
             navigate('/search/savedQuizzes', { state: 2 });
         else
@@ -84,10 +85,10 @@ const SideBarModal = (props) => {
                 <div className='sidebar-buttons flex-grow-1'>
                     <div className='other-btn'>
                         <button className="btn btn-primary mb-3" onClick={event => window.location.href = '/menu'}> Create Quiz</button>
-                        <button type="button" className="btn btn-primary mb-3" id='default-header-login-btn' onClick={event => goToSearch(2)}>
+                        <button type="button" className="btn btn-primary mb-3" id='default-header-login-btn' onClick={event => {goToSearch(2); closeSideBar(event)}}>
                             Saved Quizzes
                         </button>
-                        <button type="button" className="btn btn-primary mb-3" id='default-header-register-btn' onClick={event => goToSearch(3)}>
+                        <button type="button" className="btn btn-primary mb-3" id='default-header-register-btn' onClick={event => {goToSearch(3); closeSideBar(event)}}>
                             My Quizzes
                         </button>
                     </div>

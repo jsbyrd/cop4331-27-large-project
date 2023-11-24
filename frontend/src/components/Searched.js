@@ -39,14 +39,63 @@ const Search = () => {
         try
         {    
             const response = await fetch(path.buildPath('/api/quizzes/search'), {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
-            var res = JSON.parse(await response.text());
-            if(res.error === 204)
+            try {
+                var res = JSON.parse(await response.text());
+                setMessage("");
+                setResults(res.result);
+            }
+            catch(e)
             {
                 setMessage("No results");
                 setResults([]);
             }
-            else
-            {
+        }
+        catch(e)
+        {
+            alert(e.toString());
+            return;
+        }
+    };
+
+    // Saved quizes
+    const getSaved = async () =>
+    {
+        var obj = {id:JSON.parse(localStorage.getItem('user_data')).id};
+        var js = JSON.stringify(obj);
+        try
+        {    
+            const response = await fetch(path.buildPath('/api/saved/get'), {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
+            if (response.status == 204) {
+                setMessage("No saved quizzes");
+                setResults([]);
+            }
+            else {
+                var res = JSON.parse(await response.text());
+                setMessage("");
+                setResults(res.result);
+            }
+        }
+        catch(e)
+        {
+            alert(e.toString());
+            return;
+        }
+    };
+
+    // My Quizzes
+    const myQuizzes = async () => 
+    {
+        var obj = {id:JSON.parse(localStorage.getItem('user_data')).id};
+        var js = JSON.stringify(obj);
+        try
+        {    
+            const response = await fetch(path.buildPath('/api/quizzes/get'), {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
+            if (response.status == 204) {
+                setMessage("No created quizzes");
+                setResults([]);
+            }
+            else {
+                var res = JSON.parse(await response.text());
                 setMessage("");
                 setResults(res.result);
             }
@@ -64,11 +113,13 @@ const Search = () => {
         {
             setSearchQuery('');
             navigate('/search/savedQuizzes', { state: 2 });
+            getSaved();
         }
         else if (type == 3)
         {
             setSearchQuery('');
             navigate('/search/myQuizzes', { state: 3 })
+            myQuizzes();
         }
         else if (searchQuery.trim() !== '') {
             var i = 0;
@@ -93,9 +144,21 @@ const Search = () => {
     // Send API call upon loading of page
     useEffect(() => {
         if (type == 1)
+        {
             setSearchQuery(query);
-        doSearch(query);
-    },[]);
+            doSearch(query);
+        }
+        else if (type == 2)
+        {
+            setSearchQuery('');
+            getSaved();
+        }
+        else
+        {
+            setSearchQuery('');
+            myQuizzes();
+        }
+    },[type]);
 
     return (
         <div>
