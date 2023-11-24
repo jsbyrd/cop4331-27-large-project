@@ -16,7 +16,7 @@ const ViewQuizPage = () => {
   //                         {Question: "Are you stupid?", _id: "3"},
   //                         {Question: "This is very very dumb", _id: "4"}];
   const [quizInfo, setQuizInfo] = useState({Name: "Failed to load quiz..."});
-  const [questions, setQuestions] = useState([]);
+  const [questionsAndAnswers, setQuestionsAndAnswers] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(-1);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,7 +37,7 @@ const ViewQuizPage = () => {
   // Navigate through flashcards
   const moveFlashCardForward = (e) => {
     e.preventDefault();
-    if (currentQuestion >= questions.length - 1) {
+    if (currentQuestion >= questionsAndAnswers.length - 1) {
       return;
     }
     setCurrentQuestion(currentQuestion + 1);
@@ -65,16 +65,34 @@ const ViewQuizPage = () => {
     }
   }
 
-  const fetchQuestions = async () => {
-    const fetchParams = {
+  const fetchQuestionsAndAnswers = async () => {
+    const fetchParamsQ = {
       term: "",
       quizId: quizID
     }
     try {
-      const res = await axios.post(path.buildPath('/api/questions/search/'), fetchParams);
-      if (res !== undefined && res.data.result.length !== 0) {
-        setQuestions(res.data.result);
+      // Fetch question info
+      const resQ = await axios.post(path.buildPath('/api/questions/search/'), fetchParamsQ);
+      const qsAndAs = [];
+      if (resQ !== undefined && resQ.data.result.length !== 0) {
         setCurrentQuestion(0);
+        // Fetch answer info for each question
+        const qas = []
+        for (let i = 0; i < resQ.data.result.length; i++) {
+          const fetchParamsA = {
+            questionId: resQ.data.result[i]._id
+          }
+          const resA = await axios.post(path.buildPath('/api/answers/get/'), fetchParamsA);
+          if (resA !== undefined && resA.data.result.length !== 0) {
+            const qa = {
+              question: resQ.data.result[i],
+              answers: resA.data.result
+            }
+            qas.push(qa);
+          }
+        }
+        console.log(qas);
+        setQuestionsAndAnswers(qas);
       }
     } catch {
       return;
@@ -84,9 +102,8 @@ const ViewQuizPage = () => {
   // Fetch Quiz info and all Questions related to that quiz
   useEffect(() => {
     fetchQuizInfo();
-    fetchQuestions();
+    fetchQuestionsAndAnswers();
     setIsLoading(false);
-    
   }, []);
 
   const deleteQuestion = () => {
@@ -122,28 +139,28 @@ const ViewQuizPage = () => {
             <div id='flip-card-inner'>
               <div className='flip-card-side' id='flip-card-front'>
                 <p id='vqp-flashcard-q'>
-                  {(questions.length === 0) ? "No Questions :(" : `${questions[currentQuestion].Question}`}
+                  {(questionsAndAnswers.length === 0) ? "No Questions :(" : `${questionsAndAnswers[currentQuestion].question.Question}`}
                 </p>
               </div>
                 <div className='flip-card-side' id='flip-card-back'>
                 <p id='vqp-flashcard-q'>
-                {(questions.length === 0) ? "No Answers :(" : "No Answers :("}
+                {(questionsAndAnswers.length === 0) ? "No Answers :(" : `${questionsAndAnswers[currentQuestion].answers.find((a) => a.WrongAnswer === false).Answer}`}
                   </p>
               </div>
             </div>
           </div>
           <div id='vqp-flashcard-nav'>
             <button className='nav-btn' id='nav-btn-back' onClick={moveFlashCardBackward}>{"←"}</button>
-            <p id='flashcard-nav-count'>{`${currentQuestion + 1} / ${isLoading ? 0 : questions.length}`}</p>
+            <p id='flashcard-nav-count'>{`${currentQuestion + 1} / ${isLoading ? 0 : questionsAndAnswers.length}`}</p>
             <button className='nav-btn' id='nav-btn-forward' onClick={moveFlashCardForward}>{"→"}</button>
           </div>
           <ul id='vqp-questions-ul'>
-            {questions.map((q) => {
+            {questionsAndAnswers.map((qa) => {
               return (
-                <li key={q._id}>
+                <li key={qa.question._id}>
                   <div className='vqp-questions-li'>
-                    <div className='vqp-questions-li-q'>{`${q.Question}`}</div>
-                    <div className='vqp-questions-li-a'>{"No Answer Yet :( but this is what a really long answer would look"}</div>
+                    <div className='vqp-questions-li-q'>{`${qa.question.Question}`}</div>
+                    <div className='vqp-questions-li-a'>{`${qa.answers.find((a) => !a.WrongAnswer).Answer}`}</div>
                     <div className='vqp-questions-li-o'>
                       <button onClick={openEditQuestion}>Edit</button>
                       <button onClick={deleteQuestion}>Delete</button>

@@ -18,7 +18,6 @@ function App() {
   useEffect(() => {
     if (userID === null) {
       const userInfo = localStorage.getItem('userInfo');
-      console.log(userInfo);
       if (userInfo) {
         setUserID(userInfo.userID);
       }
