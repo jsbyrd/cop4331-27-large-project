@@ -21,10 +21,12 @@ savedRouter.post("/get", async (req, res) => {
 	const {id} = req.body;
 	console.log("Begin GET for Saved Quiz with ID " + id);
 
+	var newId = new ObjectId(id);
+
 	try
 	{
 		const db = client.db("LargeProject");
-		const result = await db.collection('Saved').find({UserId: id}).toArray();
+		const result = await db.collection('Saved').find({UserId: newId}).toArray();
 
 		if (result.length == 0)
 		{
@@ -58,11 +60,14 @@ savedRouter.post("/get", async (req, res) => {
 // Outgoing: id, error
 savedRouter.post("/add", async (req, res) => {
 	let retCode = 200;
-  let message = "";
+	let message = "";
 
 	const {userId, quizId} = req.body;
+	
+	var newUserId = new ObjectId(userId);
+	var newQuizId = new ObjectId(quizId);
 
-	const newQuiz = {UserId: userId, QuizId: quizId};
+	const newQuiz = {UserId: newUserId, QuizId: newQuizId};
 
 	console.log("Saving Quiz with userId " + userId + " and quizId " + quizId);
 
@@ -95,6 +100,8 @@ savedRouter.delete("/delete", async (req, res) => {
   let message = "";
   
 	const {id} = req.body;
+
+	var newId = new ObjectId(id);
 	
 	console.log("Begin DELETE for Saved Quiz " + id);
 	
@@ -102,7 +109,7 @@ savedRouter.delete("/delete", async (req, res) => {
 	{
 		const db = client.db("LargeProject");
 
-		const result = await db.collection('Saved').deleteOne({_id: id});
+		const result = await db.collection('Saved').deleteOne({_id: newId});
 	
 		if (result.deletedCount == 1)
 			message = "Successfully deleted Saved Quiz " + id;
