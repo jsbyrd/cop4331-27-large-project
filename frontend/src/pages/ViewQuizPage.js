@@ -73,7 +73,6 @@ const ViewQuizPage = () => {
     try {
       // Fetch question info
       const resQ = await axios.post(path.buildPath('/api/questions/search/'), fetchParamsQ);
-      const qsAndAs = [];
       if (resQ !== undefined && resQ.data.result.length !== 0) {
         setCurrentQuestion(0);
         // Fetch answer info for each question
@@ -120,6 +119,7 @@ const ViewQuizPage = () => {
       <AddQuestionModal 
         isAddQuestionOpen={isAddQuestionOpen}
         setIsAddQuestionOpen={setIsAddQuestionOpen}
+        quizID={quizID}
       />
       <EditQuestionModal
         isEditQuestionOpen={isEditQuestionOpen}
@@ -144,7 +144,7 @@ const ViewQuizPage = () => {
               </div>
                 <div className='flip-card-side' id='flip-card-back'>
                 <p id='vqp-flashcard-q'>
-                {(questionsAndAnswers.length === 0) ? "No Answers :(" : `${questionsAndAnswers[currentQuestion].answers.find((a) => a.WrongAnswer === false).Answer}`}
+                {(questionsAndAnswers.length === 0) ? "No Answers :(" : `${questionsAndAnswers[currentQuestion].answers.find((a) => !a.WrongAnswer).Answer}`}
                   </p>
               </div>
             </div>
