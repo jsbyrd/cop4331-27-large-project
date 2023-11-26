@@ -83,8 +83,10 @@ answersRouter.post("/add", async (req, res) => {
   let message = "";
 	
 	const {answer, questionId, wrong} = req.body;
+
+	var newId = new ObjectId(questionId);
 	
-	const newAnswer = {Answer: answer, QuestionId: questionId, WrongAnswer: wrong};
+	const newAnswer = {Answer: answer, QuestionId: newId, WrongAnswer: wrong};
 	
 	console.log("Begin ADD for Answer with questionId " + questionId);
 	
@@ -108,19 +110,21 @@ answersRouter.post("/add", async (req, res) => {
 // Reference the quiz stuff with the ...
 answersRouter.post("/edit", async (req, res) => {
 	let retCode = 200;
-  let message = "";
+	let message = "";
+	var newId;
 
 	const {id, answer, wrong, questionId} = req.body;
 
-	// some annoying variable jargain part 46246
 	var _id = new ObjectId(id);
+	if (questionId != null)
+		var newId = new ObjectId(questionId);
 
 	console.log("Begin EDIT for Quiz with ID " + id);
 
 	try
 	{
 		let update = {
-		...questionId != null ? {QuestionId: questionId} : null,
+		...questionId != null ? {QuestionId: newId} : null,
 		...answer != null ? {Answer: answer} : null,
 		...wrong != null ? {WrongAnswer: wrong} : null
 		};
@@ -148,10 +152,10 @@ answersRouter.post("/edit", async (req, res) => {
 // TODO: Delete
 answersRouter.delete("/delete", async (req, res) => {
 	let retCode = 200;
-  let message = "";
+	let message = "";
   
 	const {id} = req.body;
-  var _id = new ObjectId(id);
+	var _id = new ObjectId(id);
 	
 	console.log("Begin DELETE for answer " + id);
 	
