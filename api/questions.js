@@ -136,4 +136,37 @@ questionsRouter.post("/edit", async (req, res) => {
 	res.status(retCode).json(ret);
 });
 
+// TODO: Delete
+questionsRouter.post("/delete", async (req, res) => {
+	let retCode = 200;
+	let message = "";
+  
+	const {id} = req.body;
+	var _id = new ObjectId(id);
+	
+	console.log("Begin DELETE for question " + id);
+	
+	try
+	{
+		const db = client.db("LargeProject");
+
+		const result = await db.collection('Questions').deleteOne({_id});
+	
+		if(result.deletedCount == 1)
+			message = "Successfully deleted answer " + id;
+		else
+			retCode = 204;
+
+	var ret = {error: message};
+	}
+	catch(e)
+	{
+		retCode = 404;
+		var ret = {error: e.message};
+	}
+	
+	
+	res.status(retCode).json(ret);
+});
+
 module.exports = questionsRouter;
