@@ -74,24 +74,25 @@ const AddQuestionModal = (props) => {
         questionId: newQuestionId,
         wrong: true
       }
-      await axios.post(path.buildPath('/api/answers/add'), addCorrectAnswerParams)
+      await axios.post(path.buildPath('/api/answers/add'), addWrongAnswerParams)
       if (wa2.length !== 0) {
         console.log('wa2');
         addWrongAnswerParams.answer = wa2;
-        await axios.post(path.buildPath('/api/answers/add'), addCorrectAnswerParams)
+        await axios.post(path.buildPath('/api/answers/add'), addWrongAnswerParams)
       }
       if (wa3.length !== 0) {
         console.log('wa3');
         addWrongAnswerParams.answer = wa3;
-        await axios.post(path.buildPath('/api/answers/add'), addCorrectAnswerParams)
+        await axios.post(path.buildPath('/api/answers/add'), addWrongAnswerParams)
       }
 
       console.log("Question has been added")
 
       // Close add question modal
       setIsAddQuestionOpen(false);
-    } catch (e) {
-      console.log(e)
+      window.location.reload();
+    } catch (err) {
+      console.log(err)
       return;
     }
   }
@@ -99,6 +100,11 @@ const AddQuestionModal = (props) => {
   function closeAddQuestion(e) {
     e.preventDefault();
     setIsAddQuestionOpen(false);
+    setQ('');
+    setRa('');
+    setWa1('');
+    setWa2('');
+    setWa3('');
   }
 
   return (

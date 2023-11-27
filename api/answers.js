@@ -150,7 +150,7 @@ answersRouter.post("/edit", async (req, res) => {
 });
 
 // TODO: Delete
-answersRouter.delete("/delete", async (req, res) => {
+answersRouter.post("/delete", async (req, res) => {
 	let retCode = 200;
 	let message = "";
   

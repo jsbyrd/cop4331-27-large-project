@@ -8,19 +8,21 @@ import './ViewQuizPage.css';
 import EditQuestionModal from '../components/EditQuestionModal.js';
 const path = require('../components/Path.js');
 
-const ViewQuizPage = () => {
+const ViewQuizPage = (props) => {
 
   const { quizID } = useParams();
+  const { userID } = props;
   // const dummyQuestions = [{Question: "How are you today?", _id: "1"},
   //                         {Question: "This is question two", _id: "2"}, 
   //                         {Question: "Are you stupid?", _id: "3"},
   //                         {Question: "This is very very dumb", _id: "4"}];
-  const [quizInfo, setQuizInfo] = useState({Name: "Failed to load quiz..."});
+  const [quizInfo, setQuizInfo] = useState({Name: "Failed to load quiz...", _id: "N/A"});
   const [questionsAndAnswers, setQuestionsAndAnswers] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(-1);
   const [isLoading, setIsLoading] = useState(true);
+  const [editedQuestion, setEditedQuestion] = useState({});
 
-  // States for modals
+  // States for opening/closing modals
   const [isAddQuestionOpen, setIsAddQuestionOpen] = useState(false);
   const [isEditQuestionOpen, setIsEditQuestionOpen] = useState(false);
 
@@ -29,25 +31,24 @@ const ViewQuizPage = () => {
     e.preventDefault();
     setIsAddQuestionOpen(true);
   }
-  function openEditQuestion(e) {
+  function openEditQuestion(e, qa) {
     e.preventDefault();
+    setEditedQuestion(qa);
     setIsEditQuestionOpen(true);
   }
 
-  // Navigate through flashcards
+  // Navigate back and forth through flashcards
   const moveFlashCardForward = (e) => {
     e.preventDefault();
-    if (currentQuestion >= questionsAndAnswers.length - 1) {
-      return;
-    }
-    setCurrentQuestion(currentQuestion + 1);
+    setCurrentQuestion((currentQuestion + 1) % questionsAndAnswers.length);
   }
   const moveFlashCardBackward = (e) => {
     e.preventDefault();
     if (currentQuestion <= 0) {
-      return;
+      setCurrentQuestion(questionsAndAnswers.length - 1);
+    } else {
+      setCurrentQuestion(currentQuestion - 1);
     }
-    setCurrentQuestion(currentQuestion - 1);
   }
 
   const fetchQuizInfo = async () => {
@@ -90,7 +91,6 @@ const ViewQuizPage = () => {
             qas.push(qa);
           }
         }
-        console.log(qas);
         setQuestionsAndAnswers(qas);
       }
     } catch {
@@ -105,14 +105,28 @@ const ViewQuizPage = () => {
     setIsLoading(false);
   }, []);
 
-  const deleteQuestion = () => {
-    const answer = window.confirm("Are you sure you want to delete this question?");
-    if (answer) {
-      console.log('Question has been deleted!');
-      // TODO: Delete incorrect answers
-      // TODO: Delete question
+  const deleteQuestion = async (e, qa) => {
+    e.preventDefault();
+    try {
+      const userConfirmation = window.confirm(`Are you sure you want to delete this question?`);
+      if (userConfirmation) {
+        console.log('Question has been deleted!');
+        // TODO: Delete all answers associated with this question
+        const allAnswers = qa.answers;
+        for (let i = 0; i < allAnswers.length; i++) {
+          await axios.post(path.buildPath('/api/answers/delete'), {id: allAnswers[i]._id});
+        }
+        // TODO: Delete question
+        const questionId = qa.question._id;
+        await axios.post(path.buildPath('/api/questions/delete'), {id: questionId});
+      }
+      window.location.reload();
+    }
+    catch (err) {
+      console.log(err);
     }
   }
+  console.log(quizInfo);
 
   return (
     <div id='vqp-container'>
@@ -124,6 +138,7 @@ const ViewQuizPage = () => {
       <EditQuestionModal
         isEditQuestionOpen={isEditQuestionOpen}
         setIsEditQuestionOpen={setIsEditQuestionOpen}
+        editedQuestion={editedQuestion}
       />
       <MenuHeader />
       
@@ -133,7 +148,7 @@ const ViewQuizPage = () => {
           <div id='vqp-quiz-options'>
             <button className='vqp-qo' onClick={event =>  window.location.href=`/taketest/${quizID}`}>Take Test</button>
             <button className='vqp-qo'>Save Quiz</button>
-            <button className='vqp-qo' onClick={openAddQuestion}>Add Question</button>
+            {(userID === quizInfo.UserId) && <button className='vqp-qo' onClick={openAddQuestion}>Add Question</button>}
           </div>
           <div id='vqp-flashcard'>
             <div id='flip-card-inner'>
@@ -161,10 +176,11 @@ const ViewQuizPage = () => {
                   <div className='vqp-questions-li'>
                     <div className='vqp-questions-li-q'>{`${qa.question.Question}`}</div>
                     <div className='vqp-questions-li-a'>{`${qa.answers.find((a) => !a.WrongAnswer).Answer}`}</div>
+                    {(userID === quizInfo.UserId) && 
                     <div className='vqp-questions-li-o'>
-                      <button onClick={openEditQuestion}>Edit</button>
-                      <button onClick={deleteQuestion}>Delete</button>
-                    </div>
+                      <button onClick={(e) => openEditQuestion(e, qa)}>Edit</button>
+                      <button onClick={(e) => deleteQuestion(e, qa)}>Delete</button>
+                    </div>}
                   </div>
                 </li>
               )
