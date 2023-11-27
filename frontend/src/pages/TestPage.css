@@ -53,10 +53,16 @@
     border-radius: 12px;
     margin: 10px;
     box-shadow: 1px 4px 20px 1px rgba(8, 2, 27, 0.103);
+    transition: background-color 0.3s; /* Smooth transition for background color change */
 
     /* hardcoding sizes */
     height: 80px;
     width: 400px;
+}
+
+.answer-choice.selected {
+    background-color: rgb(126, 113, 170); /* Change to your preferred color */
+    color: white; /* Change text color if needed */
 }
 
 .answer-choice:hover
