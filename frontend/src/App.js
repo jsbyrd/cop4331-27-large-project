@@ -32,7 +32,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/search/:query" element={<SearchedPage />} />
-        <Route path="/viewquiz/:quizID" element={<ViewQuizPage />} />
+        <Route path="/viewquiz/:quizID" element={<ViewQuizPage userID={userID} />} />
         <Route path="/taketest/:quizID" element={<TestPage />} />
       </Routes>
     </BrowserRouter>

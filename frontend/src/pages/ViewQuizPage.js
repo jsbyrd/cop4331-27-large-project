@@ -8,14 +8,15 @@ import './ViewQuizPage.css';
 import EditQuestionModal from '../components/EditQuestionModal.js';
 const path = require('../components/Path.js');
 
-const ViewQuizPage = () => {
+const ViewQuizPage = (props) => {
 
   const { quizID } = useParams();
+  const { userID } = props;
   // const dummyQuestions = [{Question: "How are you today?", _id: "1"},
   //                         {Question: "This is question two", _id: "2"}, 
   //                         {Question: "Are you stupid?", _id: "3"},
   //                         {Question: "This is very very dumb", _id: "4"}];
-  const [quizInfo, setQuizInfo] = useState({Name: "Failed to load quiz..."});
+  const [quizInfo, setQuizInfo] = useState({Name: "Failed to load quiz...", _id: "N/A"});
   const [questionsAndAnswers, setQuestionsAndAnswers] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(-1);
   const [isLoading, setIsLoading] = useState(true);
@@ -125,6 +126,7 @@ const ViewQuizPage = () => {
       console.log(err);
     }
   }
+  console.log(quizInfo);
 
   return (
     <div id='vqp-container'>
@@ -146,7 +148,7 @@ const ViewQuizPage = () => {
           <div id='vqp-quiz-options'>
             <button className='vqp-qo' onClick={event =>  window.location.href=`/taketest/${quizID}`}>Take Test</button>
             <button className='vqp-qo'>Save Quiz</button>
-            <button className='vqp-qo' onClick={openAddQuestion}>Add Question</button>
+            {(userID === quizInfo.UserId) && <button className='vqp-qo' onClick={openAddQuestion}>Add Question</button>}
           </div>
           <div id='vqp-flashcard'>
             <div id='flip-card-inner'>
@@ -174,10 +176,11 @@ const ViewQuizPage = () => {
                   <div className='vqp-questions-li'>
                     <div className='vqp-questions-li-q'>{`${qa.question.Question}`}</div>
                     <div className='vqp-questions-li-a'>{`${qa.answers.find((a) => !a.WrongAnswer).Answer}`}</div>
+                    {(userID === quizInfo.UserId) && 
                     <div className='vqp-questions-li-o'>
                       <button onClick={(e) => openEditQuestion(e, qa)}>Edit</button>
                       <button onClick={(e) => deleteQuestion(e, qa)}>Delete</button>
-                    </div>
+                    </div>}
                   </div>
                 </li>
               )
