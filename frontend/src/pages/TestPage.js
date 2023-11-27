@@ -4,33 +4,33 @@ import { useParams } from 'react-router-dom';
 import MenuHeader from '../components/MenuHeader';
 import DefaultFooter from '../components/DefaultFooter';
 import './TestPage.css';
-const path = require('../components/Path.js');
-
 
 const TestPage = () => {
-
     const { quizID } = useParams();
-
     const [questions, setQuestions] = useState([]);
     const [answers, setAnswers] = useState([[]]);
-    const [rightAnswers, setRightAnswers] = useState([]);
-    const [wrongAnswers, setWrongAnswers] = useState([]);
+    const [combinedAnswers, setCombinedAnswers] = useState([]);
+    const [userAnswers, setUserAnswers] = useState([]);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [score, setScore] = useState(null);
 
     const fetchQuestions = async () => {
         const fetchParams = {
-        term: "",
-        quizId: quizID
-        }
+            term: "",
+            quizId: quizID
+        };
         try {
-        const res = await axios.post(`https://cop4331-27-c6dfafc737d8.herokuapp.com/api/questions/search/`, fetchParams);
-        if (res !== undefined && res.data.result.length !== 0) {
-            setQuestions(res.data.result);
-        }
+            const res = await axios.post(`https://cop4331-27-c6dfafc737d8.herokuapp.com/api/questions/search/`, fetchParams);
+            if (res !== undefined && res.data.result.length !== 0) {
+                setQuestions(res.data.result);
+                // Initialize combinedAnswers as an array of empty arrays, matching the length of questions
+                setCombinedAnswers(new Array(res.data.result.length).fill([]));
+            }
         } catch {
             console.log("fetch question ERROR :(");
-        return;
+            return;
         }
-    }
+    };
 
     const fetchAnswers = async () => {
         for (let i = 0; i < questions.length; i++) {
@@ -53,55 +53,26 @@ const TestPage = () => {
         }
     };
 
-    const storeCorrectAnswers = async () => {
+    const processAnswers = () => {
+        const newCombinedAnswers = answers.map((answerSet, index) => {
+            const rightAnswer = answerSet.find(answer => !answer.WrongAnswer);
+            const wrongAnswers = answerSet.filter(answer => answer.WrongAnswer).slice(0, 3);
 
-        for (let i = 0; i < answers.length; i++)
-        {
-            for (let j = 0; j < answers[i].length; j++)
-            {
-                if (!answers[i][j].WrongAnswer)
-                {
-                    rightAnswers[i] = answers[i][j].Answer;
-                }
-            }
-        }
-    }
+            const combined = [
+                { answer: rightAnswer.Answer, isCorrect: true },
+                ...wrongAnswers.map(wa => ({ answer: wa.Answer, isCorrect: false }))
+            ];
 
-    const storeWrongAnswers = async () => {
+            return shuffleArray(combined);
+        });
 
-        let temp = 0;
-
-        for (let i = 0; i < answers.length; i++)
-        {
-            for (let j = 0; j < answers[i].length; j++)
-            {
-                if (answers[i][j].WrongAnswer)
-                {
-
-                    if (wrongAnswers.length < i + 1)
-                    {
-                        setWrongAnswers(prevArray => [...prevArray, []]);
-                    }
-
-                    setWrongAnswers(prevArray => {
-                        const newArray = [...prevArray];
-                
-                        newArray[i] = [...newArray[i]];
-                
-                        newArray[i][j + 1] = answers[i][j].Answer; // fix newArray coords
-                
-                        return newArray;
-                    });
-                temp++;
-                }
-            }
-        }
-    }
+        setCombinedAnswers(newCombinedAnswers);
+    };
 
     useEffect(() => {
         fetchQuestions();
     }, []);
-   
+
     useEffect(() => {
         if (questions.length > 0) {
             fetchAnswers();
@@ -109,10 +80,47 @@ const TestPage = () => {
     }, [questions]);
 
     useEffect(() => {
-        storeCorrectAnswers();
-        storeWrongAnswers();
+        if (answers.some(answerSet => answerSet.length > 0)) {
+            processAnswers();
+            // Initialize user answers state
+            setUserAnswers(new Array(questions.length).fill(null));
+        }
     }, [answers]);
 
+    // Fisher-Yates shuffle algorithm
+    const shuffleArray = (array) => {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    };
+
+
+    const handleAnswerSelection = (questionIndex, answerIndex) => {
+        const newUserAnswers = [...userAnswers];
+        newUserAnswers[questionIndex] = answerIndex;
+        setUserAnswers(newUserAnswers);
+    };
+
+    const calculateScore = () => {
+        const correctAnswers = userAnswers.reduce((acc, selectedAnswerIndex, questionIndex) => {
+            if(selectedAnswerIndex !== null && combinedAnswers[questionIndex][selectedAnswerIndex].isCorrect) {
+                return acc + 1;
+            }
+            return acc;
+        }, 0);
+        const calculatedScore = (correctAnswers / questions.length) * 100;
+        setScore(calculatedScore.toFixed(2));
+        setIsSubmitted(true);
+    };
+
+    const handleRetry = () => {
+        setIsSubmitted(false);
+        setScore(null);
+        setUserAnswers(new Array(questions.length).fill(null));
+        // Optionally reshuffle answers or fetch new questions here if desired
+    };
 
     return (
         <div>
@@ -120,54 +128,49 @@ const TestPage = () => {
             <div id="test-page-body">
                 {questions.length > 0 ? (
                     questions.map((questionItem, index) => (
-                    // Create a div for each questionItem. Key should be a unique value.
-                    <div key={index} className="question-container">
-                        <p className='question-number'>Question {index + 1}</p>
-                        <p className='question-text'>{questionItem.Question}</p>
-                        <div className='answer-choices'>
-                            <button className='answer-choice'>
-                                <p>
-                                    {rightAnswers[index]}
-                                </p>
-                            </button>
-
-
-                            <button className='answer-choice'>
-                                <p>
-                                    Answer placeholder :D
-                                </p>
-                            </button>
-
-
-                            <button className='answer-choice'>
-                                <p>
-                                    Answer placeholder :D
-                                </p>
-                            </button>
-
-
-                            <button className='answer-choice'>
-                                <p>
-                                    {wrongAnswers[index]}
-                                    {console.log(wrongAnswers[index])}
-                                </p>
-                            </button>                    
+                        <div key={index} className="question-container">
+                            <p className='question-number'>Question {index + 1}</p>
+                            <p className='question-text'>{questionItem.Question}</p>
+                            <div className='answer-choices'>
+                                {combinedAnswers[index] && combinedAnswers[index].map((answerObj, answerIndex) => (
+                                    <button
+                                        key={answerIndex}
+                                        className={`answer-choice ${isSubmitted ? (userAnswers[index] === answerIndex ? (answerObj.isCorrect ? 'correct-answer' : 'incorrect-answer') : '') : (userAnswers[index] === answerIndex ? 'selected' : '')}`}
+                                        onClick={() => !isSubmitted && handleAnswerSelection(index, answerIndex)}
+                                        disabled={isSubmitted}
+                                    >
+                                        <p>{answerObj.answer}</p>
+                                    </button>
+                                
+                                ))}
+                            </div>
                         </div>
-                    </div>
                     ))
                 ) : (
-                    // Display a message if there are no questions
                     <p>No questions available.</p>
                 )}
                 <div className="test-result">
-                        <button className="submit-button">
+                    {!isSubmitted ? (
+                        <button className="submit-button" onClick={calculateScore}>
                             Submit
                         </button>
+                    ) : (
+                        <>
+                            <div>
+                                <p className='stated-result-score'>
+                                Your score is {score}%
+                                </p>
+                            </div>
+                            <button className="retry-button" onClick={handleRetry}>
+                                Retry
+                            </button>
+                        </>
+                    )}
                 </div>
             </div>
             <DefaultFooter />
         </div>
-     );
-}
- 
+    );
+};
+
 export default TestPage;
