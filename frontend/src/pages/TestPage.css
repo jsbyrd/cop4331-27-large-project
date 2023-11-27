@@ -70,6 +70,14 @@
     background-color: rgb(106, 78, 197);
 }
 
+.correct-answer {
+    background-color: #4CAF50; /* Green color for correct answers */
+}
+
+.incorrect-answer {
+    background-color: #f44336; /* Red color for incorrect answers */
+}
+
 .test-result
 {
     position: relative;
@@ -104,4 +112,27 @@
 .submit-button:hover
 {
     background-color: rgb(173, 95, 209);
+}
+
+.retry-button {
+    background-color: rgb(143, 66, 179);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    margin: 10px;
+    font-size: 24px;
+
+    /* hardcoding sizes */
+    height: 60px;
+    width: 140px;
+}
+
+.retry-button:hover
+{
+    background-color: rgb(173, 95, 209);
+}
+
+.stated-result-score
+{
+    font-size: 20px;
 }

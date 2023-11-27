@@ -11,6 +11,8 @@ const TestPage = () => {
     const [answers, setAnswers] = useState([[]]);
     const [combinedAnswers, setCombinedAnswers] = useState([]);
     const [userAnswers, setUserAnswers] = useState([]);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [score, setScore] = useState(null);
 
     const fetchQuestions = async () => {
         const fetchParams = {
@@ -67,12 +69,6 @@ const TestPage = () => {
         setCombinedAnswers(newCombinedAnswers);
     };
 
-    // debug method
-    const printAnswers = async () => {
-
-        console.log(answers);
-    }
-
     useEffect(() => {
         fetchQuestions();
     }, []);
@@ -88,8 +84,6 @@ const TestPage = () => {
             processAnswers();
             // Initialize user answers state
             setUserAnswers(new Array(questions.length).fill(null));
-
-            printAnswers();
         }
     }, [answers]);
 
@@ -101,6 +95,7 @@ const TestPage = () => {
         }
         return array;
     };
+
 
     const handleAnswerSelection = (questionIndex, answerIndex) => {
         const newUserAnswers = [...userAnswers];
@@ -115,10 +110,17 @@ const TestPage = () => {
             }
             return acc;
         }, 0);
-        const score = (correctAnswers / questions.length) * 100;
-        alert(`Your score is ${score.toFixed(2)}%`);
+        const calculatedScore = (correctAnswers / questions.length) * 100;
+        setScore(calculatedScore.toFixed(2));
+        setIsSubmitted(true);
     };
 
+    const handleRetry = () => {
+        setIsSubmitted(false);
+        setScore(null);
+        setUserAnswers(new Array(questions.length).fill(null));
+        // Optionally reshuffle answers or fetch new questions here if desired
+    };
 
     return (
         <div>
@@ -132,12 +134,14 @@ const TestPage = () => {
                             <div className='answer-choices'>
                                 {combinedAnswers[index] && combinedAnswers[index].map((answerObj, answerIndex) => (
                                     <button
-                                    key={answerIndex}
-                                    className={`answer-choice ${userAnswers[index] === answerIndex ? 'selected' : ''}`}
-                                    onClick={() => handleAnswerSelection(index, answerIndex)}
+                                        key={answerIndex}
+                                        className={`answer-choice ${isSubmitted ? (userAnswers[index] === answerIndex ? (answerObj.isCorrect ? 'correct-answer' : 'incorrect-answer') : '') : (userAnswers[index] === answerIndex ? 'selected' : '')}`}
+                                        onClick={() => !isSubmitted && handleAnswerSelection(index, answerIndex)}
+                                        disabled={isSubmitted}
                                     >
                                         <p>{answerObj.answer}</p>
                                     </button>
+                                
                                 ))}
                             </div>
                         </div>
@@ -146,9 +150,22 @@ const TestPage = () => {
                     <p>No questions available.</p>
                 )}
                 <div className="test-result">
-                    <button className="submit-button" onClick={calculateScore}>
-                        Submit
-                    </button>
+                    {!isSubmitted ? (
+                        <button className="submit-button" onClick={calculateScore}>
+                            Submit
+                        </button>
+                    ) : (
+                        <>
+                            <div>
+                                <p className='stated-result-score'>
+                                Your score is {score}%
+                                </p>
+                            </div>
+                            <button className="retry-button" onClick={handleRetry}>
+                                Retry
+                            </button>
+                        </>
+                    )}
                 </div>
             </div>
             <DefaultFooter />
