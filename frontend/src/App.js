@@ -10,6 +10,7 @@ import RegisterPage from './pages/RegisterPage';
 import SearchedPage from './pages/SearchedPage';
 import ViewQuizPage from './pages/ViewQuizPage';
 import TestPage from './pages/TestPage';
+import CreateQuizPage from './pages/CreateQuizPage';
 
 function App() {
   const [userID, setUserID] = useState(null);
@@ -34,6 +35,7 @@ function App() {
         <Route path="/search/:query" element={<SearchedPage />} />
         <Route path="/viewquiz/:quizID" element={<ViewQuizPage userID={userID} />} />
         <Route path="/taketest/:quizID" element={<TestPage />} />
+        <Route path="/createquiz" element={<CreateQuizPage />} />
       </Routes>
     </BrowserRouter>
       );
