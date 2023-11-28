@@ -84,7 +84,7 @@ const SideBarModal = (props) => {
                 </div>
                 <div className='sidebar-buttons flex-grow-1'>
                     <div className='other-btn'>
-                        <button className="btn btn-primary mb-3" onClick={event => window.location.href = '/menu'}> Create Quiz</button>
+                        <button className="btn btn-primary mb-3" onClick={event => window.location.href = '/createquiz'}> Create Quiz</button>
                         <button type="button" className="btn btn-primary mb-3" id='default-header-login-btn' onClick={event => {goToSearch(2); closeSideBar(event)}}>
                             Saved Quizzes
                         </button>
