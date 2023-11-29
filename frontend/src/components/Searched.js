@@ -73,6 +73,7 @@ const Search = () => {
                 var res = JSON.parse(await response.text());
                 setMessage("");
                 setResults(res.result);
+                console.log(res.result);
             }
         }
         catch(e)
@@ -89,7 +90,7 @@ const Search = () => {
         var js = JSON.stringify(obj);
         try
         {    
-            const response = await fetch(path.buildPath('/api/quizzes/get'), {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
+            const response = await fetch(path.buildPath('/api/quizzes/getfromuser'), {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
             if (response.status == 204) {
                 setMessage("No created quizzes");
                 setResults([]);
@@ -163,39 +164,41 @@ const Search = () => {
     return (
         <div>
             <header>
-      <SideBarModal
-        isSideBarOpen={isSideBarOpen}
-        setIsSideBarOpen={setIsSideBarOpen}
-      />
-      <nav className="navbar navbar-expand-lg d-flex flex-nowrap justify-content-between w-100 menu-navbar-custom" id='default-header-navbar'>
-        <button className="btn px-3 text-light" id="hamburger" onClick={openSideBar}>
-          ☰
-        </button>
-        <a className="nav-link text-light" id='default-header-logo' href="/menu" style={{ marginLeft: "20px" }}>
-          <img src={logo} id='menu-header-logo' />
-        </a>
-        <div className='d-flex align-items-center'>
-          <form class="form-inline">
-            <input onKeyDown={keyDownHandler}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              class="form-control mr-sm-2" id='menu-searchbar' type="text" value={searchQuery} 
-              placeholder={placeholder} onFocus={() => setPlaceHolder('')} onBlur={() => setPlaceHolder('Search')} aria-label="Search"
-            />
-          </form>
-        </div>
-      </nav>
-    </header>
-            <div>
-                {message && <p>{message}</p>}
-                <ul className="search-result">
-                    {results.map((result) => (
-                        <li key={result._id}>
-                            <a href={`/viewquiz/${result._id}`}>
-                                {result.Name}
-                            </a>
-                        </li>
-                    ))}
-                </ul>
+                <SideBarModal
+                    isSideBarOpen={isSideBarOpen}
+                    setIsSideBarOpen={setIsSideBarOpen}
+                />
+                <nav className="navbar navbar-expand-lg d-flex flex-nowrap justify-content-between w-100 menu-navbar-custom" id='default-header-navbar'>
+                    <button className="btn px-3 text-light" id="hamburger" onClick={openSideBar}>
+                        ☰
+                    </button>
+                    <a className="nav-link text-light" id='default-header-logo' href="/menu" style={{ marginLeft: "20px" }}>
+                        <img src={logo} id='menu-header-logo' />
+                    </a>
+                    <div className='d-flex align-items-center'>
+                        <form class="form-inline">
+                            <input onKeyDown={keyDownHandler}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                class="form-control mr-sm-2" id='menu-searchbar' type="text" value={searchQuery}
+                                placeholder={placeholder} onFocus={() => setPlaceHolder('')} onBlur={() => setPlaceHolder('Search')} aria-label="Search"
+                            />
+                        </form>
+                    </div>
+                </nav>
+            </header>
+            <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' , alignItems: 'center', backgroundColor: 'rgb(67, 39, 161)'}}>
+                <div id="test-page-body">
+                    {message && <p>{message}</p>}
+                    <ul className="search-result">
+                        {results.map((result) => (
+                            <li key={result._id}>
+                                <a href={`/viewquiz/${result._id}`}>
+                                    {result.Name}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
         </div>
     );

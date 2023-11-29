@@ -1,7 +1,7 @@
 import React from 'react';
 import Main from '../components/Menu'
 import MenuHeader from '../components/MenuHeader';
-import MenuFooter from '../components/MenuFooter';
+import DefaultFooter from '../components/DefaultFooter';
 
 const MainPage = () =>
 {
@@ -14,7 +14,7 @@ const MainPage = () =>
       <div className="d-flex flex-column" style={{height: "100vh"}}>
         <MenuHeader />
         <Main />
-        <MenuFooter />
+        <DefaultFooter />
     </div>
     );
 };
