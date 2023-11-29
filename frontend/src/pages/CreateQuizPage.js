@@ -9,11 +9,13 @@ const CreateQuizPage = () => {
     const [quizName, setQuizName] = useState("");
     const [quizID, setQuizID] = useState("");
 
+    var obj = {id:JSON.parse(localStorage.getItem('user_data')).id};
+
     const fetchQuizzesAdd = async () => {
         const fetchParams = {
             name: quizName,
             public: 0, // hardcoded
-            userId: "653181459014bfbb8cff6c2c" // hardcoded
+            userId: obj.id
         };
 
         try {
