@@ -38,8 +38,8 @@ savedRouter.post("/get", async (req, res) => {
 		{
 			var quizList = result.map((item) => {
 				return {
-					QuizId: item.QuizId,
-					QuizName: item.QuizName,
+					_id: item.QuizId,
+					Name: item.QuizName,
 				};
 			});
 
