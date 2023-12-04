@@ -53,7 +53,7 @@ const SideBarModal = (props) => {
             ...prevStyles,
             content: {
                 ...prevStyles.content,
-                left: '-200px',
+                left: '-250px',
             },
         }));
         // Set isSideBarOpen to false after animation completes
