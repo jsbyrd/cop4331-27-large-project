@@ -17,16 +17,32 @@ client.connect();
 savedRouter.post("/get", async (req, res) => {
 	let retCode = 200;
 	let message = "";
+	var search = {};
 
-	const {id} = req.body;
+	const {quizId, userId} = req.body;
 	console.log("Begin GET for Saved Quiz with ID " + id);
 
-	var newId = new ObjectId(id);
+	var newUserId = new ObjectId(userId);
+
+	if (quizId != null)
+	{
+		var newQuizId = new ObjectId(quizId);
+		search = {
+			UserId: newUserId,
+			QuizId: newQuizId
+		};
+	}
+	else
+	{
+		search = {
+			UserId: newUserId
+		};
+	}
 
 	try
 	{
 		const db = client.db("LargeProject");
-		const result = await db.collection('Saved').find({UserId: newId}).toArray();
+		const result = await db.collection('Saved').find(search).toArray();
 
 		if (result.length == 0)
 		{

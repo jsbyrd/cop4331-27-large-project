@@ -237,8 +237,7 @@ usersRouter.post("/recovery", async (req, res) => {
   let retCode = 200;
   let message = "";
 
-  const {login, password, newPassword} = req.body;
-  hashPassword = getHash(password);
+  const {login, newPassword} = req.body;
   newHashPassword = getHash(newPassword);
   
   console.log("Begin RECOVERY for User " + login);
@@ -248,7 +247,7 @@ usersRouter.post("/recovery", async (req, res) => {
     const edit = {$set: {Password: newHashPassword}};
 
     const db = client.db("LargeProject");
-    const result = await db.collection('Users').updateOne({Login:login, Password:hashPassword}, edit);
+    const result = await db.collection('Users').updateOne({Login:login}, edit);
 
 		if (result.modifiedCount == 0)
     {
