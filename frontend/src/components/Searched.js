@@ -60,12 +60,12 @@ const Search = () => {
     // Saved quizes
     const getSaved = async () =>
     {
-        var obj = {id:JSON.parse(localStorage.getItem('user_data')).id};
+        var obj = {userId:JSON.parse(localStorage.getItem('user_data')).id};
         var js = JSON.stringify(obj);
         try
         {    
             const response = await fetch(path.buildPath('/api/saved/get'), {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
-            if (response.status == 204) {
+            if (response.status === 204) {
                 setMessage("No saved quizzes");
                 setResults([]);
             }
@@ -86,7 +86,7 @@ const Search = () => {
     // My Quizzes
     const myQuizzes = async () => 
     {
-        var obj = {id:JSON.parse(localStorage.getItem('user_data')).id};
+        var obj = {userId:JSON.parse(localStorage.getItem('user_data')).id};
         var js = JSON.stringify(obj);
         try
         {    
