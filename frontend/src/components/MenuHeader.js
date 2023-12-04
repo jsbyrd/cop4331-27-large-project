@@ -55,22 +55,22 @@ const MenuHeader = () => {
         isSideBarOpen={isSideBarOpen}
         setIsSideBarOpen={setIsSideBarOpen}
       />
-      <nav className="navbar navbar-expand-lg d-flex flex-nowrap justify-content-between w-100 menu-navbar-custom" id='default-header-navbar'>
+      <nav id='menu-header-navbar'>
         <button className="btn px-3 text-light" id="hamburger" onClick={openSideBar}>
           ☰
         </button>
-        <a className="nav-link text-light" id='default-header-logo' href="/" style={{ marginLeft: "20px" }}>
-          <img src={logo} id='menu-header-logo' />
-        </a>
-        <div className='d-flex align-items-center'>
+        <div>
           <form class="form-inline">
             <input onKeyDown={keyDownHandler}
               onChange={(e) => setSearchQuery(e.target.value)}
-              class="form-control mr-sm-2" id='menu-searchbar' type="text" value={searchQuery} 
+              class="form-control mr-sm-2 w-100" id='menu-searchbar' type="text" value={searchQuery} 
               placeholder={placeholder} onFocus={() => setPlaceHolder('')} onBlur={() => setPlaceHolder('Search')} aria-label="Search"
             />
           </form>
         </div>
+        <a className="nav-link text-light" id='default-header-logo' href="/" style={{ marginLeft: "20px" }}>
+          <img src={logo} id='menu-header-logo' />
+        </a>
       </nav>
     </header>
 
