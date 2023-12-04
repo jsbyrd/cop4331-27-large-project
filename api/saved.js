@@ -20,7 +20,7 @@ savedRouter.post("/get", async (req, res) => {
 	var search = {};
 
 	const {quizId, userId} = req.body;
-	console.log("Begin GET for Saved Quiz with ID " + id);
+	console.log("Begin GET for Saved Quiz with ID " + userId);
 
 	var newUserId = new ObjectId(userId);
 

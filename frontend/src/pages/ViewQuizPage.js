@@ -8,10 +8,11 @@ import './ViewQuizPage.css';
 import EditQuestionModal from '../components/EditQuestionModal.js';
 const path = require('../components/Path.js');
 
-const ViewQuizPage = (props) => {
+const ViewQuizPage = () => {
 
   const { quizID } = useParams();
-  const { userID } = props;
+  const userID = JSON.parse(localStorage.getItem('user_data')).id;
+  console.log(userID);
   // const dummyQuestions = [{Question: "How are you today?", _id: "1"},
   //                         {Question: "This is question two", _id: "2"}, 
   //                         {Question: "Are you stupid?", _id: "3"},

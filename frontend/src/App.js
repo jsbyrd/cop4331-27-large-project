@@ -13,17 +13,15 @@ import TestPage from './pages/TestPage';
 import CreateQuizPage from './pages/CreateQuizPage';
 
 function App() {
-  const [userID, setUserID] = useState(null);
-
   // Fetch user info from local storage
-  useEffect(() => {
-    if (userID === null) {
-      const userInfo = localStorage.getItem('userInfo');
-      if (userInfo) {
-        setUserID(userInfo.userID);
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (userID === null) {
+  //     const userInfo = localStorage.getItem('userInfo');
+  //     if (userInfo) {
+  //       setUserID(userInfo.userID);
+  //     }
+  //   }
+  // }, []);
 
   return (
     <BrowserRouter>
@@ -33,7 +31,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/search/:query" element={<SearchedPage />} />
-        <Route path="/viewquiz/:quizID" element={<ViewQuizPage userID={userID} />} />
+        <Route path="/viewquiz/:quizID" element={<ViewQuizPage />} />
         <Route path="/taketest/:quizID" element={<TestPage />} />
         <Route path="/createquiz" element={<CreateQuizPage />} />
       </Routes>

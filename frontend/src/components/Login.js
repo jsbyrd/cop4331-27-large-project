@@ -28,7 +28,9 @@ const Login = () => {
             }
             else
             {
-                var user = {firstName:res.result.firstName,lastName:res.result.lastName,id:res.result.id}
+                console.log(res.result);
+                var user = {firstName:res.result.firstName,lastName:res.result.lastName,id:res.result.id,token:res.result.token}
+                alert(res.result.id);
                 localStorage.setItem('user_data', JSON.stringify(user));
 
                 setMessage('');
