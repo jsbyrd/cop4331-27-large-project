@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
+import wizard_pfp from './images/wizard-pfp.png';
 import './SideBarModal.css';
 
 Modal.setAppElement('#root');
@@ -11,7 +12,7 @@ const SideBarModal = (props) => {
     const { isSideBarOpen, setIsSideBarOpen } = props;
     const [sidebarStyle, setSideBarStyle] = useState({
         content: {
-            border: '1px solid #ccc',
+            border: 'none',
             backgroundColor: 'white',
             position: 'fixed',
             top: '0',
@@ -19,9 +20,9 @@ const SideBarModal = (props) => {
             right: 'auto',
             bottom: 'auto',
             height: '100vh',
-            width: '200px',
+            width: '250px',
             zIndex: '1',
-            padding: '20px',
+            padding: '0px',
             transition: 'left 0.3s ease',
             display: 'flex',
             flexDirection: 'column',
@@ -64,7 +65,7 @@ const SideBarModal = (props) => {
     // Complete the search
     const goToSearch = async (type) => {
         //setIsSideBarOpen(false);
-        if (type == 2)
+        if (type === 2)
             navigate('/search/savedQuizzes', { state: 2 });
         else
             navigate('/search/myQuizzes', { state: 3 })
@@ -79,20 +80,21 @@ const SideBarModal = (props) => {
         >
             <div id='sidebar-container'>
                 <div className='sidebar-header'>
-                    <h2></h2>
                     <button id='x-btn' onClick={closeSideBar}>X</button>
+                    <img id='wizard-pfp-img' src={wizard_pfp} alt='An owl wearing a wizard hat' />
                 </div>
-                <div className='sidebar-buttons flex-grow-1'>
-                    <div className='other-btn'>
-                        <button className="btn btn-primary mb-3" onClick={event => window.location.href = '/createquiz'}> Create Quiz</button>
-                        <button type="button" className="btn btn-primary mb-3" id='default-header-login-btn' onClick={event => {goToSearch(2); closeSideBar(event)}}>
-                            Saved Quizzes
-                        </button>
-                        <button type="button" className="btn btn-primary mb-3" id='default-header-register-btn' onClick={event => {goToSearch(3); closeSideBar(event)}}>
-                            My Quizzes
-                        </button>
-                    </div>
-                    <button className="btn btn-primary" id="logout-btn" onClick={event => window.location.href = '/'}> Logout </button>
+                <div className='sidebar-btn-container'>
+                    <button className="sidebar-btn" onClick={() => window.location.href = '/menu'}>Main Menu</button>
+                    <button className="sidebar-btn" onClick={() => window.location.href = '/createquiz'}>Create Quiz</button>
+                    <button type="button" className="sidebar-btn" onClick={event => {goToSearch(2); closeSideBar(event)}}>
+                        Saved Quizzes
+                    </button>
+                    <button type="button" className="sidebar-btn" onClick={event => {goToSearch(3); closeSideBar(event)}}>
+                        My Quizzes
+                    </button>
+                </div>
+                <div className='logout-btn-container'>
+                    <button className="sidebar-btn" id="logout-btn" onClick={() => window.location.href = '/'}>Logout</button>
                 </div>
             </div>
         </Modal>

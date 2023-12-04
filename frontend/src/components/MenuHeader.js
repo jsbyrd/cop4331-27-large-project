@@ -69,7 +69,7 @@ const MenuHeader = () => {
           </form>
         </div>
         <a className="nav-link text-light" id='default-header-logo' href="/" style={{ marginLeft: "20px" }}>
-          <img src={logo} id='menu-header-logo' />
+          <img src={logo} alt='QuizWiz logo' id='menu-header-logo' />
         </a>
       </nav>
     </header>
