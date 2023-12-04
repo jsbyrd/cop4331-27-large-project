@@ -5,7 +5,7 @@ import { useNavigate,
         useLocation,
         useParams } from 'react-router-dom';
 import './Menu.css';
-import logo from './images/logo.png'
+import MenuHeader from '../components/MenuHeader';
 import SideBarModal from './SideBarModal';
 const path = require('./Path.js');
 
@@ -163,29 +163,6 @@ const Search = () => {
 
     return (
         <div>
-            <header>
-                <SideBarModal
-                    isSideBarOpen={isSideBarOpen}
-                    setIsSideBarOpen={setIsSideBarOpen}
-                />
-                <nav className="navbar navbar-expand-lg d-flex flex-nowrap justify-content-between w-100 menu-navbar-custom" id='default-header-navbar'>
-                    <button className="btn px-3 text-light" id="hamburger" onClick={openSideBar}>
-                        ☰
-                    </button>
-                    <a className="nav-link text-light" id='default-header-logo' href="/menu" style={{ marginLeft: "20px" }}>
-                        <img src={logo} id='menu-header-logo' />
-                    </a>
-                    <div className='d-flex align-items-center'>
-                        <form class="form-inline">
-                            <input onKeyDown={keyDownHandler}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                class="form-control mr-sm-2" id='menu-searchbar' type="text" value={searchQuery}
-                                placeholder={placeholder} onFocus={() => setPlaceHolder('')} onBlur={() => setPlaceHolder('Search')} aria-label="Search"
-                            />
-                        </form>
-                    </div>
-                </nav>
-            </header>
             <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' , alignItems: 'center', backgroundColor: 'rgb(67, 39, 161)'}}>
                 <div id="test-page-body">
                     {message && <p>{message}</p>}
