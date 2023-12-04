@@ -7,12 +7,29 @@ import './TestPage.css';
 
 const TestPage = () => {
     const { quizID } = useParams();
+    const [quizInfo, setQuizInfo] = useState({Name: "Failed to load quiz...", _id: "N/A"});
     const [questions, setQuestions] = useState([]);
     const [answers, setAnswers] = useState([[]]);
     const [combinedAnswers, setCombinedAnswers] = useState([]);
     const [userAnswers, setUserAnswers] = useState([]);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [score, setScore] = useState(null);
+
+    const fetchQuizInfo = async () => {
+        const fetchParams = {
+          id: quizID
+        }
+        try {
+          const res = await axios.post('https://cop4331-27-c6dfafc737d8.herokuapp.com/api/quizzes/get/', fetchParams);
+          if (res !== undefined && res.data.result.length !== 0) {
+            setQuizInfo(res.data.result[0]);
+          }
+        }
+        catch {
+            console.log("fetch quiz info ERROR :(");
+            return;
+        }
+      }
 
     const fetchQuestions = async () => {
         const fetchParams = {
@@ -70,6 +87,7 @@ const TestPage = () => {
     };
 
     useEffect(() => {
+        fetchQuizInfo();
         fetchQuestions();
     }, []);
 
@@ -126,46 +144,50 @@ const TestPage = () => {
         <div>
             <MenuHeader />
             <div id="test-page-body">
-                {questions.length > 0 ? (
-                    questions.map((questionItem, index) => (
-                        <div key={index} className="question-container">
-                            <p className='question-number'>Question {index + 1}</p>
-                            <p className='question-text'>{questionItem.Question}</p>
-                            <div className='answer-choices'>
-                                {combinedAnswers[index] && combinedAnswers[index].map((answerObj, answerIndex) => (
-                                    <button
-                                        key={answerIndex}
-                                        className={`answer-choice ${isSubmitted ? (userAnswers[index] === answerIndex ? (answerObj.isCorrect ? 'correct-answer' : 'incorrect-answer') : '') : (userAnswers[index] === answerIndex ? 'selected' : '')}`}
-                                        onClick={() => !isSubmitted && handleAnswerSelection(index, answerIndex)}
-                                        disabled={isSubmitted}
-                                    >
-                                        <p>{answerObj.answer}</p>
+                <div id='test-page-body-content'>
+                    <p id='take-test-quiz-title'>{quizInfo.Name}</p>
+                        <button className='vqp-qo back-to-view-quiz-page-button' onClick={event =>  window.location.href=`/viewquiz/${quizID}`}>Back to View Quiz</button>
+                            {questions.length > 0 ? (
+                                questions.map((questionItem, index) => (
+                                    <div key={index} className="question-container">
+                                        <p className='question-number'>Question {index + 1}</p>
+                                        <p className='question-text'>{questionItem.Question}</p>
+                                        <div className='answer-choices'>
+                                            {combinedAnswers[index] && combinedAnswers[index].map((answerObj, answerIndex) => (
+                                                <button
+                                                    key={answerIndex}
+                                                    className={`answer-choice ${isSubmitted ? (userAnswers[index] === answerIndex ? (answerObj.isCorrect ? 'correct-answer' : 'incorrect-answer') : '') : (userAnswers[index] === answerIndex ? 'selected' : '')}`}
+                                                    onClick={() => !isSubmitted && handleAnswerSelection(index, answerIndex)}
+                                                    disabled={isSubmitted}
+                                                >
+                                                    <p>{answerObj.answer}</p>
+                                                </button>
+                                            
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <p>No questions available.</p>
+                            )}
+                            <div className="test-result">
+                                {!isSubmitted ? (
+                                    <button className="submit-button" onClick={calculateScore}>
+                                        Submit
                                     </button>
-                                
-                                ))}
+                                ) : (
+                                    <>
+                                        <div>
+                                            <p className='stated-result-score'>
+                                            Your score is {score}%
+                                            </p>
+                                        </div>
+                                        <button className="retry-button" onClick={handleRetry}>
+                                            Retry
+                                        </button>
+                                    </>
+                                )}
                             </div>
-                        </div>
-                    ))
-                ) : (
-                    <p>No questions available.</p>
-                )}
-                <div className="test-result">
-                    {!isSubmitted ? (
-                        <button className="submit-button" onClick={calculateScore}>
-                            Submit
-                        </button>
-                    ) : (
-                        <>
-                            <div>
-                                <p className='stated-result-score'>
-                                Your score is {score}%
-                                </p>
-                            </div>
-                            <button className="retry-button" onClick={handleRetry}>
-                                Retry
-                            </button>
-                        </>
-                    )}
                 </div>
             </div>
             <DefaultFooter />
