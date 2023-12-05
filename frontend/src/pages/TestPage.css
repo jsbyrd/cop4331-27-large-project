@@ -8,6 +8,21 @@
     margin: 0;
 }
 
+#take-test-quiz-title
+{
+    color: white;
+    font-size: 50px;
+    font-weight: 500;
+    margin-top: 20px;
+    margin-left: 40px;
+}
+
+.back-to-view-quiz-page-button
+{
+    margin-left: 40px;
+    width: 200px;
+}
+
 .question-container
 {
     position: relative;
