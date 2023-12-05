@@ -230,4 +230,40 @@ usersRouter.post("/verify", async (req, res) => {
 	res.status(retCode).json(ret);
 });
 
+// Verify
+// Incoming: login, password
+// Outgoing: error
+usersRouter.post("/recovery", async (req, res) => {
+  let retCode = 200;
+  let message = "";
+
+  const {login, newPassword} = req.body;
+  newHashPassword = getHash(newPassword);
+  
+  console.log("Begin RECOVERY for User " + login);
+
+  try
+  {
+    const edit = {$set: {Password: newHashPassword}};
+
+    const db = client.db("LargeProject");
+    const result = await db.collection('Users').updateOne({Login:login}, edit);
+
+		if (result.modifiedCount == 0)
+    {
+      retCode = 403;
+      message = "User not found";
+    }
+
+    var ret = {error: message};
+  }
+  catch(e)
+  {
+    retCode = 404;
+    var ret = {error: e.message};
+  }
+  
+	res.status(retCode).json(ret);
+});
+
 module.exports = usersRouter;

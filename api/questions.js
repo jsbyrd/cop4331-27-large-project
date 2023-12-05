@@ -21,12 +21,14 @@ questionsRouter.post("/search", async (req, res) => {
   let message = "";
   
   const {term, quizId} = req.body;
+
+  var newId = new ObjectId(quizId);
   
   console.log("Begin Search for Question with Quiz ID " + quizId);
   
   // more silly nodejs jargain
   var search = {
-    $and: [{QuizId: quizId}],
+    $and: [{QuizId: newId}],
     $or: [{
       Question: { $regex: term, $options: "i"}
     }]
@@ -66,8 +68,10 @@ questionsRouter.post("/add", async (req, res) => {
 	let message = "";
 	
 	const {question, quizId} = req.body;
+
+	var newId = new ObjectId(quizId);
 	
-	const newQuestion = {Question: question, QuizId: quizId};
+	const newQuestion = {Question: question, QuizId: newId};
 	
 	console.log("Begin ADD for Question with quizId " + quizId);
 	
@@ -93,11 +97,15 @@ questionsRouter.post("/add", async (req, res) => {
 questionsRouter.post("/edit", async (req, res) => {
 	let retCode = 200;
 	let message = "";
+	var newId;
 
 	const {id, question, quizId} = req.body;
 
 	// some annoying variable jargain part 2
 	var _id = new ObjectId(id);
+
+	if (quizId != null)
+		newId = new ObjectId(quizId);
 
 	console.log("Begin EDIT for Question with ID " + id);
 
@@ -106,7 +114,7 @@ questionsRouter.post("/edit", async (req, res) => {
 		// it gets worse every time I type it
 		let update = {
 		...question != null ? {Question: question} : null,
-		...quizId != null ? {QuizId: quizId} : null,
+		...quizId != null ? {QuizId: newId} : null,
 		};
 
 		const edit = {$set: update};
@@ -125,6 +133,39 @@ questionsRouter.post("/edit", async (req, res) => {
 		var ret = {error: e.message};
 	}
 
+	res.status(retCode).json(ret);
+});
+
+// TODO: Delete
+questionsRouter.post("/delete", async (req, res) => {
+	let retCode = 200;
+	let message = "";
+  
+	const {id} = req.body;
+	var _id = new ObjectId(id);
+	
+	console.log("Begin DELETE for question " + id);
+	
+	try
+	{
+		const db = client.db("LargeProject");
+
+		const result = await db.collection('Questions').deleteOne({_id});
+	
+		if(result.deletedCount == 1)
+			message = "Successfully deleted answer " + id;
+		else
+			retCode = 204;
+
+	var ret = {error: message};
+	}
+	catch(e)
+	{
+		retCode = 404;
+		var ret = {error: e.message};
+	}
+	
+	
 	res.status(retCode).json(ret);
 });
 

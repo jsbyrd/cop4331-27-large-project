@@ -1,3 +1,14 @@
+#test-page-body
+{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center;
+    background-color: rgb(67, 39, 161);
+    color: white;
+    margin: 0;
+}
+
 #searched-searchbar
 {
     width: 350px;

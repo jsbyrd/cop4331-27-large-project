@@ -22,13 +22,15 @@ const Login = () => {
             const response = await fetch(path.buildPath('/api/users/login'), {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
             var res = JSON.parse(await response.text());
             console.log(res);
-            if( res.id === undefined )
+            if( res.result === undefined )
             {
                 setMessage('User/Password combination incorrect');
             }
             else
             {
-                var user = {firstName:res.firstName,lastName:res.lastName,id:res.id}
+                console.log(res.result);
+                var user = {firstName:res.result.firstName,lastName:res.result.lastName,id:res.result.id,token:res.result.token}
+                alert(res.result.id);
                 localStorage.setItem('user_data', JSON.stringify(user));
 
                 setMessage('');

@@ -17,14 +17,32 @@ client.connect();
 savedRouter.post("/get", async (req, res) => {
 	let retCode = 200;
 	let message = "";
+	var search = {};
 
-	const {id} = req.body;
-	console.log("Begin GET for Saved Quiz with ID " + id);
+	const {quizId, userId} = req.body;
+	console.log("Begin GET for Saved Quiz with ID " + userId);
+
+	var newUserId = new ObjectId(userId);
+
+	if (quizId != null)
+	{
+		var newQuizId = new ObjectId(quizId);
+		search = {
+			UserId: newUserId,
+			QuizId: newQuizId
+		};
+	}
+	else
+	{
+		search = {
+			UserId: newUserId
+		};
+	}
 
 	try
 	{
 		const db = client.db("LargeProject");
-		const result = await db.collection('Saved').find({UserId: id}).toArray();
+		const result = await db.collection('Saved').find(search).toArray();
 
 		if (result.length == 0)
 		{
@@ -36,8 +54,8 @@ savedRouter.post("/get", async (req, res) => {
 		{
 			var quizList = result.map((item) => {
 				return {
-					QuizId: item.QuizId,
-					QuizName: item.QuizName,
+					_id: item.QuizId,
+					Name: item.QuizName,
 				};
 			});
 
@@ -58,11 +76,14 @@ savedRouter.post("/get", async (req, res) => {
 // Outgoing: id, error
 savedRouter.post("/add", async (req, res) => {
 	let retCode = 200;
-  let message = "";
+	let message = "";
 
 	const {userId, quizId} = req.body;
+	
+	var newUserId = new ObjectId(userId);
+	var newQuizId = new ObjectId(quizId);
 
-	const newQuiz = {UserId: userId, QuizId: quizId};
+	const newQuiz = {UserId: newUserId, QuizId: newQuizId};
 
 	console.log("Saving Quiz with userId " + userId + " and quizId " + quizId);
 
@@ -95,6 +116,8 @@ savedRouter.delete("/delete", async (req, res) => {
   let message = "";
   
 	const {id} = req.body;
+
+	var newId = new ObjectId(id);
 	
 	console.log("Begin DELETE for Saved Quiz " + id);
 	
@@ -102,7 +125,7 @@ savedRouter.delete("/delete", async (req, res) => {
 	{
 		const db = client.db("LargeProject");
 
-		const result = await db.collection('Saved').deleteOne({_id: id});
+		const result = await db.collection('Saved').deleteOne({_id: newId});
 	
 		if (result.deletedCount == 1)
 			message = "Successfully deleted Saved Quiz " + id;
