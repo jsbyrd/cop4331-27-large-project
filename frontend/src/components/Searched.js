@@ -4,9 +4,8 @@ import React,
 import { useNavigate,
         useLocation,
         useParams } from 'react-router-dom';
-import './Menu.css';
-import logo from './images/logo.png'
-import SideBarModal from './SideBarModal';
+import './Searched.css';
+import axios from 'axios';
 const path = require('./Path.js');
 
 const Search = () => {
@@ -41,12 +40,12 @@ const Search = () => {
             const response = await fetch(path.buildPath('/api/quizzes/search'), {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
             try {
                 var res = JSON.parse(await response.text());
-                setMessage("");
+                setMessage(`Showing ${res.result.length} Result${res.result.length === 1 ? '' : 's'} For ${term}`);
                 setResults(res.result);
             }
             catch(e)
             {
-                setMessage("No results");
+                setMessage(`Showing Zero Results for ${term}`);
                 setResults([]);
             }
         }
@@ -66,14 +65,31 @@ const Search = () => {
         {    
             const response = await fetch(path.buildPath('/api/saved/get'), {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
             if (response.status === 204) {
-                setMessage("No saved quizzes");
+                setMessage("No Saved Quizzes :(");
                 setResults([]);
             }
             else {
                 var res = JSON.parse(await response.text());
-                setMessage("");
-                setResults(res.result);
-                console.log(res.result);
+                setMessage(`Showing ${res.result.length} Result${res.result.length === 1 ? '' : 's'} For Saved Quizzes`);
+                // Fetch answer info for each question
+                const quizzes = []
+                for (let i = 0; i < res.result.length; i++) {
+                    console.log(i);
+                    const fetchParams = {
+                        id: res.result[i]._id
+                    }
+                    const resA = await axios.post(path.buildPath('/api/quizzes/get/'), fetchParams);
+                    if (resA !== undefined && resA.data.result.length !== 0) {
+                        console.log('RESA')
+                        console.log(resA);
+                        const quiz = {
+                            _id: res.result[i]._id,
+                            Name: resA.data.result[0].Name,
+                        }
+                        quizzes.push(quiz);
+                    }
+                }
+                setResults(quizzes);
             }
         }
         catch(e)
@@ -91,13 +107,13 @@ const Search = () => {
         try
         {    
             const response = await fetch(path.buildPath('/api/quizzes/getfromuser'), {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
-            if (response.status == 204) {
-                setMessage("No created quizzes");
+            if (response.status === 204) {
+                setMessage("No Created Quizzes :(");
                 setResults([]);
             }
             else {
                 var res = JSON.parse(await response.text());
-                setMessage("");
+                setMessage(`Showing ${res.result.length} Result${res.result.length === 1 ? '' : 's'} For My Quizzes`);
                 setResults(res.result);
             }
         }
@@ -110,13 +126,13 @@ const Search = () => {
 
     // Complete the search
     const goToSearch = async (type) => {
-        if (type == 2)
+        if (type === 2)
         {
             setSearchQuery('');
             navigate('/search/savedQuizzes', { state: 2 });
             getSaved();
         }
-        else if (type == 3)
+        else if (type === 3)
         {
             setSearchQuery('');
             navigate('/search/myQuizzes', { state: 3 })
@@ -124,7 +140,7 @@ const Search = () => {
         }
         else if (searchQuery.trim() !== '') {
             var i = 0;
-            while (searchQuery[i] == ' ') {
+            while (searchQuery[i] === ' ') {
                 i++;
             }
             var temp = searchQuery.substring(i);
@@ -144,12 +160,12 @@ const Search = () => {
 
     // Send API call upon loading of page
     useEffect(() => {
-        if (type == 1)
+        if (type === 1)
         {
             setSearchQuery(query);
             doSearch(query);
         }
-        else if (type == 2)
+        else if (type === 2)
         {
             setSearchQuery('');
             getSaved();
@@ -163,38 +179,14 @@ const Search = () => {
 
     return (
         <div>
-            <header>
-                <SideBarModal
-                    isSideBarOpen={isSideBarOpen}
-                    setIsSideBarOpen={setIsSideBarOpen}
-                />
-                <nav className="navbar navbar-expand-lg d-flex flex-nowrap justify-content-between w-100 menu-navbar-custom" id='default-header-navbar'>
-                    <button className="btn px-3 text-light" id="hamburger" onClick={openSideBar}>
-                        ☰
-                    </button>
-                    <a className="nav-link text-light" id='default-header-logo' href="/menu" style={{ marginLeft: "20px" }}>
-                        <img src={logo} id='menu-header-logo' />
-                    </a>
-                    <div className='d-flex align-items-center'>
-                        <form class="form-inline">
-                            <input onKeyDown={keyDownHandler}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                class="form-control mr-sm-2" id='menu-searchbar' type="text" value={searchQuery}
-                                placeholder={placeholder} onFocus={() => setPlaceHolder('')} onBlur={() => setPlaceHolder('Search')} aria-label="Search"
-                            />
-                        </form>
-                    </div>
-                </nav>
-            </header>
             <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' , alignItems: 'center', backgroundColor: 'rgb(67, 39, 161)'}}>
                 <div id="test-page-body">
-                    {message && <p>{message}</p>}
+                    {message && <p id='search-message'>{message}</p>}
                     <ul className="search-result">
                         {results.map((result) => (
                             <li key={result._id}>
-                                <a href={`/viewquiz/${result._id}`}>
-                                    {result.Name}
-                                </a>
+                                <p className='search-result-name'>{result.Name}</p>
+                                <button className='search-result-btn' onClick={() => window.location=`/viewquiz/${result._id}`}>View Quiz</button>
                             </li>
                         ))}
                     </ul>

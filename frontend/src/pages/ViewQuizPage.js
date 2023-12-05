@@ -12,16 +12,12 @@ const ViewQuizPage = () => {
 
   const { quizID } = useParams();
   const userID = JSON.parse(localStorage.getItem('user_data')).id;
-  console.log(userID);
-  // const dummyQuestions = [{Question: "How are you today?", _id: "1"},
-  //                         {Question: "This is question two", _id: "2"}, 
-  //                         {Question: "Are you stupid?", _id: "3"},
-  //                         {Question: "This is very very dumb", _id: "4"}];
   const [quizInfo, setQuizInfo] = useState({Name: "Failed to load quiz...", _id: "N/A"});
   const [questionsAndAnswers, setQuestionsAndAnswers] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(-1);
   const [isLoading, setIsLoading] = useState(true);
   const [editedQuestion, setEditedQuestion] = useState({});
+  const [isQuizSaved, setIsQuizSaved] = useState(false);
 
   // States for opening/closing modals
   const [isAddQuestionOpen, setIsAddQuestionOpen] = useState(false);
@@ -49,6 +45,29 @@ const ViewQuizPage = () => {
       setCurrentQuestion(questionsAndAnswers.length - 1);
     } else {
       setCurrentQuestion(currentQuestion - 1);
+    }
+  }
+
+  const fetchSavedQuiz = async () => {
+    const fetchParams = {
+      userId: userID,
+      quizId: quizID
+    }
+    try {
+      // Fetch all saved quizzes for user 
+      const res = await axios.post(path.buildPath('/api/saved/get'), fetchParams);
+      // Check to see if this user has saved this quiz
+      if (res !== undefined && res.status !== 204) {
+        const savedQuizzes = res.data.result;
+        const savedQuiz = savedQuizzes.find((q) => q._id === quizID);
+        if (savedQuiz !== undefined) {
+          setIsQuizSaved(true);
+        } else {
+          setIsQuizSaved(false);
+        }
+      }
+    } catch(e) {
+      console.log(e);
     }
   }
 
@@ -103,6 +122,7 @@ const ViewQuizPage = () => {
   useEffect(() => {
     fetchQuizInfo();
     fetchQuestionsAndAnswers();
+    fetchSavedQuiz();
     setIsLoading(false);
   }, []);
 
@@ -127,7 +147,28 @@ const ViewQuizPage = () => {
       console.log(err);
     }
   }
-  console.log(quizInfo);
+
+  const saveOrUnsaveQuiz = async (e) => {
+    e.preventDefault();
+    const fetchParams = {
+      userId: userID,
+      quizId: quizID
+    }
+    try {
+      // If quiz is already saved, unsave it
+      if (isQuizSaved) {
+        await axios.post(path.buildPath('/api/saved/delete'), fetchParams);
+        setIsQuizSaved(false);
+      }
+      // Otherwise, save the quiz
+      else {
+        await axios.post(path.buildPath('/api/saved/add'), fetchParams);
+        setIsQuizSaved(true);
+      }
+    } catch(e) {
+      console.log(e);
+    }
+  }
 
   return (
     <div id='vqp-container'>
@@ -147,8 +188,8 @@ const ViewQuizPage = () => {
         <div id='vqp-body'>
           <p id='vqp-quiz-title'>{quizInfo.Name}</p>
           <div id='vqp-quiz-options'>
-            <button className='vqp-qo' onClick={event =>  window.location.href=`/taketest/${quizID}`}>Take Test</button>
-            <button className='vqp-qo'>Save Quiz</button>
+            <button className='vqp-qo' onClick={() => window.location.href=`/taketest/${quizID}`}>Take Test</button>
+            <button className='vqp-qo' onClick={saveOrUnsaveQuiz}>{isQuizSaved ? 'Unsave Quiz' : 'Save Quiz'}</button>
             {(userID === quizInfo.UserId) && <button className='vqp-qo' onClick={openAddQuestion}>Add Question</button>}
           </div>
           <div id='vqp-flashcard'>
