@@ -65,7 +65,6 @@ questionsRouter.post("/search", async (req, res) => {
     if (result.length == 0)
       retCode = 204;
     
-	  console.log(result);
     var ret = {result: result, error: message};
   }
   catch(e)
@@ -74,7 +73,6 @@ questionsRouter.post("/search", async (req, res) => {
     var ret = {error: e.message};
   }
   
-  console.log(ret);
   res.status(retCode).json(ret);
 });
 
