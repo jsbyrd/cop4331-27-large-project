@@ -5,6 +5,7 @@ const { getServers, getDefaultResultOrder } = require('dns');
 const usersRouter = require('express').Router();
 require('dotenv').config();
 const token = require("./jwt.js");
+const { Console } = require('console');
 
 const MongoClient = require('mongodb').MongoClient;
 const url = process.env.MONGODB_URI;
@@ -135,6 +136,7 @@ usersRouter.post("/register", async (req, res) => {
   console.log("Begin REGISTER for User " + login);
 
   const newUser = {Login: login, Password: hashPassword, FirstName: firstName, LastName: lastName, Email: email, Verified: false};
+  
   try
   {
     const db = client.db("LargeProject");
@@ -159,19 +161,27 @@ usersRouter.delete("/delete", async (req, res) => {
   
 	const {jwt, password} = req.body;
 	
-	console.log("Begin DELETE for User with Token" + jwt);
+	console.log("Begin DELETE for User with Token " + jwt);
 
-  const decryptedToken = token.Verify(jwt);
+  // check if the jwt was given
+	if (jwt == null)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
 
-  if (decryptedToken.error != null)
-  {
-    console.log("Token not authenticated, cancelling request...");
-    res.status(403).json(ret);
-    return;
-  }
+	// this calls ./jwt.js
+	const notValid = token.verify(jwt);
+
+	// final validation check
+	if (notValid)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
 
   hashPassword = getHash(password);
-  const login = decryptedToken.login;
+  const login = token.decode(jwt).login.login;  // why
   
 	try
 	{

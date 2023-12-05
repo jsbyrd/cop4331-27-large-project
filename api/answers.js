@@ -17,13 +17,30 @@ answersRouter.post("/get", async (req, res) => {
 	let retCode = 200;
 	let message = "";
 
-	const {questionId} = req.body;
+	const {jwt, questionId} = req.body;
 
 	var newId = new ObjectId(questionId);
 
 	var projection = {projection: {QuestionId: 0}};
 
 	console.log("Begin GET for Answer with Question ID " + questionId);
+
+	// check if the jwt was given
+	if (jwt == null)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
+
+	// this calls ./jwt.js
+	const notValid = token.verify(jwt);
+
+	// final validation check
+	if (notValid)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
 
 	try
 	{
@@ -48,13 +65,30 @@ answersRouter.post("/getcorrect", async (req, res) => {
 	let retCode = 200;
   	let message = "";
 
-	const {questionId} = req.body;
+	const {jwt, questionId} = req.body;
 
 	var newId = new ObjectId(questionId);
 
   	var projection = {projection: {QuestionId: 0, WrongAnswer: 0}}
 
 	console.log("Begin GET CORRECT for Answer with Question ID " + questionId);
+
+	// check if the jwt was given
+	if (jwt == null)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
+
+	// this calls ./jwt.js
+	const notValid = token.verify(jwt);
+
+	// final validation check
+	if (notValid)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
 
 	try
 	{
@@ -80,22 +114,39 @@ answersRouter.post("/getcorrect", async (req, res) => {
 // Throw the question id in
 answersRouter.post("/add", async (req, res) => {
 	let retCode = 200;
-  let message = "";
+	let message = "";
 	
-	const {answer, questionId, wrong} = req.body;
+	const {jwt, answer, questionId, wrong} = req.body;
 
 	var newId = new ObjectId(questionId);
 	
 	const newAnswer = {Answer: answer, QuestionId: newId, WrongAnswer: wrong};
 	
 	console.log("Begin ADD for Answer with questionId " + questionId);
+
+	// check if the jwt was given
+	if (jwt == null)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
+
+	// this calls ./jwt.js
+	const notValid = token.verify(jwt);
+
+	// final validation check
+	if (notValid)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
 	
 	try
 	{
 		const db = client.db("LargeProject");
 		const result = await db.collection('Answers').insertOne(newAnswer);
 		
-		var ret = {id: result.insertedId, retCode: retCode};
+		var ret = {id: result.insertedId, error: message};
 	}
 	catch(e)
 	{
@@ -113,13 +164,30 @@ answersRouter.post("/edit", async (req, res) => {
 	let message = "";
 	var newId;
 
-	const {id, answer, wrong, questionId} = req.body;
+	const {jwt, id, answer, wrong, questionId} = req.body;
 
 	var _id = new ObjectId(id);
 	if (questionId != null)
 		var newId = new ObjectId(questionId);
 
 	console.log("Begin EDIT for Quiz with ID " + id);
+
+	// check if the jwt was given
+	if (jwt == null)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
+
+	// this calls ./jwt.js
+	const notValid = token.verify(jwt);
+
+	// final validation check
+	if (notValid)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
 
 	try
 	{
@@ -154,10 +222,27 @@ answersRouter.post("/delete", async (req, res) => {
 	let retCode = 200;
 	let message = "";
   
-	const {id} = req.body;
+	const {jwt, id} = req.body;
 	var _id = new ObjectId(id);
 	
 	console.log("Begin DELETE for answer " + id);
+
+	// check if the jwt was given
+	if (jwt == null)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
+
+	// this calls ./jwt.js
+	const notValid = token.verify(jwt);
+
+	// final validation check
+	if (notValid)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
 	
 	try
 	{

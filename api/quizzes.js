@@ -21,7 +21,7 @@ quizzesRouter.post("/get", async (req, res) => {
 	let retCode = 200;
 	let message = "";
 
-	const {id} = req.body;
+	const {jwt, id} = req.body;
 
 	// some annoying variable jargon
 	var _id = new ObjectId(id);
@@ -31,6 +31,23 @@ quizzesRouter.post("/get", async (req, res) => {
   }
 
 	console.log("Begin GET for Quiz with ID" + id);
+
+	// check if the jwt was given
+	if (jwt == null)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
+
+	// this calls ./jwt.js
+	const notValid = token.verify(jwt);
+
+	// final validation check
+	if (notValid)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
 
 	try
 	{
@@ -58,9 +75,26 @@ quizzesRouter.post("/getfromuser", async (req, res) => {
 	var search;
 
 	// public here needs to be true/false
-	const {userId, public} = req.body;
+	const {jwt, userId, public} = req.body;
 
 	console.log("Begin GET FROM ID for ID" + userId);
+
+	// check if the jwt was given
+	if (jwt == null)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
+
+	// this calls ./jwt.js
+	const notValid = token.verify(jwt);
+
+	// final validation check
+	if (notValid)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
 
 	if (public)
 	{
@@ -113,14 +147,17 @@ quizzesRouter.post("/search", async (req, res) => {
 
 	console.log("Begin Search for Quiz with term " + term + (public != null ? (" with Public Tag " + public) : ""));
 
+	// check if the jwt was given
 	if (jwt == null)
 	{
 		res.status(403).json({error: "No valid token given"});
 		return;
 	}
 
+	// this calls ./jwt.js
 	const notValid = token.verify(jwt);
 
+	// final validation check
 	if (notValid)
 	{
 		res.status(403).json({error: "No valid token given"});
@@ -181,7 +218,7 @@ quizzesRouter.post("/add", async (req, res) => {
 	let retCode = 200;
   let message = "";
 
-	const {name, public, userId} = req.body;
+	const {jwt, name, public, userId} = req.body;
 
 	const newQuiz = {Name: name, Public: public, UserId: userId};
 
@@ -190,6 +227,23 @@ quizzesRouter.post("/add", async (req, res) => {
 		newQuiz.Public = 0;
 
 	console.log("Begin ADD for Quiz with Name " + name);
+
+	// check if the jwt was given
+	if (jwt == null)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
+
+	// this calls ./jwt.js
+	const notValid = token.verify(jwt);
+
+	// final validation check
+	if (notValid)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
 
 	try
 	{
@@ -214,12 +268,29 @@ quizzesRouter.post("/edit", async (req, res) => {
 	let retCode = 200;
   let message = "";
 
-	const {id, name, public, userId} = req.body;
+	const {jwt, id, name, public, userId} = req.body;
 
 	// some annoying variable jargain part 2
 	var _id = new ObjectId(id);
 
 	console.log("Begin EDIT for Quiz with ID " + id);
+
+	// check if the jwt was given
+	if (jwt == null)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
+
+	// this calls ./jwt.js
+	const notValid = token.verify(jwt);
+
+	// final validation check
+	if (notValid)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
 
 	try
 	{

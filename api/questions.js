@@ -20,11 +20,28 @@ questionsRouter.post("/search", async (req, res) => {
   let retCode = 200;
   let message = "";
   
-  const {term, quizId} = req.body;
+  const {jwt, term, quizId} = req.body;
 
   var newId = new ObjectId(quizId);
   
   console.log("Begin Search for Question with Quiz ID " + quizId);
+
+  // check if the jwt was given
+	if (jwt == null)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
+
+	// this calls ./jwt.js
+	const notValid = token.verify(jwt);
+
+	// final validation check
+	if (notValid)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
   
   // more silly nodejs jargain
   var search = {
@@ -99,7 +116,7 @@ questionsRouter.post("/edit", async (req, res) => {
 	let message = "";
 	var newId;
 
-	const {id, question, quizId} = req.body;
+	const {jwt, id, question, quizId} = req.body;
 
 	// some annoying variable jargain part 2
 	var _id = new ObjectId(id);
@@ -108,6 +125,23 @@ questionsRouter.post("/edit", async (req, res) => {
 		newId = new ObjectId(quizId);
 
 	console.log("Begin EDIT for Question with ID " + id);
+
+	// check if the jwt was given
+	if (jwt == null)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
+
+	// this calls ./jwt.js
+	const notValid = token.verify(jwt);
+
+	// final validation check
+	if (notValid)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
 
 	try
 	{
@@ -141,10 +175,27 @@ questionsRouter.post("/delete", async (req, res) => {
 	let retCode = 200;
 	let message = "";
   
-	const {id} = req.body;
+	const {jwt, id} = req.body;
 	var _id = new ObjectId(id);
 	
 	console.log("Begin DELETE for question " + id);
+
+	// check if the jwt was given
+	if (jwt == null)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
+
+	// this calls ./jwt.js
+	const notValid = token.verify(jwt);
+
+	// final validation check
+	if (notValid)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
 	
 	try
 	{

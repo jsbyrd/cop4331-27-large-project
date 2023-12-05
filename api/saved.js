@@ -19,8 +19,25 @@ savedRouter.post("/get", async (req, res) => {
 	let message = "";
 	var search = {};
 
-	const {quizId, userId} = req.body;
+	const {jwt, quizId, userId} = req.body;
 	console.log("Begin GET for Saved Quiz with ID " + userId);
+
+	// check if the jwt was given
+	if (jwt == null)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
+
+	// this calls ./jwt.js
+	const notValid = token.verify(jwt);
+
+	// final validation check
+	if (notValid)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
 
 	var newUserId = new ObjectId(userId);
 
@@ -78,7 +95,7 @@ savedRouter.post("/add", async (req, res) => {
 	let retCode = 200;
 	let message = "";
 
-	const {userId, quizId} = req.body;
+	const {jwt, userId, quizId} = req.body;
 	
 	var newUserId = new ObjectId(userId);
 	var newQuizId = new ObjectId(quizId);
@@ -86,6 +103,23 @@ savedRouter.post("/add", async (req, res) => {
 	const newQuiz = {UserId: newUserId, QuizId: newQuizId};
 
 	console.log("Saving Quiz with userId " + userId + " and quizId " + quizId);
+
+	// check if the jwt was given
+	if (jwt == null)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
+
+	// this calls ./jwt.js
+	const notValid = token.verify(jwt);
+
+	// final validation check
+	if (notValid)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
 
 	try
 	{
@@ -115,11 +149,28 @@ savedRouter.delete("/delete", async (req, res) => {
 	let retCode = 200;
   let message = "";
   
-	const {id} = req.body;
+	const {jwt, id} = req.body;
 
 	var newId = new ObjectId(id);
 	
 	console.log("Begin DELETE for Saved Quiz " + id);
+
+	// check if the jwt was given
+	if (jwt == null)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
+
+	// this calls ./jwt.js
+	const notValid = token.verify(jwt);
+
+	// final validation check
+	if (notValid)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
 	
 	try
 	{
