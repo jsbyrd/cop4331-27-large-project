@@ -4,7 +4,7 @@ import React,
 import { useNavigate,
         useLocation,
         useParams } from 'react-router-dom';
-import './Menu.css';
+import './Searched.css';
 import axios from 'axios';
 const path = require('./Path.js');
 
@@ -40,12 +40,12 @@ const Search = () => {
             const response = await fetch(path.buildPath('/api/quizzes/search'), {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
             try {
                 var res = JSON.parse(await response.text());
-                setMessage("");
+                setMessage(`Showing ${res.result.length} Result${res.result.length === 1 ? '' : 's'} For ${term}`);
                 setResults(res.result);
             }
             catch(e)
             {
-                setMessage("No results");
+                setMessage(`Showing Zero Results for ${term}`);
                 setResults([]);
             }
         }
@@ -65,15 +65,14 @@ const Search = () => {
         {    
             const response = await fetch(path.buildPath('/api/saved/get'), {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
             if (response.status === 204) {
-                setMessage("No saved quizzes");
+                setMessage("No Saved Quizzes :(");
                 setResults([]);
             }
             else {
                 var res = JSON.parse(await response.text());
-                setMessage("");
+                setMessage(`Showing ${res.result.length} Result${res.result.length === 1 ? '' : 's'} For Saved Quizzes`);
                 // Fetch answer info for each question
                 const quizzes = []
-                console.log('HI')
                 for (let i = 0; i < res.result.length; i++) {
                     console.log(i);
                     const fetchParams = {
@@ -109,12 +108,12 @@ const Search = () => {
         {    
             const response = await fetch(path.buildPath('/api/quizzes/getfromuser'), {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
             if (response.status === 204) {
-                setMessage("No created quizzes");
+                setMessage("No Created Quizzes :(");
                 setResults([]);
             }
             else {
                 var res = JSON.parse(await response.text());
-                setMessage("");
+                setMessage(`Showing ${res.result.length} Result${res.result.length === 1 ? '' : 's'} For My Quizzes`);
                 setResults(res.result);
             }
         }
@@ -182,13 +181,12 @@ const Search = () => {
         <div>
             <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' , alignItems: 'center', backgroundColor: 'rgb(67, 39, 161)'}}>
                 <div id="test-page-body">
-                    {message && <p>{message}</p>}
+                    {message && <p id='search-message'>{message}</p>}
                     <ul className="search-result">
                         {results.map((result) => (
                             <li key={result._id}>
-                                <a href={`/viewquiz/${result._id}`}>
-                                    {result.Name}
-                                </a>
+                                <p className='search-result-name'>{result.Name}</p>
+                                <button className='search-result-btn' onClick={() => window.location=`/viewquiz/${result._id}`}>View Quiz</button>
                             </li>
                         ))}
                     </ul>
