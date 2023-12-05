@@ -111,24 +111,27 @@ savedRouter.post("/add", async (req, res) => {
 // Delete
 // Incoming: id
 // Outgoing: name, userId, error
-savedRouter.delete("/delete", async (req, res) => {
+savedRouter.post("/delete", async (req, res) => {
 	let retCode = 200;
-  let message = "";
-  
-	const {id} = req.body;
+	let message = "";
 
-	var newId = new ObjectId(id);
+	const {userId, quizId} = req.body;
 	
-	console.log("Begin DELETE for Saved Quiz " + id);
+	var newUserId = new ObjectId(userId);
+	var newQuizId = new ObjectId(quizId);
+
+	const newQuiz = {UserId: newUserId, QuizId: newQuizId};
+
+	console.log("Saving Quiz with userId " + userId + " and quizId " + quizId);
 	
 	try
 	{
 		const db = client.db("LargeProject");
 
-		const result = await db.collection('Saved').deleteOne({_id: newId});
+		const result = await db.collection('Saved').deleteOne(newQuiz);
 	
 		if (result.deletedCount == 1)
-			message = "Successfully deleted Saved Quiz " + id;
+			message = "Successfully deleted Saved Quiz " + quizId;
 		else
 			retCode = 204;
 

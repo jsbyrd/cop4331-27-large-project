@@ -5,8 +5,7 @@ import { useNavigate,
         useLocation,
         useParams } from 'react-router-dom';
 import './Menu.css';
-import MenuHeader from '../components/MenuHeader';
-import SideBarModal from './SideBarModal';
+import axios from 'axios';
 const path = require('./Path.js');
 
 const Search = () => {
@@ -72,8 +71,26 @@ const Search = () => {
             else {
                 var res = JSON.parse(await response.text());
                 setMessage("");
-                setResults(res.result);
-                console.log(res.result);
+                // Fetch answer info for each question
+                const quizzes = []
+                console.log('HI')
+                for (let i = 0; i < res.result.length; i++) {
+                    console.log(i);
+                    const fetchParams = {
+                        id: res.result[i]._id
+                    }
+                    const resA = await axios.post(path.buildPath('/api/quizzes/get/'), fetchParams);
+                    if (resA !== undefined && resA.data.result.length !== 0) {
+                        console.log('RESA')
+                        console.log(resA);
+                        const quiz = {
+                            _id: res.result[i]._id,
+                            Name: resA.data.result[0].Name,
+                        }
+                        quizzes.push(quiz);
+                    }
+                }
+                setResults(quizzes);
             }
         }
         catch(e)
@@ -91,7 +108,7 @@ const Search = () => {
         try
         {    
             const response = await fetch(path.buildPath('/api/quizzes/getfromuser'), {method:'post',body:js,headers:{'Content-Type': 'application/json'}});
-            if (response.status == 204) {
+            if (response.status === 204) {
                 setMessage("No created quizzes");
                 setResults([]);
             }
@@ -110,13 +127,13 @@ const Search = () => {
 
     // Complete the search
     const goToSearch = async (type) => {
-        if (type == 2)
+        if (type === 2)
         {
             setSearchQuery('');
             navigate('/search/savedQuizzes', { state: 2 });
             getSaved();
         }
-        else if (type == 3)
+        else if (type === 3)
         {
             setSearchQuery('');
             navigate('/search/myQuizzes', { state: 3 })
@@ -124,7 +141,7 @@ const Search = () => {
         }
         else if (searchQuery.trim() !== '') {
             var i = 0;
-            while (searchQuery[i] == ' ') {
+            while (searchQuery[i] === ' ') {
                 i++;
             }
             var temp = searchQuery.substring(i);
@@ -144,12 +161,12 @@ const Search = () => {
 
     // Send API call upon loading of page
     useEffect(() => {
-        if (type == 1)
+        if (type === 1)
         {
             setSearchQuery(query);
             doSearch(query);
         }
-        else if (type == 2)
+        else if (type === 2)
         {
             setSearchQuery('');
             getSaved();
