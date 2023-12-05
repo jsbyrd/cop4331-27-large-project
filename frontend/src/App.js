@@ -11,6 +11,10 @@ import SearchedPage from './pages/SearchedPage';
 import ViewQuizPage from './pages/ViewQuizPage';
 import TestPage from './pages/TestPage';
 import CreateQuizPage from './pages/CreateQuizPage';
+import VerificationPage from './pages/VerificationPage';
+import DoVerificationPage from './pages/DoVerificationPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 
 function App() {
   // Fetch user info from local storage
@@ -34,6 +38,10 @@ function App() {
         <Route path="/viewquiz/:quizID" element={<ViewQuizPage />} />
         <Route path="/taketest/:quizID" element={<TestPage />} />
         <Route path="/createquiz" element={<CreateQuizPage />} />
+        <Route path="/verify" element={<VerificationPage />} />
+        <Route path="/doverify" element={<DoVerificationPage />} />
+        <Route path="/reset" element={<ForgotPasswordPage />} />
+        <Route path="/doreset" element={<ResetPasswordPage />} />
       </Routes>
     </BrowserRouter>
       );

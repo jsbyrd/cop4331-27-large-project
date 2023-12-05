@@ -64,6 +64,9 @@ const Login = () => {
                 <p>Don't have an account?</p>
                 <input type="button" id="goToRegisterButton" class="buttons" value="Register Account" onClick={event =>  window.location.href='/register'}/>
             </div>
+            <div id="RegisterDiv">
+                <input type="button" id="goToRegisterButton" class="buttons" value="Forgot Password?" onClick={event => window.location.href='/reset'}/>
+            </div>
         </div>
     );
 };
