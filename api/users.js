@@ -99,7 +99,7 @@ usersRouter.post("/login", async (req, res) => {
         id: result._id,
         firstName: result.FirstName,
         lastName: result.LastName,
-        token: token.accessToken
+        jwt: token.accessToken
       }
 
       var expireTime = new Date();
