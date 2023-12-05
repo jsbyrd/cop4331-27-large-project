@@ -71,6 +71,12 @@ const SideBarModal = (props) => {
             navigate('/search/myQuizzes', { state: 3 })
     }
 
+    const handleLogout = (e) => {
+        e.preventDefault();
+        window.location.href = '/';
+        localStorage.removeItem('user_data');
+    }
+
     return (
         <Modal
             isOpen={isSideBarOpen}
@@ -94,7 +100,7 @@ const SideBarModal = (props) => {
                     </button>
                 </div>
                 <div className='logout-btn-container'>
-                    <button className="sidebar-btn" id="logout-btn" onClick={() => window.location.href = '/'}>Logout</button>
+                    <button className="sidebar-btn" id="logout-btn" onClick={handleLogout}>Logout</button>
                 </div>
             </div>
         </Modal>
