@@ -14,25 +14,14 @@ const Search = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [results, setResults] = useState([]);
     const [message, setMessage] = useState('');
-    const [placeholder, setPlaceHolder] = useState('Search');
     const navigate = useNavigate();
     const location = useLocation();
     const type = location.state;
 
-    var count = 0;
-
-    // SideBar Modal
-    const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-
-  // Functions for opening modals
-    function openSideBar(e) {
-        e.preventDefault();
-        setIsSideBarOpen(true);
-    }
-
     // Utilize Search API
     const doSearch = async (term) =>
     {
+        setSearchQuery(query);
         var obj = {term:term};
         var js = JSON.stringify(obj);
         try
@@ -45,7 +34,7 @@ const Search = () => {
             }
             catch(e)
             {
-                setMessage(`Showing Zero Results for ${term}`);
+                setMessage(`Showing 0 Results for ${term}`);
                 setResults([]);
             }
         }
@@ -124,45 +113,10 @@ const Search = () => {
         }
     };
 
-    // Complete the search
-    const goToSearch = async (type) => {
-        if (type === 2)
-        {
-            setSearchQuery('');
-            navigate('/search/savedQuizzes', { state: 2 });
-            getSaved();
-        }
-        else if (type === 3)
-        {
-            setSearchQuery('');
-            navigate('/search/myQuizzes', { state: 3 })
-            myQuizzes();
-        }
-        else if (searchQuery.trim() !== '') {
-            var i = 0;
-            while (searchQuery[i] === ' ') {
-                i++;
-            }
-            var temp = searchQuery.substring(i);
-            setSearchQuery(searchQuery.substring(i));
-            navigate(`/search/${temp}`, { state: 1 });
-            doSearch(temp);
-        }
-    }
-    // Detect enter
-    const keyDownHandler = event => {
-        if (event.key === 'Enter')
-        {
-            event.preventDefault();
-            goToSearch(1);
-        }
-    }
-
     // Send API call upon loading of page
     useEffect(() => {
         if (type === 1)
         {
-            setSearchQuery(query);
             doSearch(query);
         }
         else if (type === 2)

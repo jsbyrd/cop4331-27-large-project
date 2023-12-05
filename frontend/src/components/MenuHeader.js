@@ -1,11 +1,7 @@
-import React,
-        { useState, 
-          useRef,
-          useEffect } from 'react';
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import './Menu.css';
 import logo from './images/logo.png'
-import Search from './Searched';
 import SideBarModal from './SideBarModal';
 
 const MenuHeader = () => {
@@ -24,29 +20,9 @@ const MenuHeader = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [placeholder, setPlaceHolder] = useState('Search');
 
-  // Complete the search
-  const goToSearch = async (type) => {
-    if (type == 2)
-      navigate('/search/savedQuizzes', { state:2 });
-    else if (type == 3)
-      navigate('/search/myQuizzes', { state:3 })
-    else if (searchQuery.trim() !== '') {
-      var i = 0;
-      while (searchQuery[i] == ' ') {
-        i++;
-      }
-      var temp = searchQuery.substring(i);
-      navigate(`/search/${temp}`, { state:1 });
-    }
+  const handleFormSubmit = () => {
+    navigate(`/search/${searchQuery}`, { state:1 });
   }
-  // Detect enter
-  const keyDownHandler = event => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      goToSearch(1);
-    }
-  }
-  // ============================
 
   return (
     
@@ -60,10 +36,10 @@ const MenuHeader = () => {
           ☰
         </button>
         <div>
-          <form class="form-inline">
-            <input onKeyDown={keyDownHandler}
+          <form class="form-inline" onSubmit={handleFormSubmit}>
+            <input
               onChange={(e) => setSearchQuery(e.target.value)}
-              class="form-control mr-sm-2 w-100" id='menu-searchbar' type="text" value={searchQuery} 
+              class="form-control mr-sm-2 w-100" id='menu-searchbar' type="text" value={searchQuery}
               placeholder={placeholder} onFocus={() => setPlaceHolder('')} onBlur={() => setPlaceHolder('Search')} aria-label="Search"
             />
           </form>
