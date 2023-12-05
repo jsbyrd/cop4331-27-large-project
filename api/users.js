@@ -4,6 +4,7 @@ const { getServers, getDefaultResultOrder } = require('dns');
 
 const usersRouter = require('express').Router();
 require('dotenv').config();
+const token = require("./jwt.js");
 
 const MongoClient = require('mongodb').MongoClient;
 const url = process.env.MONGODB_URI;
@@ -26,13 +27,12 @@ function getToken(json)
   var ret;
   try
   {
-    const token = require("./createJWT.js");
     ret = token.createToken( json );
   }
   catch(e)
   {
     error = e.toString();
-    ret = {error:e.message};
+    ret = {error: e.message};
   }
 
   return ret;
@@ -71,7 +71,7 @@ usersRouter.post("/login", async (req, res) => {
 
   hashPassword = getHash(password);
   
-  console.log({login, password});
+  console.log("Begin LOGIN for User " + login);
 
   var projection = {
     projection: {_id: 1, FirstName: 1, LastName: 1}
@@ -91,8 +91,7 @@ usersRouter.post("/login", async (req, res) => {
     {
       var userJSON = {
         id: result._id,
-        firstName: result.FirstName,
-        lastName: result.LastName
+        login: login
       }
       const token = getToken(userJSON);
       var retJSON = {
@@ -101,8 +100,6 @@ usersRouter.post("/login", async (req, res) => {
         lastName: result.LastName,
         token: token.accessToken
       }
-
-      console.log(token);
 
       var expireTime = new Date();
       expireTime.setHours(expireTime.getHours() + 24);
@@ -160,11 +157,21 @@ usersRouter.delete("/delete", async (req, res) => {
 	let retCode = 200;
   let message = "";
   
-	const {login, password} = req.body;
-  
-	hashPassword = getHash(password);
+	const {jwt, password} = req.body;
 	
-	console.log("Begin DELETE for User " + login);
+	console.log("Begin DELETE for User with Token" + jwt);
+
+  const decryptedToken = token.Verify(jwt);
+
+  if (decryptedToken.error != null)
+  {
+    console.log("Token not authenticated, cancelling request...");
+    res.status(403).json(ret);
+    return;
+  }
+
+  hashPassword = getHash(password);
+  const login = decryptedToken.login;
   
 	try
 	{

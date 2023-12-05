@@ -2,6 +2,7 @@ const { resourceLimits } = require("worker_threads");
 
 const quizzesRouter = require("express").Router();
 require("dotenv").config();
+const token = require("./jwt.js");
 
 var ObjectId = require('mongodb').ObjectId;
 const MongoClient = require('mongodb').MongoClient;
@@ -108,9 +109,23 @@ quizzesRouter.post("/search", async (req, res) => {
 	var search;
 
 	// public here needs to be true/false
-	const {term, userId, public} = req.body;
+	const {jwt, term, userId, public} = req.body;
 
-	console.log("Begin Search for Quiz with term " + term + (public ? (" with Public Tag " + public) : ""));
+	console.log("Begin Search for Quiz with term " + term + (public != null ? (" with Public Tag " + public) : ""));
+
+	if (jwt == null)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
+
+	const notValid = token.verify(jwt);
+
+	if (notValid)
+	{
+		res.status(403).json({error: "No valid token given"});
+		return;
+	}
 
 	// note that for "contains" queries, we need to manipulate the search
 	// using some annoying advanced queries
