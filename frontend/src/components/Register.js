@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import './Register.css';
 const path = require('./Path.js');
 
@@ -11,6 +12,39 @@ function Register()
     var rEmail;
 
     const [message,setMessage] = useState('');
+
+    const sendEmail = async () => {
+
+        const local = JSON.parse(localStorage.getItem('user_data'));
+        const baseUrl = "https://cop4331-27-c6dfafc737d8.herokuapp.com/doverify";
+        const queryParams = {
+            login: local.login,
+            password: registerPassword.value,
+        };
+        const encodedParams = [];
+
+        // Encode each query parameter
+        Object.entries(queryParams).forEach(([key, value]) => {
+            encodedParams.push(`${key}=${encodeURIComponent(value)}`);
+        });
+        // Construct the URI with encoded query parameters
+        const uriWithParams = `${baseUrl}?${encodedParams.join("&")}`;
+
+        console.log(`Final URI with encoded query parameters: ${uriWithParams}`);
+        const verifyLink = uriWithParams;
+        const RECIPIENT_EMAIL = local.email;
+
+        try {
+          const response = await axios.post(path.buildPath('/send-email'), {
+            recipientEmail: RECIPIENT_EMAIL,
+            verifyLink: verifyLink
+          });
+  
+          console.log('Email sent successfully:', response.data);
+        } catch (error) {
+          console.error('Error sending email:', error.response.data);
+        }
+      };
 
     const doRegister = async event => 
     {
@@ -30,11 +64,12 @@ function Register()
             }
             else
             {
-                var user = {firstName:res.firstName,lastName:res.lastName,id:res.id}
+                var user = {email:res.email, login:res.login, password:res.password}
                 localStorage.setItem('user_data', JSON.stringify(user));
 
                 setMessage('');
-                window.location.href = '/'
+                sendEmail();
+                window.location.href = '/verify';
             }
         }
         catch(e)

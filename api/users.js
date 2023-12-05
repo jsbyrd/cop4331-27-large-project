@@ -143,7 +143,7 @@ usersRouter.post("/register", async (req, res) => {
     const db = client.db("LargeProject");
     const result = await db.collection("Users").insertOne(newUser);
 
-    var ret = {result: result.insertedId, error: message};
+    var ret = {result: result.insertedId, email:email, login:login, password:hashPassword, error: message};
   }
   catch(e) {
     retCode = 404;
