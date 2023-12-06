@@ -201,7 +201,7 @@ usersRouter.post("/verify", async (req, res) => {
   let retCode = 200;
   let message = "";
 
-  const {login, password} = req.body;
+  const {email, password} = req.body;
   hashPassword = getHash(password);
   
   console.log("Begin VERIFY for User " + login);
@@ -211,7 +211,7 @@ usersRouter.post("/verify", async (req, res) => {
     const edit = {$set: {Verify: true}};
 
     const db = client.db("LargeProject");
-    const result = await db.collection('Users').updateOne({Login:login, Password:hashPassword}, edit);
+    const result = await db.collection('Users').updateOne({Email:email, Password:hashPassword}, edit);
 
 		if (result.modifiedCount == 0)
     {
