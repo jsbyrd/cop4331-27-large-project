@@ -23,8 +23,8 @@ const MenuQuizzesCatagory3 = () => {
             <p className='menu-quiz-button-title'>GTA 6 Trailer Trivia</p>
           </button>
 
-          <button className='menu-quiz-button'>
-            <p className='menu-quiz-button-title'>Quiz Title</p>
+          <button className='menu-quiz-button' onClick={() => window.location.href = '/viewquiz/656e603bdc5c455145055dca'}>
+            <p className='menu-quiz-button-title'>Harry Potter Characters</p>
           </button>
         </div>
     </div>
