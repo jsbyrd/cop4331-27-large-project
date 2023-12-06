@@ -8,6 +8,8 @@ const ForgotPasswordPage = () => {
 
   var RECIPIENT_EMAIL;
   const [RECIPIENT_USERNAME, setRECIPIENT_USERNAME] = useState('');
+  const [recievedUser, setRecievedUser] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
 
   const ForgotPassword = async () => {
     const resetLink = "https://cop4331-27-c6dfafc737d8.herokuapp.com/doreset";
@@ -26,10 +28,10 @@ const ForgotPasswordPage = () => {
         recipientEmail: RECIPIENT_EMAIL.value,
         resetLink: uriWithParams
       });
-      console.log('Email sent successfully:', response.data);
+      console.log('Email sent successfully');
       setEmailSent(true);
     } catch (error) {
-      console.error('Error sending email:', error.response.data);
+      console.error('Error sending email');
     }
   }
 
@@ -37,30 +39,13 @@ const ForgotPasswordPage = () => {
     <div>
       <DefaultHeader />
     <div className="d-flex flex-column align-items-center justify-content-center" style={{ height: "100vh", backgroundColor: "#340e57", color: "white" }}>
-      {recievedUser && (
-        <><p style={{ textAlign: "center" }}>Enter the email address associated with the account.</p>
-          <input type="text" id="loginName" class="login-user-input-field" placeholder="wizard@email.com" style={{ height: '50px', width: '400px' }} ref={(c) => RECIPIENT_EMAIL = c} /><br />
-          <div style={{ height: "20px" }}>
-            {emailSent && (
-              <p style={{ marginTop: "-20px", color: "white" }}>An email has been sent. Please check your inbox to reset your password.</p>
-            )}
-          </div>
-          <div style={{ height: "20px" }}>
-            {!emailSent && (
-              <button className="btn me-3 text-light" id='default-body-left-btn' style={{ marginTop: "20px", color: "white", padding: "10px 20px", borderRadius: "10px", border: "none", cursor: "pointer", fontSize: "12px" }}
-                onClick={event => ForgotPassword()}>
-                Submit
-              </button>
-            )}
-          </div></>
-      )}
       {recievedUser == false && (
         <><p style={{ textAlign: "center" }}>Enter the username associated with the account.</p>
           <input type="text" id="loginName" class="login-user-input-field" placeholder="Wizard54" style={{ height: '50px', width: '400px' }} onChange={(e) => setRECIPIENT_USERNAME(e.target.value)} /><br />
           <div style={{ height: "20px" }}></div>
           <div style={{ height: "20px" }}>
-          <button className="btn me-3 text-light" id='default-body-left-btn' style={{ marginTop: "20px", color: "white", padding: "10px 20px", borderRadius: "10px", border: "none", cursor: "pointer", fontSize: "12px" }}
-              onClick={event => UpdateUsername()}>
+            <button className="btn me-3 text-light" id='default-body-left-btn' style={{ marginTop: "20px", color: "white", padding: "10px 20px", border: "none", cursor: "pointer", fontSize: "12px" }}
+              onClick={event => ForgotPassword()}>
               Submit
             </button>
           </div>
