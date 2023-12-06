@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import './Menu.css';
 import logo from './images/logo.png'
+import magnifyingGlass from './images/magnifying-glass.png'
 import SideBarModal from './SideBarModal';
 
 const MenuHeader = () => {
@@ -44,7 +45,9 @@ const MenuHeader = () => {
               class="form-control mr-sm-2" id='menu-searchbar' type="text" value={searchQuery}
               placeholder={placeholder} onFocus={() => setPlaceHolder('')} onBlur={() => setPlaceHolder('Search')} aria-label="Search"
             />
-            <button id='menu-searchbar-btn'>&#x1F50E;</button>
+            <button id='menu-searchbar-btn'>
+            <img id="mag-glass-icon" src={magnifyingGlass} />
+            </button>
           </form>
         </div>
         <div className="nav-link text-light" id='menu-header-logo-container'>
