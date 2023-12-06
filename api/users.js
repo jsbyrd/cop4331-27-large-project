@@ -238,7 +238,7 @@ usersRouter.post("/verify", async (req, res) => {
 
   try
   {
-    const edit = {$set: {Verify: true}};
+    const edit = {$set: {Verified: true}};
 
     const db = client.db("LargeProject");
     const result = await db.collection('Users').updateOne({Login:login, Password:hashPassword}, edit);
