@@ -311,6 +311,7 @@ usersRouter.post("/token", async (req, res) => {
     if (authToken == null)
     {
       res.status(403).json({message: "Cannot get token; please login again"});
+      return;
     }
 
     var decodedToken = token.decode(authToken);
