@@ -8,12 +8,6 @@ const ForgotPasswordPage = () => {
 
   var RECIPIENT_EMAIL;
   const [RECIPIENT_USERNAME, setRECIPIENT_USERNAME] = useState('');
-  const [recievedUser, setRecievedUser] = useState(false);
-  const [emailSent, setEmailSent] = useState(false);
-
-  const UpdateUsername = async () => {
-    setRecievedUser(true);
-  }
 
   const ForgotPassword = async () => {
     const resetLink = "https://cop4331-27-c6dfafc737d8.herokuapp.com/doreset";
