@@ -154,14 +154,16 @@ const TestPage = () => {
                                         <p className='question-text'>{questionItem.Question}</p>
                                         <div className='answer-choices'>
                                             {combinedAnswers[index] && combinedAnswers[index].map((answerObj, answerIndex) => (
-                                                <button
-                                                    key={answerIndex}
-                                                    className={`answer-choice ${isSubmitted ? (userAnswers[index] === answerIndex ? (answerObj.isCorrect ? 'correct-answer' : 'incorrect-answer') : '') : (userAnswers[index] === answerIndex ? 'selected' : '')}`}
-                                                    onClick={() => !isSubmitted && handleAnswerSelection(index, answerIndex)}
-                                                    disabled={isSubmitted}
-                                                >
-                                                    <p>{answerObj.answer}</p>
-                                                </button>
+                                                <div id='answer-choice-container'>
+                                                    <button
+                                                        key={answerIndex}
+                                                        className={`answer-choice ${isSubmitted ? (userAnswers[index] === answerIndex ? (answerObj.isCorrect ? 'correct-answer' : 'incorrect-answer') : '') : (userAnswers[index] === answerIndex ? 'selected' : '')}`}
+                                                        onClick={() => !isSubmitted && handleAnswerSelection(index, answerIndex)}
+                                                        disabled={isSubmitted}
+                                                    >
+                                                        <p>{answerObj.answer}</p>
+                                                    </button>
+                                                </div>
                                             
                                             ))}
                                         </div>
