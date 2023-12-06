@@ -83,11 +83,8 @@
 
 .quiz-catagory-container
 {
-    margin-top: 60px;
+    margin-top: 40px;
     margin-left: 40px;
-
-    /* space for quizzes */
-    margin-bottom: 400px;
 }
 
 .quiz-catagory-title
