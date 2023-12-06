@@ -29,6 +29,11 @@
     margin-right: 30px;
 }
 
+#mag-glass-icon
+{
+    height: 32px;
+}
+
 #menu-header-logo-container {
     display: flex;
     justify-content: center;

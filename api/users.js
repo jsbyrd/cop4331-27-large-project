@@ -238,7 +238,7 @@ usersRouter.post("/verify", async (req, res) => {
 
   try
   {
-    const edit = {$set: {Verify: true}};
+    const edit = {$set: {Verified: true}};
 
     const db = client.db("LargeProject");
     const result = await db.collection('Users').updateOne({Login:login, Password:hashPassword}, edit);
@@ -292,6 +292,30 @@ usersRouter.post("/recovery", async (req, res) => {
     retCode = 404;
     var ret = {error: e.message};
   }
+  
+	res.status(retCode).json(ret);
+});
+
+usersRouter.post("/token", async (req, res) => {
+  let retCode = 200;
+  let message = "";
+  
+  console.log("Begin REFRESH TOKEN");
+
+  var authToken = process.env.token;
+
+  console.log(authToken);
+
+  if (authToken == null)
+  {
+    res.status(403).json({message: "Cannot get token; please login again"});
+  }
+
+  var decodedToken = token.decode(authToken);
+  var refreshToken = getToken(decodedToken.login);
+
+  var ret = {authToken, refreshToken, error: message};
+
   
 	res.status(retCode).json(ret);
 });
