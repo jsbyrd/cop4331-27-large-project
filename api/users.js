@@ -99,6 +99,7 @@ usersRouter.post("/login", async (req, res) => {
         id: result._id,
         firstName: result.FirstName,
         lastName: result.LastName,
+        email: result.Email,
         token: token.accessToken
       }
 
@@ -120,6 +121,32 @@ usersRouter.post("/login", async (req, res) => {
     retCode = 404;
     var ret = {error:e.message};
   }
+
+	res.status(retCode).json(ret);
+});
+
+usersRouter.post("/getemail", async (req, res) => {
+  var retCode = 200;
+  var message = "";
+  const { login } = req.body;
+
+  console.log("Begin GET EMAIL for User " + login);
+
+  try
+	{
+		const db = client.db("LargeProject");
+		const result = await db.collection('Users').findOne({Login: login}, {projection: {Email: 1}});
+
+		if (result == null)
+			retCode = 200;
+
+		var ret = {result: result, error: message};
+	}
+	catch(e)
+	{
+		retCode = 404;
+		var ret = {error: e.message};
+	}
 
 	res.status(retCode).json(ret);
 });
@@ -201,7 +228,7 @@ usersRouter.post("/verify", async (req, res) => {
   let retCode = 200;
   let message = "";
 
-  const {login, password} = req.body;
+  const {email, password} = req.body;
   hashPassword = getHash(password);
   
   console.log("Begin VERIFY for User " + login);
@@ -211,7 +238,7 @@ usersRouter.post("/verify", async (req, res) => {
     const edit = {$set: {Verify: true}};
 
     const db = client.db("LargeProject");
-    const result = await db.collection('Users').updateOne({Login:login, Password:hashPassword}, edit);
+    const result = await db.collection('Users').updateOne({Email:email, Password:hashPassword}, edit);
 
 		if (result.modifiedCount == 0)
     {
