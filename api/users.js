@@ -232,7 +232,7 @@ usersRouter.post("/verify", async (req, res) => {
   let message = "";
 
   const {login, password} = req.body;
-  hashPassword = getHash(password);
+  const hashPassword = getHash(password);
   
   console.log("Begin VERIFY for User " + login);
 
