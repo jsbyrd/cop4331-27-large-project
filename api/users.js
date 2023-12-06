@@ -296,4 +296,28 @@ usersRouter.post("/recovery", async (req, res) => {
 	res.status(retCode).json(ret);
 });
 
+usersRouter.post("/token", async (req, res) => {
+  let retCode = 200;
+  let message = "";
+  
+  console.log("Begin REFRESH TOKEN");
+
+  var currentToken = process.env.token;
+
+  console.log(currentToken);
+
+  if (currentToken == null)
+  {
+    res.status(403).json({message: "Cannot get token; please login again"});
+  }
+
+  var decodedToken = token.decode(currentToken);
+  var refreshToken = getToken(decodedToken.login);
+
+  var ret = {currentToken, refreshToken, error: message};
+
+  
+	res.status(retCode).json(ret);
+});
+
 module.exports = usersRouter;
