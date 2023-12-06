@@ -32,21 +32,24 @@ const MenuHeader = () => {
         setIsSideBarOpen={setIsSideBarOpen}
       />
       <nav id='menu-header-navbar'>
-        <button className="btn px-3 text-light" id="hamburger" onClick={openSideBar}>
-          ☰
-        </button>
+        <div id='hamburger-container'>
+          <button className="btn px-3 text-light" id="hamburger" onClick={openSideBar}>
+            ☰
+          </button>
+        </div>
         <div>
-          <form class="form-inline" onSubmit={handleFormSubmit}>
+          <form id='menu-searchbar-form' class="form-inline" onSubmit={handleFormSubmit}>
             <input
               onChange={(e) => setSearchQuery(e.target.value)}
-              class="form-control mr-sm-2 w-100" id='menu-searchbar' type="text" value={searchQuery}
+              class="form-control mr-sm-2" id='menu-searchbar' type="text" value={searchQuery}
               placeholder={placeholder} onFocus={() => setPlaceHolder('')} onBlur={() => setPlaceHolder('Search')} aria-label="Search"
             />
+            <button id='menu-searchbar-btn'>&#x1F50E;</button>
           </form>
         </div>
-        <a className="nav-link text-light" id='default-header-logo' href="/" style={{ marginLeft: "20px" }}>
+        <div className="nav-link text-light" id='menu-header-logo-container'>
           <img src={logo} alt='QuizWiz logo' id='menu-header-logo' />
-        </a>
+        </div>
       </nav>
     </header>
 
