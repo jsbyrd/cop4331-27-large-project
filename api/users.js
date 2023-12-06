@@ -87,6 +87,11 @@ usersRouter.post("/login", async (req, res) => {
       retCode = 403;
       message = "Username/password combination incorrect";
 		}
+    else if (!result.Verified)
+    {
+      retCode = 403;
+      message = "User not verified";
+    }
     else
     {
       var userJSON = {
