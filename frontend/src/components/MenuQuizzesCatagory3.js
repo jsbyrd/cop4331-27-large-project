@@ -15,10 +15,6 @@ const MenuQuizzesCatagory3 = () => {
             <p className='menu-quiz-button-title'>ATLA</p>
           </button>
 
-          <button className='menu-quiz-button' onClick={() => window.location.href = '/viewquiz/656fee36c3e0263de3dd9b6b'}>
-            <p className='menu-quiz-button-title'>Deltarune Quiz</p>
-          </button>
-
           <button className='menu-quiz-button' onClick={() => window.location.href = '/viewquiz/656feea3c3e0263de3dd9b76'}>
             <p className='menu-quiz-button-title'>GTA 6 Trailer Trivia</p>
           </button>
