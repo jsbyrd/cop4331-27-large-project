@@ -1,0 +1,21 @@
+.quiz-catagory
+{
+    height: 200px;
+    display: flex;
+}
+
+.menu-quiz-button
+{
+    border: none;
+    border-radius: 8px;
+    height: 150px;
+    width: 250px;
+    margin: 10px;
+}
+
+.menu-quiz-button-title
+{
+    font-size: 30px;
+    font-weight: 500;
+    margin: 0;
+}
