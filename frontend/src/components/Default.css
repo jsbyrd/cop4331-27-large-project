@@ -60,3 +60,7 @@
 #default-body-left-btn:hover {
   background-color: rgba(150, 79, 196, 0.85);
 }
+
+#wizard1-img {
+  height: 400px;
+}

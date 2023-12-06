@@ -12,6 +12,10 @@ const CreateQuizPage = () => {
     var obj = {id:JSON.parse(localStorage.getItem('user_data')).id};
 
     const fetchQuizzesAdd = async () => {
+        if (quizName.length === 0) {
+            alert("STOP RIGHT THERE");
+            return;
+        }
         const fetchParams = {
             name: quizName,
             public: 0, // hardcoded
@@ -46,7 +50,7 @@ const CreateQuizPage = () => {
             <div id="create-quiz-page-body">
                 <p className="create-quiz-text">Create Quiz</p>
 
-                <div id='quiz-name-creation'>
+                <form id='quiz-name-creation' onSubmit={fetchQuizzesAdd}>
                     <p>What do you want to name your quiz?</p>
                     <input
                         type="text"
@@ -55,11 +59,12 @@ const CreateQuizPage = () => {
                         placeholder="Wizard Facts Quiz"
                         value={quizName}
                         onChange={handleQuizNameChange}
+                        required
                     />
-                    <button className="create" onClick={fetchQuizzesAdd}>
+                    <button className="create">
                         <p>Create Quiz!</p>
                     </button>
-                </div>
+                </form>
             </div>
             <MenuFooter />
         </div>
