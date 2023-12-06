@@ -107,7 +107,7 @@
 {
     background-color: cadetblue;
     height: 100%;
-    width: 60%;
+    width: 50%;
 
     /* just to center the "image here" text */
     display: var(--display-image-type);
