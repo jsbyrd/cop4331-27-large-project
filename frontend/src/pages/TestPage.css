@@ -25,11 +25,12 @@
 
 .question-container
 {
+    color: black;
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    background-color: rgb(48,60,84);
+    background-color: white;
     border-radius: 20px;
     margin: 40px;
     box-shadow: 1px 4px 20px 1px rgba(8, 2, 27, 0.534);
@@ -60,9 +61,15 @@
     margin: 0px;
 }
 
+#answer-choice-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .answer-choice 
 {
-    background-color: rgb(92, 66, 179);
+    background-color: rgba(92, 66, 179);
     color: white;
     border: none;
     border-radius: 12px;
@@ -76,14 +83,15 @@
 }
 
 .answer-choice.selected {
-    background-color: rgb(126, 113, 170); /* Change to your preferred color */
-    color: white; /* Change text color if needed */
+    border: 10px solid black;
+    /* background-color: rgb(126, 113, 170); /* Change to your preferred color */
+    /* color: white;  */
 }
 
-.answer-choice:hover
+/* .answer-choice:hover
 {
     background-color: rgb(106, 78, 197);
-}
+} */
 
 .correct-answer {
     background-color: #4CAF50; /* Green color for correct answers */

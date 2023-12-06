@@ -22,6 +22,7 @@ const Search = () => {
     const doSearch = async (term) =>
     {
         setSearchQuery(query);
+        console.log("Term: " + term);
         var obj = {term:term};
         var js = JSON.stringify(obj);
         try
@@ -69,8 +70,6 @@ const Search = () => {
                     }
                     const resA = await axios.post(path.buildPath('/api/quizzes/get/'), fetchParams);
                     if (resA !== undefined && resA.data.result.length !== 0) {
-                        console.log('RESA')
-                        console.log(resA);
                         const quiz = {
                             _id: res.result[i]._id,
                             Name: resA.data.result[0].Name,
@@ -113,10 +112,32 @@ const Search = () => {
         }
     };
 
+    const shrinkQuizName = (name) => {
+        let longestWord = "";
+        let currentWord = "";
+        
+        //Move through the string letter-by-letter
+        for (let i = 0; i < name.length; i++) {
+            if (name.charAt(i) === " ") { //If we're at a space character
+            if (currentWord.length > longestWord.length) longestWord = currentWord; //Check if that word was the longest
+            currentWord = ""; //Reset the current word
+            } else {
+            currentWord += name.charAt(i); //Not at a space character, still building the current word
+            }
+        }
+        if (currentWord > longestWord) longestWord = currentWord; //End of string - check current word once more
+        if (longestWord.length >= 12) {
+            return name.substring(0, 10) + "...";
+        } else {
+            return name;
+        }
+    }
+
     // Send API call upon loading of page
     useEffect(() => {
-        if (type === 1)
+        if (type === null || type === 1)
         {
+            setSearchQuery(query);
             doSearch(query);
         }
         else if (type === 2)
@@ -138,9 +159,8 @@ const Search = () => {
                     {message && <p id='search-message'>{message}</p>}
                     <ul className="search-result">
                         {results.map((result) => (
-                            <li key={result._id}>
-                                <p className='search-result-name'>{result.Name}</p>
-                                <button className='search-result-btn' onClick={() => window.location=`/viewquiz/${result._id}`}>View Quiz</button>
+                            <li key={result._id} className='individual-flashcard' onClick={() => window.location=`/viewquiz/${result._id}`}>
+                                <p className='search-result-name'>{shrinkQuizName(result.Name)}</p>
                             </li>
                         ))}
                     </ul>

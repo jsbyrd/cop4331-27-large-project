@@ -220,8 +220,8 @@ const ViewQuizPage = () => {
                     <div className='vqp-questions-li-a'>{`${qa.answers.find((a) => !a.WrongAnswer).Answer}`}</div>
                     {(userID === quizInfo.UserId) && 
                     <div className='vqp-questions-li-o'>
-                      <button onClick={(e) => openEditQuestion(e, qa)}>Edit</button>
-                      <button onClick={(e) => deleteQuestion(e, qa)}>Delete</button>
+                      <button className='vqp-li-btn vqp-edit-btn' onClick={(e) => openEditQuestion(e, qa)}>Edit</button>
+                      <button className='vqp-li-btn' onClick={(e) => deleteQuestion(e, qa)}>Delete</button>
                     </div>}
                   </div>
                 </li>

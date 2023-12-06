@@ -21,11 +21,10 @@ const MenuHeader = () => {
   const [placeholder, setPlaceHolder] = useState('Search');
 
   const handleFormSubmit = () => {
-    navigate(`/search/${searchQuery}`, { state:1 });
+    navigate(`/search/${searchQuery}`, { state: 1 });
   }
 
   return (
-    
     <header>
       <SideBarModal
         isSideBarOpen={isSideBarOpen}
@@ -40,7 +39,7 @@ const MenuHeader = () => {
         <div>
           <form id='menu-searchbar-form' class="form-inline" onSubmit={handleFormSubmit}>
             <input
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => setSearchQuery(e.target.value)} required
               class="form-control mr-sm-2" id='menu-searchbar' type="text" value={searchQuery}
               placeholder={placeholder} onFocus={() => setPlaceHolder('')} onBlur={() => setPlaceHolder('Search')} aria-label="Search"
             />
