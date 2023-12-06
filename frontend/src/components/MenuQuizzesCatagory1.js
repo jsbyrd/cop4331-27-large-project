@@ -7,8 +7,8 @@ const MenuQuizzesCatagory1 = () => {
     <div className="quiz-catagory-container">
         <h3 className="quiz-catagory-title">Popular</h3>
         <div id="quizzes-catagory1" className='quiz-catagory'>
-          <button className='menu-quiz-button' onClick={() => window.location.href = '/viewquiz/656e603bdc5c455145055dca'}>
-            <p className='menu-quiz-button-title'>Harry Potter Characters</p>
+          <button className='menu-quiz-button' onClick={() => window.location.href = '/viewquiz/656ef49f9897372398432b77'}>
+            <p className='menu-quiz-button-title'>Cars</p>
           </button>
 
           <button className='menu-quiz-button' onClick={() => window.location.href = '/viewquiz/656a64dbcf24604d0ed748e4'}>

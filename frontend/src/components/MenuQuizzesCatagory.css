@@ -13,6 +13,11 @@
     margin: 10px;
 }
 
+.menu-quiz-button:hover
+{
+    background-color: rgb(194, 194, 194);
+}
+
 .menu-quiz-button-title
 {
     font-size: 30px;
