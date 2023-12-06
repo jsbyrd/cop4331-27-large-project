@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import DefaultHeader from '../components/DefaultHeader';
+import DefaultFooter from '../components/DefaultFooter.js';
 const path = require('../components/Path.js');
 
 const ForgotPasswordPage = () => {
@@ -38,6 +40,8 @@ const ForgotPasswordPage = () => {
   }
 
   return (
+    <div>
+      <DefaultHeader />
     <div className="d-flex flex-column align-items-center justify-content-center" style={{ height: "100vh", backgroundColor: "#340e57", color: "white" }}>
       {recievedUser && (
         <><p style={{ textAlign: "center" }}>Enter the email address associated with the account.</p>
@@ -49,7 +53,7 @@ const ForgotPasswordPage = () => {
           </div>
           <div style={{ height: "20px" }}>
             {!emailSent && (
-              <button style={{ marginTop: "0px", backgroundColor: "#693c72", color: "white", padding: "10px 20px", border: "none", cursor: "pointer", fontSize: "12px" }}
+              <button className="btn me-3 text-light" id='default-body-left-btn' style={{ marginTop: "20px", color: "white", padding: "10px 20px", borderRadius: "10px", border: "none", cursor: "pointer", fontSize: "12px" }}
                 onClick={event => ForgotPassword()}>
                 Submit
               </button>
@@ -61,13 +65,15 @@ const ForgotPasswordPage = () => {
           <input type="text" id="loginName" class="login-user-input-field" placeholder="Wizard54" style={{ height: '50px', width: '400px' }} onChange={(e) => setRECIPIENT_USERNAME(e.target.value)} /><br />
           <div style={{ height: "20px" }}></div>
           <div style={{ height: "20px" }}>
-            <button style={{ marginTop: "0px", backgroundColor: "#693c72", color: "white", padding: "10px 20px", border: "none", cursor: "pointer", fontSize: "12px" }}
+          <button className="btn me-3 text-light" id='default-body-left-btn' style={{ marginTop: "20px", color: "white", padding: "10px 20px", borderRadius: "10px", border: "none", cursor: "pointer", fontSize: "12px" }}
               onClick={event => UpdateUsername()}>
               Submit
             </button>
           </div>
         </>
       )}
+    </div>
+        <DefaultFooter />
     </div>
   );
 };
