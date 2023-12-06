@@ -21,11 +21,10 @@ const MenuQuizzesCatagory1 = () => {
 
           <button className='menu-quiz-button' onClick={() => window.location.href = '/viewquiz/656ef3c59897372398432b75'}>
             <p className='menu-quiz-button-title'>Solar System</p>
+          </button>
 
           <button className='menu-quiz-button' onClick={() => window.location.href = '/viewquiz/656ef38d9897372398432b74'}>
             <p className='menu-quiz-button-title'>Amphibians</p>
-          </button>
-
           </button>
 
         </div>
