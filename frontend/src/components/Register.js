@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './Register.css';
 const path = require('./Path.js');
+const pc = require('../components/passwordComplexity.js');
 
 function Register()
 {
@@ -13,17 +14,15 @@ function Register()
 
     const [message,setMessage] = useState('');
 
-    const passwordComplexityCheck = (password) => {
-        const containsNumber = /\d/.test(password); 
-        const containsUppercaseLetter = /[A-Z]/.test(password);
-        console.log(password);
-        console.log(containsNumber);
-        if (!containsNumber) return "** Password must include a number **";
-        if (!containsUppercaseLetter) return "** Password must include an uppercase letter **";
-        return "password is good"
-    }
-
-    passwordComplexityCheck("testing");
+    // const passwordComplexityCheck = (password) => {
+    //     const containsNumber = /\d/.test(password); 
+    //     const containsUppercaseLetter = /[A-Z]/.test(password);
+    //     console.log(password);
+    //     console.log(containsNumber);
+    //     if (!containsNumber) return "** Password must include a number **";
+    //     if (!containsUppercaseLetter) return "** Password must include an uppercase letter **";
+    //     return "password is good"
+    // }
 
     const sendEmail = async () => {
 
@@ -63,8 +62,7 @@ function Register()
         event.preventDefault();
 
         // Check for password complexity
-        const passwordMessage = passwordComplexityCheck(registerPassword.value);
-        console.log(passwordMessage);
+        const passwordMessage = pc.passwordComplexityCheck(registerPassword.value);
         if (passwordMessage !== "password is good") {
             setMessage(passwordMessage);
             return;
