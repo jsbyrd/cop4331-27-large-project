@@ -73,14 +73,12 @@ usersRouter.post("/login", async (req, res) => {
   
   console.log({login, password});
 
-  var projection = {
-    projection: {_id: 1, FirstName: 1, LastName: 1}
-  }
-
   try
   {
     const db = client.db("LargeProject");
-    const result = await db.collection('Users').findOne({Login:login, Password:hashPassword}, projection);
+    const result = await db.collection('Users').findOne({Login:login, Password:hashPassword});
+
+    console.log("Result.verified: " + result.Verified);
 
 		if (result == null)
 		{
