@@ -24,30 +24,29 @@ const ResetPasswordPage = () => {
       return;
     }
     const passwordMessage = pc.passwordComplexityCheck(NEWPASS1);
-        if (passwordMessage !== "password is good") {
-            setMessage(passwordMessage);
-            return;
-        }
-    else {
-      var obj = { login: login, newPassword: NEWPASS1 };
-      var js = JSON.stringify(obj);
-      try {
-        const response = await fetch(path.buildPath('/api/users/recovery'), { method: 'post', body: js, headers: { 'Content-Type': 'application/json' } });
-        var res = JSON.parse(await response.text());
-        console.log(res);
-        if (res.error !== "") {
-          setMessage("Unable to update password.");
-        }
-        else {
-          window.location.href = '/login';
-          return 0;
-        }
+    if (passwordMessage !== "password is good") {
+      setMessage(passwordMessage);
+      return;
+    }
+    var obj = { login: login, newPassword: NEWPASS1 };
+    var js = JSON.stringify(obj);
+    try {
+      const response = await fetch(path.buildPath('/api/users/recovery'), { method: 'post', body: js, headers: { 'Content-Type': 'application/json' } });
+      var res = JSON.parse(await response.text());
+      console.log(res);
+      if (res.error !== "") {
+        setMessage("Unable to update password.");
       }
-      catch (e) {
-        alert(e.toString());
-        return;
+      else {
+        window.location.href = '/login';
+        return 0;
       }
     }
+    catch (e) {
+      alert(e.toString());
+      return;
+    }
+
   }
 
   return (
