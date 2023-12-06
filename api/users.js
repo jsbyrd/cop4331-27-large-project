@@ -302,19 +302,19 @@ usersRouter.post("/token", async (req, res) => {
   
   console.log("Begin REFRESH TOKEN");
 
-  var currentToken = process.env.token;
+  var authToken = process.env.token;
 
-  console.log(currentToken);
+  console.log(authToken);
 
-  if (currentToken == null)
+  if (authToken == null)
   {
     res.status(403).json({message: "Cannot get token; please login again"});
   }
 
-  var decodedToken = token.decode(currentToken);
+  var decodedToken = token.decode(authToken);
   var refreshToken = getToken(decodedToken.login);
 
-  var ret = {currentToken, refreshToken, error: message};
+  var ret = {authToken, refreshToken, error: message};
 
   
 	res.status(retCode).json(ret);
