@@ -128,7 +128,7 @@ function Register()
             </div>
             <div id='submit-btn-container'>
                 <input type="submit" id="registerButton" class="buttons" value="Submit" onClick={doRegister}/>
-                <span id="registerResult" color="red"><b>{message}</b></span>
+                <span id="registerResult" style={{color="red"}}><b>{message}</b></span>
             </div>
         </form>
             <div id="LoginDiv">
