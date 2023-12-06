@@ -41,12 +41,12 @@ const CreateQuizPage = () => {
     }, [quizID]);
 
     return (
-        <div>
+        <div id='create-quiz-container'>
             <MenuHeader />
             <div id="create-quiz-page-body">
                 <p className="create-quiz-text">Create Quiz</p>
 
-                <div className='quizNameCreation'>
+                <div id='quiz-name-creation'>
                     <p>What do you want to name your quiz?</p>
                     <input
                         type="text"
@@ -56,11 +56,10 @@ const CreateQuizPage = () => {
                         value={quizName}
                         onChange={handleQuizNameChange}
                     />
+                    <button className="create" onClick={fetchQuizzesAdd}>
+                        <p>Create Quiz!</p>
+                    </button>
                 </div>
-
-                <button className="create" onClick={fetchQuizzesAdd}>
-                    <p>Create Quiz!</p>
-                </button>
             </div>
             <MenuFooter />
         </div>
