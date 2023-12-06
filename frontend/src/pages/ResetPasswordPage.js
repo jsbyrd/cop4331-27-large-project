@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import DefaultHeader from '../components/DefaultHeader';
 import DefaultFooter from '../components/DefaultFooter.js';
 const path = require('../components/Path.js');
+const pc = require('../components/passwordComplexity.js');
 
 
 const ResetPasswordPage = () => {
@@ -22,6 +23,11 @@ const ResetPasswordPage = () => {
       setMessage("Entered passwords do not match.");
       return;
     }
+    const passwordMessage = pc.passwordComplexityCheck(NEWPASS1);
+        if (passwordMessage !== "password is good") {
+            setMessage(passwordMessage);
+            return;
+        }
     else {
       var obj = { login: login, newPassword: NEWPASS1 };
       var js = JSON.stringify(obj);
