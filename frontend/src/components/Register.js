@@ -51,9 +51,9 @@ function Register()
             verifyLink: verifyLink
           });
   
-          console.log('Email sent successfully:', response.data);
+          //console.log('Email sent successfully:', response.data);
         } catch (error) {
-          console.error('Error sending email:', error.response.data);
+          //console.error('Error sending email:', error.response.data);
         }
       };
 
@@ -82,7 +82,7 @@ function Register()
             }
             else
             {
-                var user = {email:res.email, login:res.login, password:res.password}
+                var user = {email:res.email, login:res.login, password:registerPassword.value}
                 localStorage.setItem('user_data', JSON.stringify(user));
 
                 setMessage('');

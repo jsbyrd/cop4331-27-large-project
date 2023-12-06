@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import DefaultHeader from '../components/DefaultHeader';
+import DefaultFooter from '../components/DefaultFooter.js';
 const path = require('../components/Path.js');
 
 const DoVerificationPage = () => {
@@ -45,8 +47,12 @@ const DoVerificationPage = () => {
     }, [login, password]);
 
     return (
-        <div className="d-flex flex-column align-items-center justify-content-center" style={{ height: "100vh", backgroundColor: "#340e57", color: "white" }}>
-            <p>{message}</p>
+        <div>
+            <DefaultHeader />
+            <div className="d-flex flex-column align-items-center justify-content-center" style={{ height: "100vh", backgroundColor: "#340e57", color: "white" }}>
+                <p>{message}</p>
+            </div>
+            <DefaultFooter />
         </div>
     );
 };
