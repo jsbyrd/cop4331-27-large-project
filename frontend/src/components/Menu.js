@@ -9,7 +9,6 @@ function Menu()
 {
    return(
     <div id="menu-background">
-      <MenuButtons />
       <MenuQuizzesCatagory1 />
       <MenuQuizzesCatagory2 />
       <MenuQuizzesCatagory3 />
