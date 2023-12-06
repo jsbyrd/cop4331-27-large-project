@@ -1,0 +1,116 @@
+#login-form
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.login-background
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: blueviolet;
+    height: 100vh;
+}
+
+.login-foreground
+{
+    display: flex;
+    background-color: aliceblue;
+    height: 450px;
+    width: 1000px;
+    box-shadow: 0px 10px 10px 10px rgba(0, 0, 0, 0.356);
+}
+
+#login-page-container
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 50%;
+}
+
+#login-title
+{
+    position: absolute;
+    margin: 12px;
+    font-size: 40px;
+}
+
+.input-field-container
+{
+    height: 30%;
+    margin: 0;
+}
+
+.login-input-field-description
+{
+    font-size: 16px;
+    margin-bottom: 0px;
+}
+
+.login-user-input-field
+{
+    background-color: aliceblue;
+    border: solid;
+    border-color: blueviolet;
+    height: 53%;
+    width: 300px;
+    border-radius: 12px;
+    margin-top: 0px;
+    margin-bottom: 20px;
+    font-size: 18px;
+    padding: 3px 5px 3px 5px; 
+}
+
+#loginButton
+{
+    height: 50px;
+    width: 100px;
+    background-color: rgb(138, 44, 226);
+    color: aliceblue;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+#loginButton:hover {
+  background-color: rgba(138, 44, 226, 0.85);
+}
+
+#RegisterDiv
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+}
+
+#RegisterDiv p
+{
+    margin: 0;
+}
+
+#goToRegisterButton
+{
+    background-color: rgba(255, 255, 255, 0);
+    border: none;
+}
+
+.login-image
+{
+    background-color: cadetblue;
+    height: 100%;
+    width: 50%;
+
+    /* just to center the "image here" text */
+    display: var(--display-image-type);
+    justify-content: center;
+    align-items: center;
+}

@@ -13,6 +13,18 @@ function Register()
 
     const [message,setMessage] = useState('');
 
+    const passwordComplexityCheck = (password) => {
+        const containsNumber = /\d/.test(password); 
+        const containsUppercaseLetter = /[A-Z]/.test(password);
+        console.log(password);
+        console.log(containsNumber);
+        if (!containsNumber) return "** Password must include a number **";
+        if (!containsUppercaseLetter) return "** Password must include an uppercase letter **";
+        return "password is good"
+    }
+
+    passwordComplexityCheck("testing");
+
     const sendEmail = async () => {
 
         const local = JSON.parse(localStorage.getItem('user_data'));
@@ -50,6 +62,14 @@ function Register()
     {
         event.preventDefault();
 
+        // Check for password complexity
+        const passwordMessage = passwordComplexityCheck(registerPassword.value);
+        console.log(passwordMessage);
+        if (passwordMessage !== "password is good") {
+            setMessage(passwordMessage);
+            return;
+        }
+
         var obj = {login:registerLogin.value,password:registerPassword.value,firstName:rFirstName.value,lastName:rLastName.value,email:rEmail.value};
         var js = JSON.stringify(obj);
 
@@ -81,33 +101,37 @@ function Register()
 
     return(
       <div id="registerDiv">
+        <h1 id='register-title'>Register</h1>
         <form id="register-form" onSubmit={doRegister}>
             <div className="register-input-field-container">
                 <span class="register-input-field-description">Enter Username</span><br />
-                <input type="text" id="registerLogin" class="register-user-input-field" placeholder="Username" ref={(c) => registerLogin = c}/><br />
+                <input required type="text" id="registerLogin" class="register-user-input-field" placeholder="Username" ref={(c) => registerLogin = c}/><br />
             </div>
 
             <div className="register-input-field-container">
                 <span class="register-input-field-description">Enter Password</span><br />
-                <input type="password" id="registerPassword" class="register-user-input-field" placeholder="Password" ref={(c) => registerPassword = c}/><br />
+                <input required type="password" id="registerPassword" class="register-user-input-field" placeholder="Password" ref={(c) => registerPassword = c}/><br />
+                <p id='password-requirements'>** Password must contain a number and an uppercase letter **</p>
             </div>
 
             <div className="register-input-field-container">
                 <span class="register-input-field-description">Enter First Name</span><br />
-                <input type="text" id="firstName" class="register-user-input-field" placeholder="First Name" ref={(c) => rFirstName = c}/><br />
+                <input required type="text" id="firstName" class="register-user-input-field" placeholder="First Name" ref={(c) => rFirstName = c}/><br />
             </div>
 
             <div className="register-input-field-container">
                 <span class="register-input-field-description">Enter Last Name</span><br />
-                <input type="text" id="lastName" class="register-user-input-field" placeholder="Last Name" ref={(c) => rLastName = c}/><br />
+                <input required type="text" id="lastName" class="register-user-input-field" placeholder="Last Name" ref={(c) => rLastName = c}/><br />
             </div>
 
             <div className="register-input-field-container">
                 <span class="register-input-field-description">Enter Email</span><br />
-                <input type="email" id="email" class="register-user-input-field" placeholder="Email" ref={(c) => rEmail = c}/><br />
+                <input required type="email" id="email" class="register-user-input-field" placeholder="Email" ref={(c) => rEmail = c}/><br />
             </div>
-            <input type="submit" id="registerButton" class="buttons" value="Submit" onClick={doRegister}/>
-            <span id="registerResult">{message}</span>
+            <div id='submit-btn-container'>
+                <input type="submit" id="registerButton" class="buttons" value="Submit" onClick={doRegister}/>
+                <span id="registerResult"><b>{message}</b></span>
+            </div>
         </form>
             <div id="LoginDiv">
                 <p>Already have an account?</p>

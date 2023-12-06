@@ -1,182 +1,9 @@
-@media (min-width: 3500px)
-{
-    #register-form
-    {
-        width: 1100px;
-        height: 1200px;
-    }
-
-    :root
-    {
-        --responsive-description-font-size: 50px;
-        --responsive-button-font-size: 46px;
-        --responsive-title-font-size: 66px;
-        --display-image-type: flex;
-        --register-section-width: 40%;
-    }
-}
-
-@media (min-width: 3200px) and (max-width: 3499px)
-{
-    #register-form
-    {
-        width: 1000px;
-        height: 1100px;
-    }
-
-    :root
-    {
-        --responsive-description-font-size: 42px;
-        --responsive-button-font-size: 38px;
-        --responsive-title-font-size: 60px;
-        --display-image-type: flex;
-        --register-section-width: 40%;
-    }
-}
-
-@media (min-width: 2800px) and (max-width: 3199px)
-{
-    #register-form
-    {
-        width: 900px;
-        height: 1000px;
-    }
-
-    :root
-    {
-        --responsive-description-font-size: 38px;
-        --responsive-button-font-size: 34px;
-        --responsive-title-font-size: 54px;
-        --display-image-type: flex;
-        --register-section-width: 40%;
-    }
-}
-
-@media (min-width: 2500px) and (max-width: 2799px)
-{
-    #register-form
-    {
-        width: 800px;
-        height: 900px;
-    }
-
-    :root
-    {
-        --responsive-description-font-size: 34px;
-        --responsive-button-font-size: 30px;
-        --responsive-title-font-size: 50px;
-        --display-image-type: flex;
-        --register-section-width: 40%;
-    }
-}
-
-@media (min-width: 2200px) and (max-width: 2499px)
-{
-    #register-form
-    {
-        width: 700px;
-        height: 800px;
-    }
-
-    :root
-    {
-        --responsive-description-font-size: 30px;
-        --responsive-button-font-size: 26px;
-        --responsive-title-font-size: 46px;
-        --display-image-type: flex;
-        --register-section-width: 40%;
-    }
-}
-
-@media (min-width: 1800px) and (max-width: 2199px)
-{
-    #register-form
-    {
-        width: 500px;
-        height: 700px;
-    }
-
-    :root
-    {
-        --responsive-description-font-size: 24px;
-        --responsive-button-font-size: 20px;
-        --responsive-title-font-size: 38px;
-        --display-image-type: flex;
-        --register-section-width: 40%;
-    }
-}
-
-@media (min-width: 1500px) and (max-width: 1799px)
-{
-    #register-form
-    {
-        width: 450px;
-        height: 600px;
-    }
-
-    :root
-    {
-        --responsive-description-font-size: 20px;
-        --responsive-button-font-size: 16px;
-        --responsive-title-font-size: 34px;
-        --display-image-type: flex;
-        --register-section-width: 40%;
-    }
-}
-
-@media (min-width: 1250px) and (max-width: 1499px)
-{
-    #register-form
-    {
-        width: 380px;
-        height: 500px;
-    }
-
-    :root
-    {
-        --responsive-description-font-size: 16px;
-        --responsive-button-font-size: 14px;
-        --responsive-title-font-size: 28px;
-        --display-image-type: flex;
-        --register-section-width: 40%;
-    }
-}
-
-@media (min-width: 900px) and (max-width: 1249px)
-{
-    #register-form
-    {
-        width: 300px;
-        height: 400px;
-    }
-
-    :root
-    {
-        --responsive-description-font-size: 14px;
-        --responsive-button-font-size: 12px;
-        --responsive-title-font-size: 24px;
-        --display-image-type: flex;
-        --register-section-width: 40%;
-    }
-}
-
-/* for mobile */
-@media (max-width: 899px)
-{
-    #register-form
-    {
-        width: 400px;
-        height: 700px;
-    }
-
-    :root
-    {
-        --responsive-description-font-size: 24px;
-        --responsive-button-font-size: 20px;
-        --responsive-title-font-size: 38px;
-        --display-image-type: none;
-        --register-section-width: 100%;
-    }
+#registerDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 #register-form
@@ -192,16 +19,18 @@
     justify-content: center;
     align-items: center;
     background-color: blueviolet;
-    height: 100vh;
+    height: 100%;
     width: 100%;
 }
 
 .register-foreground
 {
+    margin: 40px 0px 40px 0px;
+    border-radius: 5px;
     display: flex;
     background-color: aliceblue;
-    height: calc(100% - 150px);
-    width: calc(100% - 150px);
+    height: 700px;
+    width: 450px;
     box-shadow: 0px 10px 10px 10px rgba(0, 0, 0, 0.356);
 }
 
@@ -212,14 +41,13 @@
     align-items: center;
     justify-content: center;
     height: 100%;
-    width: var(--register-section-width);
+    width: 1000px;
 }
 
 #register-title
 {
-    position: absolute;
-    margin: 12px;
-    font-size: var(--responsive-title-font-size);
+    margin: 10px 0px 15px 0px;
+    font-size: 40px
 }
 
 .register-input-field-container
@@ -230,7 +58,16 @@
 
 .register-input-field-description
 {
-    font-size: var(--responsive-description-font-size);
+    font-size: 20px
+}
+
+#password-requirements
+{
+    font-size: 12px;   
+}
+
+#registerPassword
+{
     margin-bottom: 0px;
 }
 
@@ -240,24 +77,31 @@
     border: solid;
     border-color: blueviolet;
     height: 53%;
-    width: 100%;
+    width: 350px;
     border-radius: 12px;
-    padding-left: 10px;
+    padding: 3px 5px 3px 5px;
     margin-bottom: 20px;
-    font-size: var(--responsive-description-font-size);
+    font-size: 16px
 }
 
 #registerButton
 {
-    height: 16%;
-    width: 100%;
+    height: 50px;
+    width: 100px;
     background-color: blueviolet;
     color: aliceblue;
     border: none;
     border-radius: 12px;
     font-weight: 600;
-    font-size: var(--responsive-button-font-size);
-    margin-top: 12px;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+#submit-btn-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 #LoginDiv
@@ -277,16 +121,4 @@
 {
     background-color: rgba(255, 255, 255, 0);
     border: none;
-}
-
-.register-image
-{
-    background-color: cadetblue;
-    height: 100%;
-    width: 60%;
-
-    /* just to center the "image here" text */
-    display: var(--display-image-type);
-    justify-content: center;
-    align-items: center;
 }
